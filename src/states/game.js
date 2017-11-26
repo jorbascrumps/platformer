@@ -5,10 +5,15 @@ export const numRows = 4;
 export const numColumns = 4;
 export const mapWidth = roomWidth * numColumns;
 export const mapHeight = roomHeight * numRows;
+
+let cursors;
 let map;
+let player;
 
 export function preload () {
     this.load.image('tiles', '/src/data/tiles.png');
+    this.load.image('player', '/src/data/nega_nathan.png');
+
     this.load.json('left', '/src/data/left.json');
     this.load.json('right', '/src/data/left.json');
     this.load.json('down', '/src/data/down.json');
@@ -35,23 +40,13 @@ export function create () {
         left: leftLayout,
         right: rightLayout,
         down: downLayout
-    }
+    };
     const levelLayout = generateSolutionPath();
-
     const rooms = levelLayout
-        .reduce((level, direction, i) => {
-            const insertRow = i % (mapWidth / roomWidth) === 0;
-            if (insertRow) {
-                level.push([]);
-            }
-
-            const layout = layouts[directionsMap[direction]].data.map(i => i - 1);
-
-            level[level.length - 1].push(layout);
-
-            return level;
-        }, []);
-
+        .reduce((level, direction, i) => ([
+            ...level,
+            layouts[directionsMap[direction]].data.map(i => i - 1)
+        ]), []);
     const roomGrid = buildRoomGrid({
         height: mapHeight,
         width: mapWidth,
@@ -59,32 +54,79 @@ export function create () {
     });
 
     map = this.make.tilemap({
-        map: {
-            data: roomGrid,
-            width: mapWidth,
-            height: mapHeight
-        },
-        tile: {
-            width: tileSize,
-            height: tileSize,
-            texture: 'tiles'
-        }
+        data: roomGrid,
+        tileWidth: tileSize,
+        tileHeight: tileSize
     });
+    const tileset = map.addTilesetImage('tiles');
+    const layer = map.createDynamicLayer(0, tileset, 0, 0);
+    const collisionMap = getCollisionMapForRoom(roomGrid);
+
+    this.physics.world.setCollisionMap(32, collisionMap);
+    this.physics.world.setBounds();
+
+    cursors = this.input.keyboard.createCursorKeys();
+
+    player = this.physics.add.sprite(32, 32, 'player');
+
+    player.setActive();
+    player.setBodyScale(.64, .64);
+    player.setOrigin(0.5, 0);
+    player.setMaxVelocity(500);
+    player.setFriction(2000, 100);
+
+    player.body.accelGround = 1000;
+    player.body.accelAir = 800;
+    player.body.jumpSpeed = 500;
+}
+
+export function update () {
+    let acceleration = player.body.accelGround;
+    if (!player.body.standing) {
+        acceleration = player.body.accelAir;
+    }
+
+    if (cursors.left.isDown && cursors.right.isUp) {
+        player.setAccelerationX(-acceleration);
+    } else if (cursors.right.isDown && cursors.left.isUp) {
+        player.setAccelerationX(acceleration);
+    } else {
+        player.setAccelerationX(0);
+    }
+
+    if (cursors.up.isDown && player.body.standing) {
+        player.setVelocityY(-player.body.jumpSpeed);
+    }
+}
+
+function getCollisionMapForRoom (rooms) {
+    return rooms
+        .map(room => room
+            .map(space => Number(space > -1))
+        );
 }
 
 function buildRoomGrid ({
-    rooms = [],
-    width = 1,
-    height = 1
-}) {
+    rooms = []
+} = {}) {
     let data = [];
 
-    for (let row = 0; row < rooms.length; row++) {
-        for (let j = 0; j < rooms[row][0].length / roomWidth; j++) {
-            const offset = j * roomWidth;
+    for (let row = 0; row < numRows; row++) {
+        const offset = row * numColumns;
+        const roomsInRow = rooms.slice(offset, offset + numColumns);
 
-            rooms[row].forEach(room => data.push(...room.slice(offset, offset + roomWidth)));
+        let rowData = [];
+
+        for (let i = 0; i < roomHeight; i++) {
+            const roomOffset = i * roomWidth;
+
+            let t = [];
+
+            roomsInRow.forEach(room => t.push(...room.slice(roomOffset, roomOffset + roomWidth)));
+            rowData.push(t);
         }
+
+        data.push(...rowData);
     }
 
     return data;
