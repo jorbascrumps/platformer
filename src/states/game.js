@@ -65,7 +65,7 @@ export function create () {
     this.physics.world.setCollisionMap(32, collisionMap);
     this.physics.world.setBounds();
 
-    cursors = this.input.keyboard.createCursorKeys();
+    this.input.gamepad.enabled = true;
 
     player = this.physics.add.sprite(32, 32, 'player');
 
@@ -81,20 +81,29 @@ export function create () {
 }
 
 export function update () {
+    const [
+        gamepad
+    ] = this.input.gamepad.gamepads;
+    const  {
+        buttons = []
+    } = gamepad;
+    const button = buttons
+        .filter((button = {}) => button.value > 0) || {};
+
     let acceleration = player.body.accelGround;
     if (!player.body.standing) {
         acceleration = player.body.accelAir;
     }
 
-    if (cursors.left.isDown && cursors.right.isUp) {
+    if (button.find(button => button.index === 14)) {
         player.setAccelerationX(-acceleration);
-    } else if (cursors.right.isDown && cursors.left.isUp) {
+    } else if (button.find(button => button.index === 15)) {
         player.setAccelerationX(acceleration);
     } else {
         player.setAccelerationX(0);
     }
 
-    if (cursors.up.isDown && player.body.standing) {
+    if (button.find(button => button.index === 0) && player.body.standing) {
         player.setVelocityY(-player.body.jumpSpeed);
     }
 }
