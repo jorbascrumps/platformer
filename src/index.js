@@ -7,6 +7,13 @@ window.onload = () => {
         parent: 'game',
         scene,
         type: Phaser.AUTO,
-        width: scene.mapWidth * scene.tileSize
+        width: scene.mapWidth * scene.tileSize,
+        physics: {
+            default: 'impact',
+            impact: {
+                gravity: 2000,
+                debug: true
+            }
+        },
     });
 };
