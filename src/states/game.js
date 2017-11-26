@@ -1,8 +1,8 @@
 export const tileSize = 32;
-export const roomWidth = 5;
-export const roomHeight = 5;
-export const numRows = 5;
-export const numColumns = 5;
+export const roomWidth = 8;
+export const roomHeight = 6;
+export const numRows = 4;
+export const numColumns = 4;
 export const mapWidth = roomWidth * numColumns;
 export const mapHeight = roomHeight * numRows;
 let map;
