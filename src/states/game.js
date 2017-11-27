@@ -15,7 +15,7 @@ export function preload () {
     this.load.image('player', '/src/data/nega_nathan.png');
 
     this.load.json('left', '/src/data/left.json');
-    this.load.json('right', '/src/data/left.json');
+    this.load.json('right', '/src/data/right.json');
     this.load.json('down', '/src/data/down.json');
 }
 
@@ -70,7 +70,7 @@ export function create () {
     player = this.physics.add.sprite(32, 32, 'player');
 
     player.setActive();
-    player.setBodyScale(.64, .64);
+    player.setBodyScale(.6, .6);
     player.setOrigin(0.5, 0);
     player.setMaxVelocity(500);
     player.setFriction(2000, 100);
