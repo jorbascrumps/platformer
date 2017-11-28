@@ -1,8 +1,8 @@
 export const tileSize = 32;
 export const roomWidth = 8;
 export const roomHeight = 6;
-export const numRows = 4;
-export const numColumns = 4;
+export const numRows = 10;
+export const numColumns = 10;
 export const mapWidth = roomWidth * numColumns;
 export const mapHeight = roomHeight * numRows;
 
@@ -70,7 +70,7 @@ export function create () {
     player = this.physics.add.sprite(32, 32, 'player');
 
     player.setActive();
-    player.setBodyScale(.6, .6);
+    player.setBodyScale(0.6, 0.6);
     player.setOrigin(0.5, 0);
     player.setMaxVelocity(500);
     player.setFriction(2000, 100);
@@ -78,6 +78,9 @@ export function create () {
     player.body.accelGround = 1000;
     player.body.accelAir = 800;
     player.body.jumpSpeed = 500;
+
+    this.cameras.main.setSize(320, 240);
+    this.cameras.main.startFollow(player);
 }
 
 export function update () {
