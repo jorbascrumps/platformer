@@ -12,6 +12,10 @@ const cameraWidth = 320;
 let map;
 let cursors;
 let player;
+let startPosition = {
+    x: 0,
+    y: 0
+};
 
 export function preload () {
     this.load.image('tiles', '/src/data/tiles.png');
@@ -20,6 +24,7 @@ export function preload () {
     this.load.json('left', '/src/data/left.json');
     this.load.json('right', '/src/data/right.json');
     this.load.json('down', '/src/data/down.json');
+    this.load.json('start', '/src/data/start.json');
 }
 
 export function create () {
@@ -38,18 +43,31 @@ export function create () {
             downLayout
         ]
     } = this.cache.json.get('down');
+    const {
+        layers: [
+            startLayout
+        ]
+    } = this.cache.json.get('start');
 
     const layouts = {
         left: leftLayout,
         right: rightLayout,
-        down: downLayout
+        down: downLayout,
+        start: startLayout
     };
     const levelLayout = generateSolutionPath();
     const rooms = levelLayout
-        .reduce((level, direction, i) => ([
-            ...level,
-            layouts[directionsMap[direction]].data.map(i => i - 1)
-        ]), []);
+        .reduce((level, direction, i) => {
+            if (direction === 5) {
+                const roomSize = roomWidth * tileSize;
+                startPosition.x = i * roomSize + (roomSize / 2);
+            }
+
+            return [
+                ...level,
+                layouts[directionsMap[direction]].data.map(i => i - 1)
+            ]
+        }, []);
     const roomGrid = buildRoomGrid({
         height: mapHeight,
         width: mapWidth,
@@ -70,7 +88,7 @@ export function create () {
 
     cursors = this.input.keyboard.createCursorKeys();
 
-    player = this.physics.add.sprite(32, 32, 'player');
+    player = this.physics.add.sprite(startPosition.x + 32, startPosition.y + 32, 'player');
 
     player.setActive();
     player.setBodyScale(0.6, 0.6);
@@ -152,13 +170,21 @@ function generateSolutionPath () {
 
     const calcHeight = mapHeight / roomHeight;
     const calcWidth = mapWidth / roomWidth;
-    const startTile = Phaser.Math.RND.between(0, mapWidth - 1);
+    const startTile = Phaser.Math.RND.between(0, numColumns - 1);
     let data = [];
 
     for (let row = 0; row < calcHeight; row++) {
         let rowData = [];
 
         for (let col = 0; col < calcWidth; col++) {
+
+            // Place start tile
+            if (row === 0 && col === startTile) {
+                rowData.push(5);
+
+                continue;
+            }
+
             let t = Phaser.Math.RND.pick(fillRange(0, 4));
 
             if (row < calcHeight - 1) {
@@ -191,7 +217,8 @@ const directionsMap = {
     1: 'left',
     2: 'right',
     3: 'right',
-    4: 'down'
+    4: 'down',
+    5: 'start'
 };
 
 const fillRange = (start, end) =>
