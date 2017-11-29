@@ -6,8 +6,11 @@ export const numColumns = 10;
 export const mapWidth = roomWidth * numColumns;
 export const mapHeight = roomHeight * numRows;
 
-let cursors;
+const cameraHeight = 240;
+const cameraWidth = 320;
+
 let map;
+let cursors;
 let player;
 
 export function preload () {
@@ -79,11 +82,20 @@ export function create () {
     player.body.accelAir = 800;
     player.body.jumpSpeed = 500;
 
-    this.cameras.main.setSize(320, 240);
+    this.cameras.main.setSize(cameraWidth, cameraHeight);
     this.cameras.main.startFollow(player);
 }
 
 export function update () {
+    if (cursors.down.isDown && player.body.standing) {
+        this.cameras.main.stopFollow();
+        this.cameras.main.setScroll(player.x - cameraWidth / 2, player.y - tileSize);
+
+        return;
+    } else if (cursors.down._justUp) {
+        this.cameras.main.startFollow(player);
+    }
+
     let acceleration = player.body.accelGround;
     if (!player.body.standing) {
         acceleration = player.body.accelAir;
