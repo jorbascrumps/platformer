@@ -105,6 +105,10 @@ export function create () {
 }
 
 export function update () {
+    playerControls.apply(this);
+}
+
+function playerControls () {
     if (cursors.down.isDown && player.body.standing) {
         this.cameras.main.stopFollow();
         this.cameras.main.setScroll(player.x - cameraWidth / 2, player.y - tileSize);
