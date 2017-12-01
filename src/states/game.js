@@ -99,6 +99,7 @@ export function create () {
     player.body.accelGround = 1000;
     player.body.accelAir = 800;
     player.body.jumpSpeed = 500;
+    player.body.isFalling = false;
 
     this.cameras.main.setSize(cameraWidth, cameraHeight);
     this.cameras.main.startFollow(player);
@@ -106,6 +107,7 @@ export function create () {
 
 export function update () {
     playerControls.apply(this);
+    checkForFallDamage.apply(this);
 }
 
 function playerControls () {
@@ -133,6 +135,14 @@ function playerControls () {
 
     if (cursors.up.isDown && player.body.standing) {
         player.setVelocityY(-player.body.jumpSpeed);
+    }
+}
+
+function checkForFallDamage () {
+    if (player.vel.y > 1000) {
+        player.body.isFalling = true;
+    } else if (player.body.isFalling && player.body.standing) {
+        player.body.isFalling = false;
     }
 }
 
