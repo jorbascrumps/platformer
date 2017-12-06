@@ -1,3 +1,5 @@
+import Map from '../components/map';
+
 export const tileSize = 32;
 export const roomWidth = 8;
 export const roomHeight = 6;
@@ -28,6 +30,17 @@ export function preload () {
 }
 
 export function create () {
+    const generatedMap = new Map({
+        size: {
+            columns: numColumns,
+            rows: numRows
+        },
+        room: {
+            height: roomHeight,
+            width: roomWidth
+        }
+    });
+
     const {
         layers: [
             leftLayout
@@ -55,7 +68,7 @@ export function create () {
         down: downLayout,
         start: startLayout
     };
-    const levelLayout = generateSolutionPath();
+    const levelLayout = generatedMap.solutionPath;
     const rooms = levelLayout
         .reduce((level, direction, i) => {
             if (direction === 5) {
@@ -68,11 +81,7 @@ export function create () {
                 layouts[directionsMap[direction]].data.map(i => i - 1)
             ]
         }, []);
-    const roomGrid = buildRoomGrid({
-        height: mapHeight,
-        width: mapWidth,
-        rooms
-    });
+    const roomGrid = generatedMap.buildRoomGrid(rooms);
 
     map = this.make.tilemap({
         data: roomGrid,
@@ -81,7 +90,7 @@ export function create () {
     });
     const tileset = map.addTilesetImage('tiles');
     const layer = map.createDynamicLayer(0, tileset, 0, 0);
-    const collisionMap = getCollisionMapForRoom(roomGrid);
+    const collisionMap = generatedMap.getCollisionMap(roomGrid);
 
     this.physics.world.setCollisionMap(32, collisionMap);
     this.physics.world.setBounds();
@@ -146,86 +155,6 @@ function checkForFallDamage () {
     }
 }
 
-function getCollisionMapForRoom (rooms) {
-    return rooms
-        .map(room => room
-            .map(space => Number(space > -1))
-        );
-}
-
-function buildRoomGrid ({
-    rooms = []
-} = {}) {
-    let data = [];
-
-    for (let row = 0; row < numRows; row++) {
-        const offset = row * numColumns;
-        const roomsInRow = rooms.slice(offset, offset + numColumns);
-
-        let rowData = [];
-
-        for (let i = 0; i < roomHeight; i++) {
-            const roomOffset = i * roomWidth;
-
-            let t = [];
-
-            roomsInRow.forEach(room => t.push(...room.slice(roomOffset, roomOffset + roomWidth)));
-            rowData.push(t);
-        }
-
-        data.push(...rowData);
-    }
-
-    return data;
-}
-
-function generateSolutionPath () {
-    Phaser.Math.RND.sow([ Date.now() ]);
-
-    const calcHeight = mapHeight / roomHeight;
-    const calcWidth = mapWidth / roomWidth;
-    const startTile = Phaser.Math.RND.between(0, numColumns - 1);
-    let data = [];
-
-    for (let row = 0; row < calcHeight; row++) {
-        let rowData = [];
-
-        for (let col = 0; col < calcWidth; col++) {
-
-            // Place start tile
-            if (row === 0 && col === startTile) {
-                rowData.push(5);
-
-                continue;
-            }
-
-            let t = Phaser.Math.RND.pick(fillRange(0, 4));
-
-            if (row < calcHeight - 1) {
-                const position = Phaser.Math.RND.pick(fillRange(0, numColumns - 1));
-
-                if (t > 3) {
-                    rowData.splice(position, 0, 4);
-
-                    continue;
-                } else if (col === (calcWidth) - 1 && !rowData.includes(4)) {
-                    rowData.splice(position, 0, 4);
-
-                    continue;
-                }
-            } else if (t === 4) {
-                t = Phaser.Math.RND.pick(fillRange(0, 3));
-            }
-
-            rowData.push(t);
-        }
-
-        data.push(...rowData);
-    }
-
-    return data;
-}
-
 const directionsMap = {
     0: 'left',
     1: 'left',
@@ -234,8 +163,3 @@ const directionsMap = {
     4: 'down',
     5: 'start'
 };
-
-const fillRange = (start, end) =>
-    Array(end - start + 1)
-    .fill()
-    .map((item, index) => start + index);
