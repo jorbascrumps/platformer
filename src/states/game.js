@@ -92,12 +92,12 @@ export function create () {
     const layer = map.createDynamicLayer(0, tileset, 0, 0);
     const collisionMap = generatedMap.getCollisionMap(roomGrid);
 
-    this.physics.world.setCollisionMap(32, collisionMap);
-    this.physics.world.setBounds();
+    this.impact.world.setCollisionMap(collisionMap, 32);
+    this.impact.world.setBounds();
 
     cursors = this.input.keyboard.createCursorKeys();
 
-    player = this.physics.add.sprite(startPosition.x + 32, startPosition.y + 32, 'player');
+    player = this.impact.add.sprite(startPosition.x + 32, startPosition.y + 32, 'player');
 
     player.setActive();
     player.setBodyScale(0.6, 0.6);
