@@ -1,4 +1,5 @@
 import Map from '../components/map';
+import Enemy from '../components/enemy';
 
 export const tileSize = 32;
 export const roomWidth = 8;
@@ -90,6 +91,7 @@ export function create () {
     });
     const tileset = map.addTilesetImage('tiles');
     const layer = map.createDynamicLayer(0, tileset, 0, 0);
+    this.map = layer;
     const collisionMap = generatedMap.getCollisionMap(roomGrid);
 
     this.impact.world.setCollisionMap(collisionMap, 32);
@@ -98,7 +100,7 @@ export function create () {
     cursors = this.input.keyboard.createCursorKeys();
 
     player = this.impact.add.sprite(startPosition.x + 32, startPosition.y + 32, 'player');
-
+window.player = player;
     player.setActive();
     player.setBodyScale(0.6, 0.6);
     player.setOrigin(0.5, 0);
@@ -110,11 +112,15 @@ export function create () {
     player.body.jumpSpeed = 500;
     player.body.isFalling = false;
 
+    this.enemies = [{ x: 100, y: 50 }, { x: 400, y: 50 }].map(({ x, y }) => new Enemy(this, x, y));
+
     this.cameras.main.setSize(cameraWidth, cameraHeight);
     this.cameras.main.startFollow(player);
 }
 
 export function update () {
+    this.enemies.forEach(enemy => enemy.update());
+
     playerControls.apply(this);
     checkForFallDamage.apply(this);
 }
