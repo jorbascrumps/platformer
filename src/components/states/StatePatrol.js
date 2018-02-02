@@ -6,6 +6,8 @@ const REACTION_DISTANCE = 200;
 
 export default class StatePatrol extends State {
     onEnter () {
+        super.onEnter();
+
         this.obj.body.accelGround = this.obj.body.accelGround > 0 ? SPEED : -SPEED;
     }
 

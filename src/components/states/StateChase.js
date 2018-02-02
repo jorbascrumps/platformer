@@ -6,6 +6,8 @@ const REACTION_DISTANCE = 200;
 
 export default class StateChase extends State {
     onEnter () {
+        super.onEnter();
+
         this.obj.body.accelGround = SPEED;
     }
 
