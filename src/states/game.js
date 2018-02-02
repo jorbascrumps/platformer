@@ -113,18 +113,8 @@ export function create () {
 
     cursors = this.input.keyboard.createCursorKeys();
 
-    player = this.impact.add.sprite(startPosition.x + 32, startPosition.y + 32, 'enemyWalk');
+    player = new Player(this, startPosition.x + 32, startPosition.y + 32);
     window.player = player;
-    player.setActive();
-    player.setBodyScale(0.6, 0.6);
-    player.setOrigin(0.5, 0);
-    player.setMaxVelocity(500);
-    player.setFriction(2000, 100);
-
-    player.body.accelGround = 1000;
-    player.body.accelAir = 800;
-    player.body.jumpSpeed = 500;
-    player.body.isFalling = false;
 
     this.enemies = this.add.group();
     [{ x: 100, y: 50 }].map(({ x, y }) =>
