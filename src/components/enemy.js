@@ -5,8 +5,7 @@ export default class Enemy extends Phaser.Physics.Impact.Sprite {
         super(scene.impact.world, x, y, 'player');
 
         this.setActive();
-        this.setBodyScale(0.6, 0.6);
-        this.setOrigin(0.5, 0.5);
+        this.setOrigin(0, 0);
         this.setMaxVelocity(500);
         this.setFriction(2000, 100);
 

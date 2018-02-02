@@ -10,19 +10,24 @@ export default class StatePatrol extends State {
     }
 
     execute () {
-        const nextX = this.obj.body.accelGround > 1 ? 33 : -1;
-        const nextTile = this.obj.scene.map.getTileAtWorldXY(this.obj.body.pos.x + nextX, this.obj.body.pos.y + 45);
+        const {
+            obj: self
+        } = this;
 
-        if (nextTile === null) {
+        const distanceToPlayerX = Phaser.Math.Distance.Between(self.x, self.y, window.player.x, window.player.y);
+        const isWithinChasingDistance = distanceToPlayerX < REACTION_DISTANCE;
+
+        if (isWithinChasingDistance && (window.player.y >= self.y && self.y + self.height >= window.player.y)) {
+            return self.changeState(new StateChase(self));
+        }
+
+        const nextX = this.obj.body.accelGround > 1 ? this.obj.width + 1 : -1;
+        const nextGroundTile = this.obj.scene.map.getTileAtWorldXY(this.obj.body.pos.x + nextX, this.obj.body.pos.y + 45);
+
+        if (nextGroundTile === null) {
             this.obj.body.accelGround *= -1;
         }
 
-        const distanceToPlayerX = Phaser.Math.Distance.Between(this.obj.x, this.obj.y, window.player.x, window.player.y);
-
-        if ((this.obj.y <= window.player.y + 16 && this.obj.y >= window.player.y - 16) && distanceToPlayerX < REACTION_DISTANCE) {
-            return this.obj.changeState(new StateChase(this.obj));
-        }
-
-        this.obj.setVelocityX(this.obj.body.accelGround);
+        return self.setVelocityX(self.body.accelGround);
     }
 }
