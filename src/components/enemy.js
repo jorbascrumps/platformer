@@ -2,7 +2,7 @@ import StatePatrol from './states/StatePatrol';
 
 export default class Enemy extends Phaser.Physics.Impact.Sprite {
     constructor (scene, x, y) {
-        super(scene.impact.world, x, y, 'player');
+        super(scene.impact.world, x, y, 'enemyWalk');
 
         this.setActive();
         this.setOrigin(0, 0);

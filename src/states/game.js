@@ -23,6 +23,7 @@ let startPosition = {
 export function preload () {
     this.load.image('tiles', '/src/data/tiles.png');
     this.load.image('player', '/src/data/nega_nathan.png');
+    this.load.spritesheet('enemyWalk', '/src/data/enemy/walk.png', { frameWidth: 22, frameHeight: 33, endFrame: 12 });
 
     this.load.json('left', '/src/data/left.json');
     this.load.json('right', '/src/data/right.json');
@@ -31,6 +32,19 @@ export function preload () {
 }
 
 export function create () {
+    this.anims.create({
+        key: 'enemyWalk',
+        frames: this.anims.generateFrameNumbers('enemyWalk', {
+            start: 0,
+            end: 12,
+            first: 0
+        }),
+        frameRate: 30,
+        repeat: -1,
+        forward: false,
+        repeatDelay: 0
+    });
+
     const generatedMap = new Map({
         size: {
             columns: numColumns,
@@ -99,8 +113,8 @@ export function create () {
 
     cursors = this.input.keyboard.createCursorKeys();
 
-    player = this.impact.add.sprite(startPosition.x + 32, startPosition.y + 32, 'player');
-window.player = player;
+    player = this.impact.add.sprite(startPosition.x + 32, startPosition.y + 32, 'enemyWalk');
+    window.player = player;
     player.setActive();
     player.setBodyScale(0.6, 0.6);
     player.setOrigin(0.5, 0);
@@ -112,14 +126,19 @@ window.player = player;
     player.body.jumpSpeed = 500;
     player.body.isFalling = false;
 
-    this.enemies = [{ x: 100, y: 50 }, { x: 400, y: 50 }].map(({ x, y }) => new Enemy(this, x, y));
+    this.enemies = this.add.group();
+    [{ x: 100, y: 50 }].map(({ x, y }) =>
+        this.enemies.add(new Enemy(this, x, y), {
+            addToScene: true
+        })
+    );
 
     this.cameras.main.setSize(cameraWidth, cameraHeight);
     this.cameras.main.startFollow(player);
 }
 
 export function update () {
-    this.enemies.forEach(enemy => enemy.update());
+    this.enemies.children.each(enemy => enemy.update());
 
     playerControls.apply(this);
     checkForFallDamage.apply(this);

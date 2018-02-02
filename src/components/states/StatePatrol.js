@@ -9,6 +9,7 @@ export default class StatePatrol extends State {
         super.onEnter();
 
         this.obj.body.accelGround = this.obj.body.accelGround > 0 ? SPEED : -SPEED;
+        this.obj.anims.play('enemyWalk');
     }
 
     execute () {

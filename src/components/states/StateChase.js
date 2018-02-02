@@ -9,6 +9,7 @@ export default class StateChase extends State {
         super.onEnter();
 
         this.obj.body.accelGround = SPEED;
+        this.obj.anims.play('enemyWalk');
     }
 
     execute () {
@@ -17,6 +18,8 @@ export default class StateChase extends State {
         if (distanceToPlayer >= REACTION_DISTANCE) {
             return this.obj.changeState(new StatePatrol(this.obj));
         }
+
+        this.obj.flipX = this.obj.x - window.player.x > 0;
 
         const direction = this.obj.x - window.player.x > 0 ? -SPEED : SPEED;
         this.obj.body.accelGround = direction;
