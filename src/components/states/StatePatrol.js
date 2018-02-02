@@ -1,7 +1,7 @@
 import State from './State';
 import StateChase from './StateChase';
 
-const SPEED = 100;
+const SPEED = 50;
 const REACTION_DISTANCE = 200;
 
 export default class StatePatrol extends State {
