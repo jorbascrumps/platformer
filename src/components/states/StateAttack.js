@@ -5,8 +5,8 @@ export default class StateAttack extends State {
         super.onEnter();
 
         this.obj.body.offset = {
-            x: this.obj.flipX ? 16 : 3,
-            y: 4
+            x: this.obj.flipX ? 27 : 5,
+            y: 14
         };
         this.obj.setDisplayOrigin(this.obj.flipX ? 16 : 3, 5);
         this.obj.anims.play('enemyAttack');

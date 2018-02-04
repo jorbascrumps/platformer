@@ -6,6 +6,10 @@ export default class StateIdle extends State {
     onEnter () {
         super.onEnter();
 
+        this.obj.body.offset = {
+            x: this.obj.flipX ? 11 : 2,
+            y: 9
+        };
         this.obj.anims.play('enemyIdle');
     }
 

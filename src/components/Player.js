@@ -8,13 +8,14 @@ export default class Player extends Phaser.Physics.Impact.Sprite {
         this.setOrigin(0, 0);
         this.setMaxVelocity(500);
         this.setFriction(2000, 100);
+        this.setBodySize(10, 23);
 
         this.scene = scene;
         this.state = new StateIdle(this);
 
         this.body.offset = {
-            x: 0,
-            y: -1
+            x: 2,
+            y: 9
         };
 
         this.update.bind(this);
