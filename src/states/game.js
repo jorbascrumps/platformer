@@ -1,5 +1,6 @@
 import Map from '../components/map';
 import Enemy from '../components/enemy';
+import Player from '../components/Player';
 
 export const tileSize = 32;
 export const roomWidth = 8;
@@ -113,8 +114,8 @@ export function create () {
 
     cursors = this.input.keyboard.createCursorKeys();
 
-    player = new Player(this, startPosition.x + 32, startPosition.y + 32);
-    window.player = player;
+    window.players = this.add.group();
+    players.add(new Player(this, startPosition.x + 32, startPosition.y + 32), true);
 
     this.enemies = this.add.group();
     [{ x: 100, y: 50 }].map(({ x, y }) =>
@@ -124,7 +125,7 @@ export function create () {
     );
 
     this.cameras.main.setSize(cameraWidth, cameraHeight);
-    this.cameras.main.startFollow(player);
+    this.cameras.main.startFollow(players.getFirstAlive());
 }
 
 export function update () {

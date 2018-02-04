@@ -13,15 +13,16 @@ export default class StateChase extends State {
     }
 
     execute () {
-        const distanceToPlayer = Phaser.Math.Distance.Between(this.obj.x, this.obj.y, window.player.x, window.player.y);
+        const player = players.getFirstAlive();
+        const distanceToPlayer = Phaser.Math.Distance.Between(this.obj.x, this.obj.y, player.x, player.y);
 
         if (distanceToPlayer >= REACTION_DISTANCE) {
             return this.obj.changeState(new StatePatrol(this.obj));
         }
 
-        this.obj.flipX = this.obj.x - window.player.x > 0;
+        this.obj.flipX = this.obj.x - player.x > 0;
 
-        const direction = this.obj.x - window.player.x > 0 ? -SPEED : SPEED;
+        const direction = this.obj.x - player.x > 0 ? -SPEED : SPEED;
         this.obj.body.accelGround = direction;
         this.obj.setVelocityX(this.obj.body.accelGround);
     }
