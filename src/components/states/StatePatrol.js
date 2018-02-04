@@ -34,6 +34,11 @@ export default class StatePatrol extends State {
 
         this.obj.flipX = this.obj.body.accelGround < 0;
 
+        this.obj.body.offset = {
+            x: this.obj.flipX ? 11 : 2,
+            y: 9
+        };
+
         return self.setVelocityX(self.body.accelGround);
     }
 }

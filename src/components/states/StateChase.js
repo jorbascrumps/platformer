@@ -20,9 +20,14 @@ export default class StateChase extends State {
             return this.obj.changeState(new StatePatrol(this.obj));
         }
 
-        this.obj.flipX = this.obj.x - player.x > 0;
-
         const direction = this.obj.x - player.x > 0 ? -SPEED : SPEED;
+        this.obj.body.offset = {
+            x: direction < 0 ? 11 : 2,
+            y: 9
+        };
+
+        this.obj.flipX = direction < 0;
+
         this.obj.body.accelGround = direction;
         this.obj.setVelocityX(this.obj.body.accelGround);
     }
