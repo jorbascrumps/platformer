@@ -14,8 +14,6 @@ const cameraHeight = 240;
 const cameraWidth = 320;
 
 let map;
-let cursors;
-let player;
 let startPosition = {
     x: 0,
     y: 0
@@ -25,6 +23,8 @@ export function preload () {
     this.load.image('tiles', '/src/data/tiles.png');
     this.load.image('player', '/src/data/nega_nathan.png');
     this.load.spritesheet('enemyWalk', '/src/data/enemy/walk.png', { frameWidth: 22, frameHeight: 33, endFrame: 12 });
+    this.load.spritesheet('enemyAttack', '/src/data/enemy/attack.png', { frameWidth: 43, frameHeight: 37, endFrame: 18 });
+    this.load.spritesheet('enemyIdle', '/src/data/enemy/idle.png', { frameWidth: 24, frameHeight: 32, endFrame: 10 });
 
     this.load.json('left', '/src/data/left.json');
     this.load.json('right', '/src/data/right.json');
@@ -42,7 +42,17 @@ export function create () {
         }),
         frameRate: 30,
         repeat: -1,
-        forward: false,
+        repeatDelay: 0
+    });
+    this.anims.create({
+        key: 'enemyIdle',
+        frames: this.anims.generateFrameNumbers('enemyIdle', {
+            start: 0,
+            end: 9,
+            first: 0
+        }),
+        frameRate: 6,
+        repeat: -1,
         repeatDelay: 0
     });
 
@@ -112,55 +122,24 @@ export function create () {
     this.impact.world.setCollisionMap(collisionMap, 32);
     this.impact.world.setBounds();
 
-    cursors = this.input.keyboard.createCursorKeys();
+    this.cursors = this.input.keyboard.createCursorKeys();
 
     window.players = this.add.group();
     players.add(new Player(this, startPosition.x + 32, startPosition.y + 32), true);
 
     this.enemies = this.add.group();
-    [{ x: 100, y: 50 }].map(({ x, y }) =>
-        this.enemies.add(new Enemy(this, x, y), {
-            addToScene: true
-        })
-    );
+    [{ x: 100, y: 50 }]
+        .map(({ x, y }) => this.enemies.add(new Enemy(this, x, y), true));
 
     this.cameras.main.setSize(cameraWidth, cameraHeight);
     this.cameras.main.startFollow(players.getFirstAlive());
 }
 
 export function update () {
+    players.children.each(player => player.update());
     this.enemies.children.each(enemy => enemy.update());
 
-    playerControls.apply(this);
-    checkForFallDamage.apply(this);
-}
-
-function playerControls () {
-    if (cursors.down.isDown && player.body.standing) {
-        this.cameras.main.stopFollow();
-        this.cameras.main.setScroll(player.x - cameraWidth / 2, player.y - tileSize);
-
-        return;
-    } else if (cursors.down._justUp) {
-        this.cameras.main.startFollow(player);
-    }
-
-    let acceleration = player.body.accelGround;
-    if (!player.body.standing) {
-        acceleration = player.body.accelAir;
-    }
-
-    if (cursors.left.isDown && cursors.right.isUp) {
-        player.setAccelerationX(-acceleration);
-    } else if (cursors.right.isDown && cursors.left.isUp) {
-        player.setAccelerationX(acceleration);
-    } else {
-        player.setAccelerationX(0);
-    }
-
-    if (cursors.up.isDown && player.body.standing) {
-        player.setVelocityY(-player.body.jumpSpeed);
-    }
+    // checkForFallDamage.apply(this);
 }
 
 function checkForFallDamage () {
