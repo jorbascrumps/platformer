@@ -55,7 +55,7 @@ export default class StateWalk extends State {
 
     onExit () {
         this.obj.body.offset = {
-            x: 2,
+            x: this.obj.flipX ? 11 : 2,
             y: 9
         };
     }
