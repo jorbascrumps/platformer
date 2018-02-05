@@ -43,6 +43,5 @@ export default class Player extends Phaser.Physics.Impact.Sprite {
     changeState (state) {
         this.state.onExit(this);
         this.state = state;
-        this.state.onEnter(this);
     }
 }
