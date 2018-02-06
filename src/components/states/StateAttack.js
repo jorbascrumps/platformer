@@ -50,13 +50,13 @@ export default class StateAttack extends State {
 
         const line = new Phaser.Geom.Line(
             target.flipX
-                ? target.x
-                : target.x + target.width,
-            target.y,
+                ? target.body.pos.x
+                : target.body.pos.x + target.body.size.x,
+            target.body.pos.y - target.body.size.x,
             target.flipX
-                ? target.x - 10
-                : target.x + target.width + 10,
-            target.y + (target.height) - 5
+                ? target.body.pos.x - (target.body.size.x * 2)
+                : target.body.pos.x + (target.body.size.x * 3),
+            target.body.pos.y + target.body.size.y
         );
 
         enemies.children.each(enemy => {
