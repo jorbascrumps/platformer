@@ -1,4 +1,5 @@
 import StatePatrol from './states/StatePatrol';
+import StateIdle from './states/StateIdle';
 
 export default class Enemy extends Phaser.Physics.Impact.Sprite {
     constructor (scene, x, y) {
@@ -31,6 +32,5 @@ export default class Enemy extends Phaser.Physics.Impact.Sprite {
     changeState (state) {
         this.state.onExit(this);
         this.state = state;
-        this.state.onEnter(this);
     }
 }

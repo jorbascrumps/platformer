@@ -25,6 +25,7 @@ export function preload () {
     this.load.spritesheet('enemyWalk', '/src/data/enemy/walk.png', { frameWidth: 22, frameHeight: 33, endFrame: 12 });
     this.load.spritesheet('enemyAttack', '/src/data/enemy/attack.png', { frameWidth: 43, frameHeight: 37, endFrame: 18 });
     this.load.spritesheet('enemyIdle', '/src/data/enemy/idle.png', { frameWidth: 24, frameHeight: 32, endFrame: 10 });
+    this.load.spritesheet('enemyHit', '/src/data/enemy/hit.png', { frameWidth: 30, frameHeight: 32, endFrame: 9 });
 
     this.load.json('left', '/src/data/left.json');
     this.load.json('right', '/src/data/right.json');
