@@ -1,6 +1,7 @@
 import State from './State';
 import StateAttack from './StateAttack';
 import StateWalk from './StateWalk';
+import StateFalling from './StateFalling';
 
 export default class StateIdle extends State {
     onEnter () {
@@ -14,6 +15,10 @@ export default class StateIdle extends State {
     }
 
     execute () {
+        if (this.obj.vel.y > 1000) {
+            return this.obj.changeState(new StateFalling(this.obj));
+        }
+
         const {
             obj: {
                 scene: {
