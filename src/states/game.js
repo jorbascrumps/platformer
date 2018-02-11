@@ -3,10 +3,10 @@ import Enemy from '../components/enemy';
 import Player from '../components/Player';
 
 export const tileSize = 32;
-export const roomWidth = 8;
-export const roomHeight = 6;
-export const numRows = 10;
-export const numColumns = 10;
+export const roomWidth = 10;
+export const roomHeight = 8;
+export const numRows = 6;
+export const numColumns = 6;
 export const mapWidth = roomWidth * numColumns;
 export const mapHeight = roomHeight * numRows;
 
