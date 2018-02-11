@@ -68,44 +68,48 @@ export function create () {
         }
     });
 
-    const {
-        layers: [
-            leftLayout
-        ]
-    } = this.cache.json.get('left');
-    const {
-        layers: [
-            rightLayout
-        ]
-    } = this.cache.json.get('right');
-    const {
-        layers: [
-            downLayout
-        ]
-    } = this.cache.json.get('down');
-    const {
-        layers: [
-            startLayout
-        ]
-    } = this.cache.json.get('start');
-
+    let spawnPositions = [];
     const layouts = {
-        left: leftLayout,
-        right: rightLayout,
-        down: downLayout,
-        start: startLayout
+        left: this.cache.json.get('left').layers,
+        right: this.cache.json.get('right').layers,
+        down: this.cache.json.get('down').layers,
+        start: this.cache.json.get('start').layers
     };
     const levelLayout = generatedMap.solutionPath;
     const rooms = levelLayout
         .reduce((level, direction, i) => {
-            if (direction === 5) {
-                const roomSize = roomWidth * tileSize;
-                startPosition.x = i * roomSize + (roomSize / 2);
+            const type = directionsMap[direction];
+            const {
+                [type]: [
+                    {
+                        data: layoutData = []
+                    } = {},
+                    decoration,
+                    {
+                        objects: spawns = []
+                    } = {}
+                ]
+            } = layouts;
+
+            const rowNum = Math.floor(i / numColumns);
+            const colNum = i % numColumns;
+            const width = roomWidth * tileSize;
+            const height = roomHeight * tileSize;
+
+            if (type === 'start') {
+                startPosition.x = i * width + (width / 2);
+            }
+
+            if (spawns.length) {
+                spawns.forEach(({ x, y }) => spawnPositions.push({
+                    x: (colNum * width) + x,
+                    y: (rowNum * height) + y
+                }));
             }
 
             return [
                 ...level,
-                layouts[directionsMap[direction]].data.map(i => i - 1)
+                layoutData.map(i => i - 1)
             ]
         }, []);
     const roomGrid = generatedMap.buildRoomGrid(rooms);
@@ -129,7 +133,7 @@ export function create () {
     players.add(new Player(this, startPosition.x + 32, startPosition.y + 32), true);
 
     this.enemies = this.add.group();
-    [{ x: 100, y: 50 }]
+    spawnPositions
         .map(({ x, y }) => this.enemies.add(new Enemy(this, x, y), true));
 
     this.cameras.main.setSize(cameraWidth, cameraHeight);
