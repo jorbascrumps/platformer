@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.1.0" orientation="orthogonal" renderorder="left-down" width="10" height="8" tilewidth="32" tileheight="32" infinite="0" nextobjectid="1">
+<map version="1.0" tiledversion="1.1.0" orientation="orthogonal" renderorder="left-down" width="10" height="8" tilewidth="32" tileheight="32" infinite="0" nextobjectid="3">
  <tileset firstgid="1" name="platformertiles" tilewidth="32" tileheight="32" tilecount="24" columns="8">
   <image source="../../../../Downloads/platformertiles.png" trans="ff00ff" width="256" height="96"/>
  </tileset>
- <layer name="Tile Layer 1" width="10" height="8">
+ <layer name="level" width="10" height="8">
   <data encoding="csv">
 20,0,0,0,0,0,0,0,0,20,
 20,0,0,0,0,0,0,0,0,20,
@@ -15,4 +15,19 @@
 20,20,20,20,20,20,20,20,20,20
 </data>
  </layer>
+ <layer name="decorations" width="10" height="8">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <objectgroup name="spawns">
+  <object id="1" x="160" y="192" width="32" height="32"/>
+ </objectgroup>
 </map>
