@@ -12,6 +12,7 @@ export default class Enemy extends Phaser.Physics.Impact.Sprite {
         this.setBodySize(10, 23);
 
         this.scene = scene;
+        this.body.accelGround = Phaser.Math.RND.between(-1, 1);
         this.state = new StatePatrol(this);
 
         this.body.offset = {
