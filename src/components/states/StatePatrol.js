@@ -25,10 +25,12 @@ export default class StatePatrol extends State {
             return self.changeState(new StateChase(self));
         }
 
-        const nextX = this.obj.body.accelGround > 1 ? this.obj.width + 1 : -1;
-        const nextGroundTile = this.obj.scene.map.getTileAtWorldXY(this.obj.body.pos.x + nextX, this.obj.body.pos.y + 45);
+        const nextX = this.obj.body.pos.x + (this.obj.body.accelGround > 1 ? this.obj.body.size.x + 1 : -1);
+        const nextY = this.obj.body.pos.y + this.obj.body.size.y + 1;
+        const nextGroundTile = this.obj.scene.map.getTileAtWorldXY(nextX, nextY);
+        const nextAirTile = this.obj.scene.map.getTileAtWorldXY(nextX, nextY - (this.obj.body.size.y / 2));
 
-        if (nextGroundTile === null) {
+        if (nextGroundTile === null || nextAirTile !== null) {
             this.obj.body.accelGround *= -1;
         }
 
