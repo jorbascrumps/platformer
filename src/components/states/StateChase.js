@@ -16,7 +16,7 @@ export default class StateChase extends State {
         const player = players.getFirstAlive();
         const distanceToPlayer = Phaser.Math.Distance.Between(this.obj.x, this.obj.y, player.x, player.y);
 
-        if (distanceToPlayer >= REACTION_DISTANCE) {
+        if (!this.obj.canSeePlayer || distanceToPlayer >= REACTION_DISTANCE) {
             return this.obj.changeState(new StatePatrol(this.obj));
         }
 

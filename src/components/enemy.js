@@ -11,7 +11,7 @@ export default class Enemy extends Phaser.Physics.Impact.Sprite {
         this.setFriction(2000, 100);
         this.setBodySize(10, 23);
 
-        this.scene = scene;
+        this.canSeePlayer = false;
         this.body.accelGround = Phaser.Math.RND.between(-1, 1);
         this.state = new StatePatrol(this);
 
@@ -28,6 +28,27 @@ export default class Enemy extends Phaser.Physics.Impact.Sprite {
         if (typeof this.state !== 'undefined') {
             this.state.execute(this);
         }
+
+        const player = window.players.getFirstAlive();
+        const line = new Phaser.Geom.Line(this.body.pos.x, this.body.pos.y, player.body.pos.x, player.body.pos.y);
+
+        const x = this.body.pos.x > player.body.pos.x
+            ?   player.body.pos.x
+            :   this.body.pos.x;
+        const y = this.body.pos.y > player.body.pos.y
+            ?   player.body.pos.y
+            :   this.body.pos.y;
+        const w = this.body.pos.x > player.body.pos.x
+            ?   this.body.pos.x - player.body.pos.x
+            :   player.body.pos.x;
+        const h = this.body.pos.y > player.body.pos.y
+            ?   this.body.pos.y - player.body.pos.y
+            :   player.body.pos.y - this.body.pos.y;
+        this.canSeePlayer = !this.scene.map.getTilesWithinWorldXY(x, y, w, h, {
+                isNotEmpty: true
+            })
+            .filter(tile => Phaser.Geom.Intersects.LineToRectangle(line, tile.getBounds()))
+            .length;
     }
 
     changeState (state) {

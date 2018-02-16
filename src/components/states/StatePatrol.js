@@ -21,7 +21,7 @@ export default class StatePatrol extends State {
         const distanceToPlayerX = Phaser.Math.Distance.Between(self.x, self.y, player.x, player.y);
         const isWithinChasingDistance = distanceToPlayerX < REACTION_DISTANCE;
 
-        if (isWithinChasingDistance && (player.y >= self.y && self.y + self.height >= player.y)) {
+        if (this.obj.canSeePlayer && isWithinChasingDistance && (player.y >= self.y && self.y + self.height >= player.y)) {
             return self.changeState(new StateChase(self));
         }
 
