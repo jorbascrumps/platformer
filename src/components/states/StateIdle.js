@@ -2,6 +2,7 @@ import State from './State';
 import StateAttack from './StateAttack';
 import StateWalk from './StateWalk';
 import StateFalling from './StateFalling';
+import StateJump from './StateJump';
 
 export default class StateIdle extends State {
     onEnter () {
@@ -26,6 +27,10 @@ export default class StateIdle extends State {
                 }
             }
         } = this;
+
+        if (this.obj.allowedToJump && cursors.up.isDown) {
+            return this.obj.changeState(new StateJump(this.obj));
+        }
 
         if (cursors.space.isDown) {
             return this.obj.changeState(new StateAttack(this.obj));
