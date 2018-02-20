@@ -26,13 +26,18 @@ export default class StateIdle extends State {
                 }
             }
         } = this;
-        const controlPressed = Object.keys(cursors).find(key => cursors[key].isDown);
 
         if (cursors.space.isDown) {
             return this.obj.changeState(new StateAttack(this.obj));
         }
 
-        if (controlPressed) {
+        const movementKeys = [ 'left', 'right' ];
+        const movementKeysPressed = !!Object
+            .keys(cursors)
+            .filter(key => movementKeys.includes(key))
+            .find(key => cursors[key].isDown);
+
+        if (movementKeysPressed) {
             return this.obj.changeState(new StateWalk(this.obj));
         }
     }
