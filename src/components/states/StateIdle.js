@@ -3,6 +3,7 @@ import StateAttack from './StateAttack';
 import StateWalk from './StateWalk';
 import StateFalling from './StateFalling';
 import StateJump from './StateJump';
+import StateLadder from './StateLadder';
 
 export default class StateIdle extends State {
     onEnter () {
@@ -27,6 +28,15 @@ export default class StateIdle extends State {
                 }
             }
         } = this;
+        const currentTileAtPosition = this.obj.scene.map.getTileAtWorldXY(
+            this.obj.body.pos.x + (this.obj.body.size.x / 2),
+            this.obj.body.pos.y + this.obj.body.size.y - 1,
+            true
+        );
+
+        if (currentTileAtPosition.index === 11 && cursors.up.isDown) {
+            return this.obj.changeState(new StateLadder(this.obj));
+        }
 
         if (this.obj.allowedToJump && cursors.up.isDown) {
             return this.obj.changeState(new StateJump(this.obj));
