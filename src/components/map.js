@@ -20,9 +20,11 @@ export default class Map {
     }
 
     getCollisionMap (rooms) {
+        const solidTiles = [ 19 ];
+
         return rooms
             .map(room => room
-                .map(space => Number(space > -1))
+                .map(space => Number(solidTiles.includes(space)))
             );
     }
 

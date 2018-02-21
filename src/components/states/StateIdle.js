@@ -3,6 +3,7 @@ import StateAttack from './StateAttack';
 import StateWalk from './StateWalk';
 import StateFalling from './StateFalling';
 import StateJump from './StateJump';
+import StateLadder from './StateLadder';
 
 export default class StateIdle extends State {
     onEnter () {
@@ -27,6 +28,20 @@ export default class StateIdle extends State {
                 }
             }
         } = this;
+        const groundTilePos = {
+            x: this.obj.body.pos.x + (this.obj.body.size.x / 2),
+            y: this.obj.body.pos.y + this.obj.body.size.y
+        };
+        const currentTileAtPosition = this.obj.scene.map.getTileAtWorldXY(groundTilePos.x, groundTilePos.y - 1, true);
+        const climbKeys = [ 'up', 'down' ];
+        const climbKeysPressed = !!Object
+            .keys(cursors)
+            .filter(key => climbKeys.includes(key))
+            .find(key => cursors[key].isDown);
+
+        if (currentTileAtPosition.index === 11 && climbKeysPressed) {
+            return this.obj.changeState(new StateLadder(this.obj));
+        }
 
         if (this.obj.allowedToJump && cursors.up.isDown) {
             return this.obj.changeState(new StateJump(this.obj));
