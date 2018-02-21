@@ -16,11 +16,11 @@ export default class StateLadder extends State {
                 }
             }
         } = this;
-        const currentTileAtPosition = this.obj.scene.map.getTileAtWorldXY(
-            this.obj.body.pos.x + (this.obj.body.size.x / 2),
-            this.obj.body.pos.y + this.obj.body.size.y - 1,
-            true
-        );
+        const groundTilePos = {
+            x: this.obj.body.pos.x + (this.obj.body.size.x / 2),
+            y: this.obj.body.pos.y + this.obj.body.size.y
+        };
+        const currentTileAtPosition = this.obj.scene.map.getTileAtWorldXY(groundTilePos.x, groundTilePos.y - 1, true);
 
         if (currentTileAtPosition.index !== 11) {
             return this.obj.changeState(new StateIdle(this.obj));
