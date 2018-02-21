@@ -5,7 +5,7 @@ export default class StateLadder extends State {
     onEnter () {
         super.onEnter();
 
-        this.obj.body.gravityFactor = 0;
+        this.obj.setGravity(0);
     }
 
     execute () {
@@ -46,6 +46,6 @@ export default class StateLadder extends State {
     onExit () {
         super.onExit();
 
-        this.obj.body.gravityFactor = 1;
+        this.obj.setGravity(1);
     }
 }
