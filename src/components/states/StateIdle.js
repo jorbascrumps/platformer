@@ -33,8 +33,13 @@ export default class StateIdle extends State {
             this.obj.body.pos.y + this.obj.body.size.y - 1,
             true
         );
+        const climbKeys = [ 'up', 'down' ];
+        const climbKeysPressed = !!Object
+            .keys(cursors)
+            .filter(key => climbKeys.includes(key))
+            .find(key => cursors[key].isDown);
 
-        if (currentTileAtPosition.index === 11 && cursors.up.isDown) {
+        if (currentTileAtPosition.index === 11 && climbKeysPressed) {
             return this.obj.changeState(new StateLadder(this.obj));
         }
 
