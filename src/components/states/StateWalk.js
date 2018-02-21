@@ -38,7 +38,7 @@ export default class StateWalk extends State {
             }
         } = this;
 
-        if (cursors.up.isDown && this.obj.body.standing) {
+        if (this.obj.allowedToJump && cursors.up.isDown) {
             return this.obj.changeState(new StateJump(this.obj));
         }
 

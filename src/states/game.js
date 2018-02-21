@@ -143,16 +143,6 @@ export function create () {
 export function update () {
     players.children.each(player => player.update());
     this.enemies.children.each(enemy => enemy.update());
-
-    // checkForFallDamage.apply(this);
-}
-
-function checkForFallDamage () {
-    if (player.vel.y > 1000) {
-        player.body.isFalling = true;
-    } else if (player.body.isFalling && player.body.standing) {
-        player.body.isFalling = false;
-    }
 }
 
 const directionsMap = {

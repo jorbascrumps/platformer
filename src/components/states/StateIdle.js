@@ -2,6 +2,7 @@ import State from './State';
 import StateAttack from './StateAttack';
 import StateWalk from './StateWalk';
 import StateFalling from './StateFalling';
+import StateJump from './StateJump';
 
 export default class StateIdle extends State {
     onEnter () {
@@ -26,13 +27,22 @@ export default class StateIdle extends State {
                 }
             }
         } = this;
-        const controlPressed = Object.keys(cursors).find(key => cursors[key].isDown);
+
+        if (this.obj.allowedToJump && cursors.up.isDown) {
+            return this.obj.changeState(new StateJump(this.obj));
+        }
 
         if (cursors.space.isDown) {
             return this.obj.changeState(new StateAttack(this.obj));
         }
 
-        if (controlPressed) {
+        const movementKeys = [ 'left', 'right' ];
+        const movementKeysPressed = !!Object
+            .keys(cursors)
+            .filter(key => movementKeys.includes(key))
+            .find(key => cursors[key].isDown);
+
+        if (movementKeysPressed) {
             return this.obj.changeState(new StateWalk(this.obj));
         }
     }
