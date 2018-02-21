@@ -26,12 +26,6 @@ export default class StateLadder extends State {
             return this.obj.changeState(new StateIdle(this.obj));
         }
 
-        if (!this.obj.body.standing) {
-            this.obj.body.gravityFactor = 0;
-        } else {
-            this.obj.body.gravityFactor = 1;
-        }
-
         if (cursors.up.isDown) {
             this.obj.setVelocityY(-200);
         } else if (cursors.down.isDown) {
