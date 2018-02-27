@@ -44,7 +44,7 @@ export default class Enemy extends Phaser.Physics.Impact.Sprite {
         const h = this.body.pos.y > player.body.pos.y
             ?   this.body.pos.y - player.body.pos.y
             :   player.body.pos.y - this.body.pos.y;
-        this.canSeePlayer = !this.scene.map.getTilesWithinWorldXY(x, y, w, h, {
+        this.canSeePlayer = !this.scene.ground.getTilesWithinWorldXY(x, y, w, h, {
                 isNotEmpty: true
             })
             .filter(tile => Phaser.Geom.Intersects.LineToRectangle(line, tile.getBounds()))
