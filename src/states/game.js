@@ -13,7 +13,6 @@ export const mapHeight = roomHeight * numRows;
 const cameraHeight = 240;
 const cameraWidth = 320;
 
-let map;
 let startPosition = {
     x: 0,
     y: 0
@@ -76,15 +75,24 @@ export function create () {
         start: this.cache.json.get('start').layers
     };
     const levelLayout = generatedMap.solutionPath;
-    const rooms = levelLayout
-        .reduce((level, direction, i) => {
+    const {
+        decorations,
+        interactions,
+        rooms
+    } = levelLayout
+        .reduce(({ decorations, rooms, interactions }, direction, i) => {
             const type = directionsMap[direction];
             const {
                 [type]: [
                     {
-                        data: layoutData = []
+                        data: layoutData = new Array(80).fill(-1)
                     } = {},
-                    decoration,
+                    {
+                        data: interactiveData = new Array(80).fill(-1)
+                    } = {},
+                    {
+                        data: decorationsData = new Array(80).fill(-1)
+                    } = {},
                     {
                         objects: spawns = []
                     } = {}
@@ -107,24 +115,55 @@ export function create () {
                 }));
             }
 
-            return [
-                ...level,
-                layoutData.map(i => i - 1)
-            ]
-        }, []);
-    const roomGrid = generatedMap.buildRoomGrid(rooms);
+            return {
+                rooms: [
+                    ...rooms,
+                    layoutData.map(i => i - 1)
+                ],
+                interactions: [
+                    ...interactions,
+                    interactiveData.map(i => i - 1)
+                ],
+                decorations: [
+                    ...decorations,
+                    decorationsData.map(i => i - 1)
+                ]
+            }
+        }, { rooms: [], interactions: [], decorations: [] });
 
-    map = this.make.tilemap({
-        data: roomGrid,
+    const map = this.make.tilemap({
         tileWidth: tileSize,
-        tileHeight: tileSize
+        tileHeight: tileSize,
+        width: roomWidth * numColumns,
+        height: roomHeight * numRows
     });
     const tileset = map.addTilesetImage('tiles');
-    const layer = map.createDynamicLayer(0, tileset, 0, 0);
-    this.map = layer;
-    const collisionMap = generatedMap.getCollisionMap(roomGrid);
 
-    this.impact.world.setCollisionMap(collisionMap, 32);
+    const setTilesFromGrid = (grid, collisions = true) => (tile, pos) => {
+        const {
+            [pos]: index
+        } = grid;
+
+        tile.index = index;
+
+        if (collisions && index !== -1) {
+            tile.setCollision(true, true, true, true, true);
+        }
+    };
+
+    this.interactions = map.createBlankDynamicLayer('interactions', tileset);
+    const interactionsGrid = generatedMap
+        .buildRoomGrid(interactions)
+        .reduce((room, interactions) => ([ ...room, ...interactions ]), []);
+    this.interactions.forEachTile(setTilesFromGrid(interactionsGrid, false), this, undefined, undefined, undefined, undefined, { isNotEmpty: false });
+
+    this.ground = map.createBlankDynamicLayer('ground', tileset);
+    const roomGrid = generatedMap
+        .buildRoomGrid(rooms)
+        .reduce((room, segment) => ([ ...room, ...segment ]), []);
+    this.ground.forEachTile(setTilesFromGrid(roomGrid), this, undefined, undefined, undefined, undefined, { isNotEmpty: false });
+
+    this.impact.world.setCollisionMapFromTilemapLayer(this.ground);
     this.impact.world.setBounds();
 
     this.cursors = this.input.keyboard.createCursorKeys();
@@ -135,6 +174,12 @@ export function create () {
     this.enemies = this.add.group();
     spawnPositions
         .map(({ x, y }) => this.enemies.add(new Enemy(this, x, y), true));
+
+    this.decorations = map.createBlankDynamicLayer('decorations', tileset);
+    const decorationsGrid = generatedMap
+        .buildRoomGrid(decorations)
+        .reduce((room, decorations) => ([ ...room, ...decorations ]), []);
+    this.decorations.forEachTile(setTilesFromGrid(decorationsGrid, false), this, undefined, undefined, undefined, undefined, { isNotEmpty: false });
 
     this.cameras.main.setSize(cameraWidth, cameraHeight);
     this.cameras.main.startFollow(players.getFirstAlive());

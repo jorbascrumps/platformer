@@ -32,7 +32,7 @@ export default class StateIdle extends State {
             x: this.obj.body.pos.x + (this.obj.body.size.x / 2),
             y: this.obj.body.pos.y + this.obj.body.size.y
         };
-        const currentTileAtPosition = this.obj.scene.map.getTileAtWorldXY(groundTilePos.x, groundTilePos.y - 1, true);
+        const currentTileAtPosition = this.obj.scene.interactions.getTileAtWorldXY(groundTilePos.x, groundTilePos.y - 1, true);
         const climbKeys = [ 'up', 'down' ];
         const climbKeysPressed = !!Object
             .keys(cursors)
