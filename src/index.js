@@ -1,4 +1,5 @@
 import * as level from './scenes/level';
+import * as ui from './scenes/ui';
 
 window.onload = () => {
     const game = new Phaser.Game({
@@ -6,7 +7,10 @@ window.onload = () => {
         height: level.mapHeight * level.tileSize,
         parent: 'game',
         pixelArt: true,
-        scene: level,
+        scene: [
+            level,
+            ui
+        ],
         type: Phaser.AUTO,
         width: level.mapWidth * level.tileSize,
         physics: {
