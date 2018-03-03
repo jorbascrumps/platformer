@@ -1,14 +1,14 @@
-import * as scene from './states/game';
+import * as level from './scenes/level';
 
 window.onload = () => {
     const game = new Phaser.Game({
         backgroundColor: 'rgba(0, 0, 0, 0)',
-        height: scene.mapHeight * scene.tileSize,
+        height: level.mapHeight * level.tileSize,
         parent: 'game',
         pixelArt: true,
-        scene,
+        scene: level,
         type: Phaser.AUTO,
-        width: scene.mapWidth * scene.tileSize,
+        width: level.mapWidth * level.tileSize,
         physics: {
             default: 'impact',
             impact: {
