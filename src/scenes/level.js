@@ -181,8 +181,10 @@ export function create () {
         .reduce((room, decorations) => ([ ...room, ...decorations ]), []);
     this.decorations.forEachTile(setTilesFromGrid(decorationsGrid, false), this, undefined, undefined, undefined, undefined, { isNotEmpty: false });
 
-    this.cameras.main.setSize(cameraWidth, cameraHeight);
-    this.cameras.main.startFollow(players.getFirstAlive());
+    this.cameras.main
+        .setSize(cameraWidth, cameraHeight)
+        .setBounds(0, 0, mapWidth * tileSize, mapHeight * tileSize)
+        .startFollow(players.getFirstAlive());
 }
 
 export function update () {
