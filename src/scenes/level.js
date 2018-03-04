@@ -10,9 +10,6 @@ export const numColumns = 6;
 export const mapWidth = roomWidth * numColumns;
 export const mapHeight = roomHeight * numRows;
 
-const cameraHeight = 240;
-const cameraWidth = 320;
-
 let startPosition = {
     x: 0,
     y: 0
@@ -164,7 +161,7 @@ export function create () {
     this.ground.forEachTile(setTilesFromGrid(roomGrid), this, undefined, undefined, undefined, undefined, { isNotEmpty: false });
 
     this.impact.world.setCollisionMapFromTilemapLayer(this.ground);
-    this.impact.world.setBounds();
+    this.impact.world.setBounds(0, 0, mapWidth * tileSize, mapHeight * tileSize);
 
     this.cursors = this.input.keyboard.createCursorKeys();
 
@@ -181,8 +178,9 @@ export function create () {
         .reduce((room, decorations) => ([ ...room, ...decorations ]), []);
     this.decorations.forEachTile(setTilesFromGrid(decorationsGrid, false), this, undefined, undefined, undefined, undefined, { isNotEmpty: false });
 
-    this.cameras.main.setSize(cameraWidth, cameraHeight);
-    this.cameras.main.startFollow(players.getFirstAlive());
+    this.cameras.main
+        .setBounds(0, 0, mapWidth * tileSize, mapHeight * tileSize)
+        .startFollow(players.getFirstAlive());
 }
 
 export function update () {
