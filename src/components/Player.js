@@ -5,6 +5,7 @@ export default class Player extends Phaser.Physics.Impact.Sprite {
         super(scene.impact.world, x, y, 'enemyWalk');
 
         this.setActive();
+        this.setAvsB();
         this.setOrigin(0.5, 0.5);
         this.setMaxVelocity(500);
         this.setFriction(2000, 100);
