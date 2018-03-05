@@ -11,15 +11,35 @@ export default class Player extends Phaser.Physics.Impact.Sprite {
         this.setBodySize(10, 23);
 
         this.state = new StateIdle(this);
-        this.health = 5;
+        this.health = 50;
+        this.hitGracePeriod = 1000;
+        this.vulnerable = true;
 
         this.body.offset = {
             x: 2,
             y: 9
         };
 
+        this.damage.bind(this);
         this.update.bind(this);
         this.changeState.bind(this);
+    }
+
+    damage (v) {
+        if (!this.vulnerable) {
+            return;
+        }
+
+        const value = parseInt(v, 10);
+        const newHealth = this.health - value;
+
+        if (newHealth <= 0) {
+            alert('Game over!');
+        }
+
+        this.health = newHealth;
+        this.vulnerable = false;
+        this.scene.time.delayedCall(this.hitGracePeriod, () => this.vulnerable = true);
     }
 
     update () {
