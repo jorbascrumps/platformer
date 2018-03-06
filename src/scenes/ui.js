@@ -24,9 +24,9 @@ export function update () {
             .fill()
             .forEach((n, i) =>
                 this.heartContainer.add(
-                    this.add.image(i * 10, 0, 'heart')
+                    this.add.image(i * 14, 0, 'heart')
                         .setOrigin(0, 0)
-                        .setDisplaySize(10, 10),
+                        .setDisplaySize(14, 14),
                     true
                 )
             );
