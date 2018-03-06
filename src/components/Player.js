@@ -12,7 +12,7 @@ export default class Player extends Phaser.Physics.Impact.Sprite {
         this.setBodySize(10, 23);
 
         this.state = new StateIdle(this);
-        this.health = 50;
+        this.health = 5;
         this.hitGracePeriod = 1000;
         this.vulnerable = true;
 
