@@ -5,11 +5,13 @@ export default class Enemy extends Phaser.Physics.Impact.Sprite {
     constructor (scene, x, y) {
         super(scene.impact.world, x, y, 'enemyWalk');
 
-        this.setActive();
         this.setOrigin(0, 0);
         this.setMaxVelocity(500);
         this.setFriction(2000, 100);
         this.setBodySize(10, 23);
+        this.setActive();
+        this.setAvsB();
+        this.setCollideCallback(this.collide, this);
 
         this.canSeePlayer = false;
         this.body.accelGround = Phaser.Math.RND.between(-1, 1);
@@ -22,6 +24,16 @@ export default class Enemy extends Phaser.Physics.Impact.Sprite {
 
         this.update.bind(this);
         this.changeState.bind(this);
+    }
+
+    collide (enemy, player) {
+        const {
+            gameObject: playerObject
+        } = player;
+
+        if (typeof playerObject.damage === 'function') {
+            playerObject.damage(1);
+        }
     }
 
     update () {
