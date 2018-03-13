@@ -17,7 +17,7 @@ window.onload = () => {
             default: 'impact',
             impact: {
                 gravity: 2000,
-                debug: true
+                // debug: true
             }
         },
     });
