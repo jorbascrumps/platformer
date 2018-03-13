@@ -17,9 +17,14 @@ export function create () {
 
 export function update () {
     if (typeof window.players !== 'undefined') {
+        const playerHealth = window.players.getFirstAlive().health;
+
+        if (playerHealth === this.heartContainer.children.size) {
+            return;
+        }
+
         this.heartContainer.clear(true);
 
-        const playerHealth = window.players.getFirstAlive().health;
         new Array(playerHealth)
             .fill()
             .forEach((n, i) =>
