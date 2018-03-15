@@ -31,9 +31,7 @@ export default class Enemy extends Phaser.Physics.Impact.Sprite {
             gameObject: playerObject
         } = player;
 
-        if (typeof playerObject.damage === 'function') {
-            playerObject.damage(1);
-        }
+        playerObject.emit('damage', 1);
     }
 
     preUpdate (...args) {
