@@ -183,10 +183,7 @@ export function create () {
         .startFollow(players.getFirstAlive());
 }
 
-export function update () {
-    players.children.each(player => player.update());
-    this.enemies.children.each(enemy => enemy.update());
-}
+export function update () {}
 
 const directionsMap = {
     0: 'left',

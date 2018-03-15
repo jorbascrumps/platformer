@@ -43,6 +43,10 @@ export default class Player extends Phaser.Physics.Impact.Sprite {
         this.scene.time.delayedCall(this.hitGracePeriod, () => this.vulnerable = true);
     }
 
+    preUpdate (...args) {
+        this.update(...args);
+    }
+
     update () {
         const {
             scene: {

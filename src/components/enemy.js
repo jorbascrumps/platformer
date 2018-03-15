@@ -36,6 +36,10 @@ export default class Enemy extends Phaser.Physics.Impact.Sprite {
         }
     }
 
+    preUpdate (...args) {
+        this.update(...args);
+    }
+
     update () {
         if (typeof this.state !== 'undefined') {
             this.state.execute(this);
