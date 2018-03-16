@@ -11,6 +11,7 @@ export default class Player extends Phaser.Physics.Impact.Sprite {
         this.setFriction(2000, 100);
         this.setBodySize(10, 23);
 
+        this.previousState = null;
         this.state = new StateIdle(this);
         this.health = 5;
         this.hitGracePeriod = 1000;
@@ -68,6 +69,7 @@ export default class Player extends Phaser.Physics.Impact.Sprite {
     changeState (state) {
         this.state.onExit(this);
 
+        this.previousState = this.state;
         this.state = new state(this);
     }
 }
