@@ -1,6 +1,9 @@
 import State from './State';
 import StateIdle from './StateIdle';
 import StateWalk from './StateWalk';
+import {
+    STATE_CHANGE
+} from '@/constants/events';
 
 export default class StateJump extends State {
     onEnter () {
@@ -39,11 +42,11 @@ export default class StateJump extends State {
         } = this;
 
         if (this.obj.body.standing) {
-            return this.obj.changeState(new StateIdle(this.obj));
+            return this.obj.emit(STATE_CHANGE, StateIdle);
         }
 
         if (cursors.left.isDown || cursors.right.isDown) {
-            return this.obj.changeState(new StateWalk(this.obj));
+            return this.obj.emit(STATE_CHANGE, StateWalk);
         }
     }
 }

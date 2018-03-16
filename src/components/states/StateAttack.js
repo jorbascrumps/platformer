@@ -1,6 +1,9 @@
 import State from './State';
 import StateIdle from './StateIdle';
 import StateHit from './StateHit';
+import {
+    STATE_CHANGE
+} from '@/constants/events';
 
 export default class StateAttack extends State {
     onEnter () {
@@ -17,7 +20,7 @@ export default class StateAttack extends State {
             repeat: 0,
             onUpdateParams: [ this.obj.scene.enemies ],
             onUpdate: this.checkWeaponCollisionForFrame,
-            onComplete: () => this.obj.changeState(new StateIdle(this.obj))
+            onComplete: () => this.obj.emit(STATE_CHANGE, StateIdle)
         });
         this.obj.body.offset = {
             x: this.obj.flipX ? 27 : 5,

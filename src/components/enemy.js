@@ -1,5 +1,7 @@
 import StatePatrol from './states/StatePatrol';
-import StateIdle from './states/StateIdle';
+import {
+    DAMAGE_RECEIVE
+} from '@/constants/events';
 
 export default class Enemy extends Phaser.Physics.Impact.Sprite {
     constructor (scene, x, y) {
@@ -31,9 +33,11 @@ export default class Enemy extends Phaser.Physics.Impact.Sprite {
             gameObject: playerObject
         } = player;
 
-        if (typeof playerObject.damage === 'function') {
-            playerObject.damage(1);
-        }
+        playerObject.emit(DAMAGE_RECEIVE, 1);
+    }
+
+    preUpdate (...args) {
+        this.update(...args);
     }
 
     update () {

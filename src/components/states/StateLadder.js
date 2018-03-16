@@ -1,5 +1,8 @@
 import State from './State';
 import StateIdle from './StateIdle';
+import {
+    STATE_CHANGE
+} from '@/constants/events';
 
 export default class StateLadder extends State {
     onEnter () {
@@ -23,7 +26,7 @@ export default class StateLadder extends State {
         const currentTileAtPosition = this.obj.scene.interactions.getTileAtWorldXY(groundTilePos.x, groundTilePos.y - 1, true);
 
         if (currentTileAtPosition.index !== 11) {
-            return this.obj.changeState(new StateIdle(this.obj));
+            return this.obj.emit(STATE_CHANGE, StateIdle);
         }
 
         if (cursors.up.isDown) {

@@ -1,4 +1,8 @@
 import StateIdle from './states/StateIdle';
+import {
+    DAMAGE_RECEIVE,
+    STATE_CHANGE
+} from '@/constants/events';
 
 export default class Player extends Phaser.Physics.Impact.Sprite {
     constructor (scene, x, y) {
@@ -11,6 +15,7 @@ export default class Player extends Phaser.Physics.Impact.Sprite {
         this.setFriction(2000, 100);
         this.setBodySize(10, 23);
 
+        this.previousState = null;
         this.state = new StateIdle(this);
         this.health = 5;
         this.hitGracePeriod = 1000;
@@ -21,9 +26,11 @@ export default class Player extends Phaser.Physics.Impact.Sprite {
             y: 9
         };
 
-        this.damage.bind(this);
         this.update.bind(this);
         this.changeState.bind(this);
+
+        this.on(DAMAGE_RECEIVE, this.damage);
+        this.on(STATE_CHANGE, this.changeState);
     }
 
     damage (v) {
@@ -41,6 +48,10 @@ export default class Player extends Phaser.Physics.Impact.Sprite {
         this.health = newHealth;
         this.vulnerable = false;
         this.scene.time.delayedCall(this.hitGracePeriod, () => this.vulnerable = true);
+    }
+
+    preUpdate (...args) {
+        this.update(...args);
     }
 
     update () {
@@ -61,6 +72,8 @@ export default class Player extends Phaser.Physics.Impact.Sprite {
 
     changeState (state) {
         this.state.onExit(this);
-        this.state = state;
+
+        this.previousState = this.state;
+        this.state = new state(this);
     }
 }
