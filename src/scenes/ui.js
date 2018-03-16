@@ -16,24 +16,30 @@ export function create () {
 }
 
 export function update () {
-    if (typeof window.players !== 'undefined') {
-        const playerHealth = window.players.getFirstAlive().health;
+    drawHealthContainer.call(this);
+}
 
-        if (playerHealth === this.heartContainer.children.size) {
-            return;
-        }
-
-        this.heartContainer.clear(true);
-
-        new Array(playerHealth)
-            .fill()
-            .forEach((n, i) =>
-                this.heartContainer.add(
-                    this.add.image(i * 14, 0, 'heart')
-                        .setOrigin(0, 0)
-                        .setDisplaySize(14, 14),
-                    true
-                )
-            );
+function drawHealthContainer () {
+    if (typeof window.players === 'undefined') {
+        return;
     }
+
+    const playerHealth = window.players.getFirstAlive().health;
+
+    if (playerHealth === this.heartContainer.children.size) {
+        return;
+    }
+
+    this.heartContainer.clear(true);
+
+    new Array(playerHealth)
+        .fill()
+        .forEach((n, i) =>
+            this.heartContainer.add(
+                this.add.image(i * 14, 0, 'heart')
+                    .setOrigin(0, 0)
+                    .setDisplaySize(14, 14),
+                true
+            )
+        );
 }
