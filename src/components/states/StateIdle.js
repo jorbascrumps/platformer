@@ -18,7 +18,7 @@ export default class StateIdle extends State {
 
     execute () {
         if (this.obj.vel.y > 1000) {
-            return this.obj.changeState(new StateFalling(this.obj));
+            return this.obj.emit('change_state', StateFalling);
         }
 
         const {
@@ -40,15 +40,15 @@ export default class StateIdle extends State {
             .find(key => cursors[key].isDown);
 
         if (currentTileAtPosition.index === 11 && climbKeysPressed) {
-            return this.obj.changeState(new StateLadder(this.obj));
+            return this.obj.emit('change_state', StateLadder);
         }
 
         if (this.obj.allowedToJump && cursors.up.isDown) {
-            return this.obj.changeState(new StateJump(this.obj));
+            return this.obj.emit('change_state', StateJump);
         }
 
         if (cursors.space.isDown) {
-            return this.obj.changeState(new StateAttack(this.obj));
+            return this.obj.emit('change_state', StateAttack);
         }
 
         const movementKeys = [ 'left', 'right' ];
@@ -58,7 +58,7 @@ export default class StateIdle extends State {
             .find(key => cursors[key].isDown);
 
         if (movementKeysPressed) {
-            return this.obj.changeState(new StateWalk(this.obj));
+            return this.obj.emit('change_state', StateWalk);
         }
     }
 }

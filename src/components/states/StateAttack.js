@@ -17,7 +17,7 @@ export default class StateAttack extends State {
             repeat: 0,
             onUpdateParams: [ this.obj.scene.enemies ],
             onUpdate: this.checkWeaponCollisionForFrame,
-            onComplete: () => this.obj.changeState(new StateIdle(this.obj))
+            onComplete: () => this.obj.emit('change_state', StateIdle)
         });
         this.obj.body.offset = {
             x: this.obj.flipX ? 27 : 5,

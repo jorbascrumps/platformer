@@ -39,11 +39,11 @@ export default class StateJump extends State {
         } = this;
 
         if (this.obj.body.standing) {
-            return this.obj.changeState(new StateIdle(this.obj));
+            return this.obj.emit('change_state', StateIdle);
         }
 
         if (cursors.left.isDown || cursors.right.isDown) {
-            return this.obj.changeState(new StateWalk(this.obj));
+            return this.obj.emit('change_state', StateWalk);
         }
     }
 }

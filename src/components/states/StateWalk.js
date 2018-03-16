@@ -39,7 +39,7 @@ export default class StateWalk extends State {
         } = this;
 
         if (this.obj.allowedToJump && cursors.up.isDown) {
-            return this.obj.changeState(new StateJump(this.obj));
+            return this.obj.emit('change_state', StateJump);
         }
 
         if (cursors.left.isDown && cursors.right.isUp) {
@@ -47,7 +47,7 @@ export default class StateWalk extends State {
         } else if (cursors.right.isDown && cursors.left.isUp) {
             this.obj.setVelocityX(SPEED);
         } else {
-            this.obj.changeState(new StateIdle(this.obj));
+            this.obj.emit('change_state', StateIdle);
         }
 
         // TODO: Pan camera down when down held

@@ -25,6 +25,7 @@ export default class Player extends Phaser.Physics.Impact.Sprite {
         this.changeState.bind(this);
 
         this.on('damage', this.damage);
+        this.on('change_state', this.changeState);
     }
 
     damage (v) {
@@ -66,6 +67,7 @@ export default class Player extends Phaser.Physics.Impact.Sprite {
 
     changeState (state) {
         this.state.onExit(this);
-        this.state = state;
+
+        this.state = new state(this);
     }
 }
