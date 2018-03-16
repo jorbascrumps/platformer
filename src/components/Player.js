@@ -1,4 +1,8 @@
 import StateIdle from './states/StateIdle';
+import {
+    DAMAGE_RECEIVE,
+    STATE_CHANGE
+} from '@/constants/events';
 
 export default class Player extends Phaser.Physics.Impact.Sprite {
     constructor (scene, x, y) {
@@ -25,8 +29,8 @@ export default class Player extends Phaser.Physics.Impact.Sprite {
         this.update.bind(this);
         this.changeState.bind(this);
 
-        this.on('damage', this.damage);
-        this.on('change_state', this.changeState);
+        this.on(DAMAGE_RECEIVE, this.damage);
+        this.on(STATE_CHANGE, this.changeState);
     }
 
     damage (v) {

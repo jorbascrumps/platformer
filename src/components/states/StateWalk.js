@@ -1,6 +1,9 @@
 import State from './State';
 import StateIdle from './StateIdle';
 import StateJump from './StateJump';
+import {
+    STATE_CHANGE
+} from '@/constants/events';
 
 const SPEED = 200;
 
@@ -39,7 +42,7 @@ export default class StateWalk extends State {
         } = this;
 
         if (this.obj.allowedToJump && cursors.up.isDown) {
-            return this.obj.emit('change_state', StateJump);
+            return this.obj.emit(STATE_CHANGE, StateJump);
         }
 
         if (cursors.left.isDown && cursors.right.isUp) {
@@ -47,7 +50,7 @@ export default class StateWalk extends State {
         } else if (cursors.right.isDown && cursors.left.isUp) {
             this.obj.setVelocityX(SPEED);
         } else {
-            this.obj.emit('change_state', StateIdle);
+            this.obj.emit(STATE_CHANGE, StateIdle);
         }
 
         // TODO: Pan camera down when down held

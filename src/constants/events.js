@@ -1,0 +1,2 @@
+export const STATE_CHANGE = 'STATE_CHANGE';
+export const DAMAGE_RECEIVE = 'DAMAGE_RECEIVE';

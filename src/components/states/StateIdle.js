@@ -4,6 +4,9 @@ import StateWalk from './StateWalk';
 import StateFalling from './StateFalling';
 import StateJump from './StateJump';
 import StateLadder from './StateLadder';
+import {
+    STATE_CHANGE
+} from '@/constants/events';
 
 export default class StateIdle extends State {
     onEnter () {
@@ -18,7 +21,7 @@ export default class StateIdle extends State {
 
     execute () {
         if (this.obj.vel.y > 1000) {
-            return this.obj.emit('change_state', StateFalling);
+            return this.obj.emit(STATE_CHANGE, StateFalling);
         }
 
         const {
@@ -40,15 +43,15 @@ export default class StateIdle extends State {
             .find(key => cursors[key].isDown);
 
         if (currentTileAtPosition.index === 11 && climbKeysPressed) {
-            return this.obj.emit('change_state', StateLadder);
+            return this.obj.emit(STATE_CHANGE, StateLadder);
         }
 
         if (this.obj.allowedToJump && cursors.up.isDown) {
-            return this.obj.emit('change_state', StateJump);
+            return this.obj.emit(STATE_CHANGE, StateJump);
         }
 
         if (cursors.space.isDown) {
-            return this.obj.emit('change_state', StateAttack);
+            return this.obj.emit(STATE_CHANGE, StateAttack);
         }
 
         const movementKeys = [ 'left', 'right' ];
@@ -58,7 +61,7 @@ export default class StateIdle extends State {
             .find(key => cursors[key].isDown);
 
         if (movementKeysPressed) {
-            return this.obj.emit('change_state', StateWalk);
+            return this.obj.emit(STATE_CHANGE, StateWalk);
         }
     }
 }
