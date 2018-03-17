@@ -1,5 +1,6 @@
 import * as level from './scenes/level';
 import * as ui from './scenes/ui';
+import * as preloader from '@/scenes/preloader';
 
 window.onload = () => {
     const game = new Phaser.Game({
@@ -8,6 +9,7 @@ window.onload = () => {
         parent: 'game',
         pixelArt: true,
         scene: [
+            preloader,
             level,
             ui
         ],
