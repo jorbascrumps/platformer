@@ -1,6 +1,13 @@
+import {
+    LEVEL,
+    UI
+} from '@/constants/scenes';
+
 import Map from '../components/map';
 import Enemy from '../components/enemy';
 import Player from '../components/Player';
+
+export const key = LEVEL;
 
 export const tileSize = 32;
 export const roomWidth = 10;
@@ -15,21 +22,9 @@ let startPosition = {
     y: 0
 };
 
-export function preload () {
-    this.load.image('tiles', '/src/data/tiles.png');
-    this.load.image('player', '/src/data/nega_nathan.png');
-    this.load.spritesheet('enemyWalk', '/src/data/enemy/walk.png', { frameWidth: 22, frameHeight: 33, endFrame: 12 });
-    this.load.spritesheet('enemyAttack', '/src/data/enemy/attack.png', { frameWidth: 43, frameHeight: 37, endFrame: 18 });
-    this.load.spritesheet('enemyIdle', '/src/data/enemy/idle.png', { frameWidth: 24, frameHeight: 32, endFrame: 10 });
-    this.load.spritesheet('enemyHit', '/src/data/enemy/hit.png', { frameWidth: 30, frameHeight: 32, endFrame: 9 });
-
-    this.load.json('left', '/src/data/left.json');
-    this.load.json('right', '/src/data/right.json');
-    this.load.json('down', '/src/data/down.json');
-    this.load.json('start', '/src/data/start.json');
-}
-
 export function create () {
+    this.scene.launch(UI);
+
     this.anims.create({
         key: 'enemyWalk',
         frames: this.anims.generateFrameNumbers('enemyWalk', {
