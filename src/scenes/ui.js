@@ -1,5 +1,4 @@
 export const key = 'ui';
-export const active = true;
 
 export function preload () {
     this.load.image('heart', '/src/data/heart.png');

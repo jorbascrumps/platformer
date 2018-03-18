@@ -18,6 +18,8 @@ let startPosition = {
 };
 
 export function create () {
+    this.scene.launch('ui');
+
     this.anims.create({
         key: 'enemyWalk',
         frames: this.anims.generateFrameNumbers('enemyWalk', {
