@@ -1,8 +1,13 @@
+import {
+    LEVEL,
+    UI
+} from '@/constants/scenes';
+
 import Map from '../components/map';
 import Enemy from '../components/enemy';
 import Player from '../components/Player';
 
-export const key = 'level';
+export const key = LEVEL;
 
 export const tileSize = 32;
 export const roomWidth = 10;
@@ -18,7 +23,7 @@ let startPosition = {
 };
 
 export function create () {
-    this.scene.launch('ui');
+    this.scene.launch(UI);
 
     this.anims.create({
         key: 'enemyWalk',

@@ -1,4 +1,8 @@
-export const key = 'ui';
+import {
+    UI
+} from '@/constants/scenes';
+
+export const key = UI;
 
 export function preload () {
     this.load.image('heart', '/src/data/heart.png');

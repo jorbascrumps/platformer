@@ -1,10 +1,14 @@
 import {
+    LEVEL,
+    PRELOADER
+} from '@/constants/scenes';
+import {
     IMAGES,
     JSON,
     SPRITESHEETS
 } from '@/constants/files';
 
-export const key = 'preloader';
+export const key = PRELOADER
 
 export const loader = {
     path: 'src/data'
@@ -30,5 +34,5 @@ export function preload () {
 }
 
 export function create () {
-    this.scene.start('level');
+    this.scene.start(LEVEL);
 }
