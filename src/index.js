@@ -1,6 +1,7 @@
 import * as level from './scenes/level';
 import * as ui from './scenes/ui';
 import * as preloader from '@/scenes/preloader';
+import * as pause from '@/scenes/pause';
 
 window.onload = () => {
     const game = new Phaser.Game({
@@ -11,7 +12,8 @@ window.onload = () => {
         scene: [
             preloader,
             level,
-            ui
+            ui,
+            pause
         ],
         type: Phaser.AUTO,
         width: level.roomWidth * level.tileSize,

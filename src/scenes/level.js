@@ -1,5 +1,6 @@
 import {
     LEVEL,
+    PAUSE,
     UI
 } from '@/constants/scenes';
 
@@ -176,6 +177,11 @@ export function create () {
     this.cameras.main
         .setBounds(0, 0, mapWidth * tileSize, mapHeight * tileSize)
         .startFollow(players.getFirstAlive());
+
+    this.input.on('pointerdown', () => {
+        this.input.stopPropagation();
+        this.scene.switch(PAUSE);
+    });
 }
 
 export function update () {}
