@@ -15,6 +15,8 @@ export default class Player extends Phaser.Physics.Impact.Sprite {
         this.setFriction(2000, 100);
         this.setBodySize(10, 23);
 
+        this.light = scene.lights.addLight(0, 0, 100, undefined, 3);
+
         this.previousState = null;
         this.state = new StateIdle(this);
         this.health = 5;
@@ -68,6 +70,9 @@ export default class Player extends Phaser.Physics.Impact.Sprite {
         if (typeof this.state !== 'undefined') {
             this.state.execute(this);
         }
+
+        this.light.x = this.x;
+        this.light.y = this.y - 25;
     }
 
     changeState (state) {
