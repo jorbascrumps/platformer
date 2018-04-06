@@ -8,7 +8,7 @@ import {
     SPRITESHEETS
 } from '@/constants/files';
 
-export const key = PRELOADER
+export const key = PRELOADER;
 
 export const loader = {
     path: 'src/data'
