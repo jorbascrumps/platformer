@@ -5,7 +5,7 @@ export default class extends Phaser.GameObjects.Container {
         y = 0,
         radius = 100,
         intensity = 2,
-        colour = 0xffffff,
+        colour = 0xffff00,
         flicker = false
     } = {}) {
         super(scene, x, y);
