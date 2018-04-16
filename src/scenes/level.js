@@ -7,6 +7,7 @@ import {
 import Map from '../components/map';
 import Enemy from '../components/enemy';
 import Player from '../components/Player';
+import LightSource from '../components/LightSource';
 
 export const key = LEVEL;
 
@@ -61,6 +62,7 @@ export function create () {
     });
 
     let spawnPositions = [];
+    let lightPositions = [];
     const layouts = {
         left: this.cache.json.get('left').layers,
         right: this.cache.json.get('right').layers,
@@ -88,6 +90,9 @@ export function create () {
                     } = {},
                     {
                         objects: spawns = []
+                    } = {},
+                    {
+                        objects: lights = []
                     } = {}
                 ]
             } = layouts;
@@ -103,6 +108,13 @@ export function create () {
 
             if (spawns.length) {
                 spawns.forEach(({ x, y }) => spawnPositions.push({
+                    x: (colNum * width) + x,
+                    y: (rowNum * height) + y
+                }));
+            }
+
+            if (lights.length) {
+                lights.forEach(({ x, y }) => lightPositions.push({
                     x: (colNum * width) + x,
                     y: (rowNum * height) + y
                 }));
@@ -167,6 +179,15 @@ export function create () {
     this.enemies = this.add.group();
     spawnPositions
         .map(({ x, y }) => this.enemies.add(new Enemy(this, x, y), true));
+
+    this.sceneLights = this.add.group();
+    lightPositions
+        .forEach(({ x, y }) => this.sceneLights.add(new LightSource({
+            scene: this,
+            x,
+            y,
+            flicker: true
+        })));
 
     this.decorations = map.createBlankDynamicLayer('decorations', tileset);
     const decorationsGrid = generatedMap
