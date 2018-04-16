@@ -5,6 +5,7 @@ export default class extends Phaser.GameObjects.Container {
         y = 0,
         radius = 100,
         intensity = 2,
+        colour = 0xffff00,
         flicker = false
     } = {}) {
         super(scene, x, y);
@@ -15,16 +16,17 @@ export default class extends Phaser.GameObjects.Container {
         this.y = y;
         this.radius = radius;
         this.intensity = intensity;
+        this.colour = colour;
 
-        this.light = scene.lights.addLight(this.x, this.y, radius, undefined, intensity);
-        this.lightArea = new Phaser.Geom.Ellipse(this.x, this.y, 5, 5);
+        this.light = scene.lights.addLight(this.x, this.y, radius, colour, intensity);
+        this.lightArea = new Phaser.Geom.Circle(this.x, this.y, 5, 5);
 
         this._follow = undefined;
 
         if (flicker) {
             scene.time.addEvent({
                 delay: 100,
-                callback: () => Phaser.Geom.Ellipse.Random(this.lightArea, this.light),
+                callback: () => Phaser.Geom.Circle.Random(this.lightArea, this.light),
                 repeat: -1
             });
         }

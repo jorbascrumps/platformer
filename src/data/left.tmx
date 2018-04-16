@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.1.0" orientation="orthogonal" renderorder="left-down" width="10" height="8" tilewidth="32" tileheight="32" infinite="0" nextobjectid="3">
+<map version="1.0" tiledversion="1.1.0" orientation="orthogonal" renderorder="left-down" width="10" height="8" tilewidth="32" tileheight="32" infinite="0" nextobjectid="4">
  <tileset firstgid="1" name="platformertiles" tilewidth="32" tileheight="32" tilecount="24" columns="8">
   <image source="../../../../Downloads/platformertiles.png" trans="ff00ff" width="256" height="96"/>
   <tile id="9">
@@ -53,10 +53,13 @@
 0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,
 22,22,22,22,22,22,22,22,22,22,
-0,0,0,0,0,0,0,0,0,0
+0,14,0,0,0,0,0,0,0,0
 </data>
  </layer>
  <objectgroup name="spawns">
   <object id="1" x="160" y="192" width="32" height="32"/>
+ </objectgroup>
+ <objectgroup name="lights">
+  <object id="3" x="32" y="224" width="32" height="32"/>
  </objectgroup>
 </map>
