@@ -5,7 +5,8 @@ const type = (type, assets) => assets
 
 export const IMAGES = type('image', [
     {
-        key: 'tiles'
+        key: 'tiles',
+        file: [ 'tiles.png', 'tiles_n.png' ]
     },
     {
         key: 'player',

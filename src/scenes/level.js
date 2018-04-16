@@ -176,12 +176,26 @@ export function create () {
 
     this.cameras.main
         .setBounds(0, 0, mapWidth * tileSize, mapHeight * tileSize)
+        .setBackgroundColor('#000000')
         .startFollow(players.getFirstAlive());
 
     this.input.on('pointerdown', () => {
         this.input.stopPropagation();
         this.scene.switch(PAUSE);
     });
+
+    this.decorations.texture = tileset.image;
+    this.decorations.setPipeline('Light2D');
+
+    this.ground.texture = tileset.image;
+    this.ground.setPipeline('Light2D');
+
+    this.interactions.texture = tileset.image;
+    this.interactions.setPipeline('Light2D');
+
+    this.lights
+        .enable()
+        .setAmbientColor(0x000000);
 }
 
 export function update () {}

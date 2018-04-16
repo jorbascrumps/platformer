@@ -3,6 +3,7 @@ import {
     DAMAGE_RECEIVE,
     STATE_CHANGE
 } from '@/constants/events';
+import LightSource from './LightSource';
 
 export default class Player extends Phaser.Physics.Impact.Sprite {
     constructor (scene, x, y) {
@@ -14,6 +15,15 @@ export default class Player extends Phaser.Physics.Impact.Sprite {
         this.setMaxVelocity(500);
         this.setFriction(2000, 100);
         this.setBodySize(10, 23);
+
+        this.light = new LightSource({
+            scene: this.scene,
+            x: this.x,
+            y: this.y,
+            flicker: true,
+            radius: 200
+        })
+            .startFollow(this);
 
         this.previousState = null;
         this.state = new StateIdle(this);
