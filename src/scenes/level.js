@@ -176,6 +176,7 @@ export function create () {
 
     this.cameras.main
         .setBounds(0, 0, mapWidth * tileSize, mapHeight * tileSize)
+        .setBackgroundColor('#000000')
         .startFollow(players.getFirstAlive());
 
     this.input.on('pointerdown', () => {
