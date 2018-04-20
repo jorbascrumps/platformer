@@ -6,8 +6,12 @@ export default class Flying extends Phaser.Physics.Impact.Sprite {
         scene.sys.updateList.add(this); // TODO: Remove in favour of Group
 
         this.setGravity(0);
-        this.setBodySize(10, 23);
-
+        this.setBodySize(10, 10);
+        this.setOrigin(0.5, 0.5);
+        this.body.offset = {
+            x: 5,
+            y: 16
+        };
         this.update.bind(this);
     }
 
