@@ -20,7 +20,7 @@ window.onload = () => {
         physics: {
             default: 'impact',
             impact: {
-                gravity: 2000,
+                gravity: 2600,
                 // debug: true
             }
         },

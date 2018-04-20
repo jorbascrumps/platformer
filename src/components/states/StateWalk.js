@@ -5,7 +5,7 @@ import {
     STATE_CHANGE
 } from '@/constants/events';
 
-const SPEED = 200;
+const SPEED = 225;
 
 export default class StateWalk extends State {
     onEnter () {

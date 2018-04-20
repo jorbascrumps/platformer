@@ -28,7 +28,7 @@ export default class StateJump extends State {
             y: 9
         };
 
-        this.obj.setVelocityY(-500);
+        this.obj.setVelocityY(-650);
     }
 
     execute () {
