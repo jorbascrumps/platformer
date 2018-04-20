@@ -21,7 +21,7 @@ export default class Player extends Phaser.Physics.Impact.Sprite {
             x: this.x,
             y: this.y,
             flicker: true,
-            radius: 200
+            radius: 150
         })
             .startFollow(this);
 
