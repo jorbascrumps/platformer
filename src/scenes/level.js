@@ -27,6 +27,10 @@ let startPosition = {
 export function create () {
     this.scene.launch(UI);
 
+    this.background = this.add.tileSprite(0, 0, mapWidth * tileSize, mapHeight * tileSize, 'tilesprite')
+        .setOrigin(0, 0);
+    this.background.setPipeline('Light2D');
+
     this.anims.create({
         key: 'enemyWalk',
         frames: this.anims.generateFrameNumbers('enemyWalk', {

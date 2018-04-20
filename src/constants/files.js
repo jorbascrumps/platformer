@@ -11,6 +11,10 @@ export const IMAGES = type('image', [
     {
         key: 'player',
         file: 'nega_nathan.png'
+    },
+    {
+        key: 'tilesprite',
+        file: [ 'tilesprite.png', 'tilesprite_n.png' ]
     }
 ]);
 
