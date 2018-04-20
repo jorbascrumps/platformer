@@ -71,10 +71,6 @@ export default class Player extends Phaser.Physics.Impact.Sprite {
             }
         } = this;
 
-        if (!cursors.up.isDown && this.body.standing) {
-            this.allowedToJump = true;
-        }
-
         if (typeof this.state !== 'undefined') {
             this.state.execute(this);
         }

@@ -41,7 +41,7 @@ export default class StateWalk extends State {
             }
         } = this;
 
-        if (this.obj.allowedToJump && cursors.up.isDown) {
+        if (this.obj.body.standing && Phaser.Input.Keyboard.JustDown(cursors.up)) {
             return this.obj.emit(STATE_CHANGE, StateJump);
         }
 
