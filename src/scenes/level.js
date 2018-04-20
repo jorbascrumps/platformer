@@ -220,7 +220,7 @@ export function create () {
 
     this.lights
         .enable()
-        .setAmbientColor(0x000000);
+        .setAmbientColor(0x333333);
 }
 
 export function update () {}
