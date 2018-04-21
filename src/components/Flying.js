@@ -5,7 +5,7 @@ export default class Flying extends Phaser.Physics.Impact.Sprite {
         scene.sys.displayList.add(this); // TODO: Remove in favour of Group
         scene.sys.updateList.add(this); // TODO: Remove in favour of Group
 
-        this.setActive();
+        this.setActiveCollision();
         this.setAvsB();
         this.setGravity(0);
         this.setBodySize(10, 10);

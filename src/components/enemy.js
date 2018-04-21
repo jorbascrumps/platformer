@@ -11,7 +11,7 @@ export default class Enemy extends Phaser.Physics.Impact.Sprite {
         this.setMaxVelocity(500);
         this.setFriction(2000, 100);
         this.setBodySize(10, 23);
-        this.setActive();
+        this.setActiveCollision();
         this.setAvsB();
         this.setCollideCallback(this.collide, this);
 
