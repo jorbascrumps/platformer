@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.1.0" orientation="orthogonal" renderorder="left-down" width="10" height="8" tilewidth="32" tileheight="32" infinite="0" nextobjectid="4">
+<map version="1.0" tiledversion="1.1.0" orientation="orthogonal" renderorder="left-down" width="10" height="8" tilewidth="32" tileheight="32" infinite="0" nextobjectid="5">
  <tileset firstgid="1" name="platformertiles" tilewidth="32" tileheight="32" tilecount="24" columns="8">
   <image source="../../../../Downloads/platformertiles.png" trans="ff00ff" width="256" height="96"/>
   <tile id="9">
@@ -57,7 +57,15 @@
 </data>
  </layer>
  <objectgroup name="spawns">
+  <properties>
+   <property name="type" value="walk"/>
+  </properties>
   <object id="1" x="160" y="192" width="32" height="32"/>
+  <object id="4" x="160" y="96" width="32" height="32">
+   <properties>
+    <property name="type" value="fly"/>
+   </properties>
+  </object>
  </objectgroup>
  <objectgroup name="lights">
   <object id="3" x="32" y="224" width="32" height="32"/>
