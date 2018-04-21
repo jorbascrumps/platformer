@@ -8,6 +8,7 @@ import Map from '../components/map';
 import Enemy from '../components/enemy';
 import Player from '../components/Player';
 import LightSource from '../components/LightSource';
+import Flying from '../components/Flying';
 
 export const key = LEVEL;
 
@@ -111,9 +112,10 @@ export function create () {
             }
 
             if (spawns.length) {
-                spawns.forEach(({ x, y }) => spawnPositions.push({
+                spawns.forEach(({ x, y, properties: { type } = {} }) => spawnPositions.push({
                     x: (colNum * width) + x,
-                    y: (rowNum * height) + y
+                    y: (rowNum * height) + y,
+                    type
                 }));
             }
 
@@ -182,7 +184,11 @@ export function create () {
 
     this.enemies = this.add.group();
     spawnPositions
-        .map(({ x, y }) => this.enemies.add(new Enemy(this, x, y), true));
+        .map(({ x, y, type }) => this.enemies.add(
+            type === 'fly'
+            ?   new Flying(this, x, y)
+            :   new Enemy(this, x, y)
+        , true));
 
     this.sceneLights = this.add.group();
     lightPositions
