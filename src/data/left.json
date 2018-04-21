@@ -24,7 +24,7 @@
          "y":0
         }, 
         {
-         "data":[4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 22, 22, 22, 22, 0, 0, 0, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 24, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 22, 14, 22, 22, 22, 22, 22, 22, 22, 22, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+         "data":[4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 22, 22, 22, 22, 0, 0, 0, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 24, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 0, 14, 0, 0, 0, 0, 0, 0, 0, 0],
          "height":8,
          "name":"decorations",
          "opacity":1,
@@ -48,8 +48,35 @@
                  "width":32,
                  "x":160,
                  "y":192
+                }, 
+                {
+                 "height":32,
+                 "id":4,
+                 "name":"",
+                 "properties":
+                    {
+                     "type":"fly"
+                    },
+                 "propertytypes":
+                    {
+                     "type":"string"
+                    },
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":32,
+                 "x":160,
+                 "y":96
                 }],
          "opacity":1,
+         "properties":
+            {
+             "type":"walk"
+            },
+         "propertytypes":
+            {
+             "type":"string"
+            },
          "type":"objectgroup",
          "visible":true,
          "x":0,
@@ -68,7 +95,7 @@
                  "visible":true,
                  "width":32,
                  "x":32,
-                 "y":192
+                 "y":224
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -76,7 +103,7 @@
          "x":0,
          "y":0
         }],
- "nextobjectid":4,
+ "nextobjectid":5,
  "orientation":"orthogonal",
  "renderorder":"left-down",
  "tiledversion":"1.1.0",
