@@ -1,11 +1,17 @@
 import StatePatrol from './states/StatePatrol';
 import {
-    DAMAGE_RECEIVE
+    DAMAGE_RECEIVE,
+    STATE_CHANGE
 } from '@/constants/events';
 
 export default class Enemy extends Phaser.Physics.Impact.Sprite {
     constructor (scene, x, y) {
         super(scene.impact.world, x, y, 'enemyWalk');
+
+        this.update.bind(this);
+        this.changeState.bind(this);
+
+        this.on(STATE_CHANGE, this.changeState);
 
         this.setOrigin(0, 0);
         this.setMaxVelocity(500);
@@ -17,15 +23,14 @@ export default class Enemy extends Phaser.Physics.Impact.Sprite {
 
         this.canSeePlayer = false;
         this.body.accelGround = Phaser.Math.RND.between(-1, 1);
-        this.state = new StatePatrol(this);
 
         this.body.offset = {
             x: 2,
             y: 9
         };
 
-        this.update.bind(this);
-        this.changeState.bind(this);
+        this.previousState = null;
+        this.emit(STATE_CHANGE, StatePatrol);
     }
 
     collide (enemy, player) {
@@ -68,7 +73,13 @@ export default class Enemy extends Phaser.Physics.Impact.Sprite {
     }
 
     changeState (state) {
-        this.state.onExit(this);
-        this.state = state;
+        if (this.state) {
+            this.state.onExit(this);
+        }
+
+        this.previousState = this.state;
+        this.state = typeof state === 'function'
+            ?   new state(this)
+            :   state;
     }
 }
