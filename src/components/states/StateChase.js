@@ -1,5 +1,7 @@
 import State from './State';
-import StatePatrol from './StatePatrol';
+import {
+    STATE_CHANGE
+} from '@/constants/events';
 
 const SPEED = 100;
 const REACTION_DISTANCE = 200;
@@ -13,22 +15,25 @@ export default class StateChase extends State {
     }
 
     execute () {
+        const {
+            obj: self
+        } = this;
         const player = players.getFirstAlive();
-        const distanceToPlayer = Phaser.Math.Distance.Between(this.obj.x, this.obj.y, player.x, player.y);
+        const distanceToPlayer = Phaser.Math.Distance.Between(self.x, self.y, player.x, player.y);
 
-        if (!this.obj.canSeePlayer || distanceToPlayer >= REACTION_DISTANCE) {
-            return this.obj.changeState(new StatePatrol(this.obj));
+        if (!self.canSeePlayer || distanceToPlayer >= REACTION_DISTANCE) {
+            return self.emit(STATE_CHANGE, self.previousState);
         }
 
-        const direction = this.obj.x - player.x > 0 ? -SPEED : SPEED;
-        this.obj.body.offset = {
+        const direction = self.x - player.x > 0 ? -SPEED : SPEED;
+        self.body.offset = {
             x: direction < 0 ? 11 : 2,
             y: 9
         };
 
-        this.obj.flipX = direction < 0;
+        self.flipX = direction < 0;
 
-        this.obj.body.accelGround = direction;
-        this.obj.setVelocityX(this.obj.body.accelGround);
+        self.body.accelGround = direction;
+        self.setVelocityX(self.body.accelGround);
     }
 }
