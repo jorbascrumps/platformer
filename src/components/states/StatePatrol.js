@@ -1,5 +1,8 @@
 import State from './State';
 import StateChase from './StateChase';
+import {
+    STATE_CHANGE
+} from '@/constants/events';
 
 const SPEED = 50;
 const REACTION_DISTANCE = 200;
@@ -22,7 +25,7 @@ export default class StatePatrol extends State {
         const isWithinChasingDistance = distanceToPlayerX < REACTION_DISTANCE;
 
         if (this.obj.canSeePlayer && isWithinChasingDistance && (player.y >= self.y && self.y + self.height >= player.y)) {
-            return self.changeState(new StateChase(self));
+            return self.emit(STATE_CHANGE, StateChase);
         }
 
         const nextX = this.obj.body.pos.x + (this.obj.body.accelGround > 1 ? this.obj.body.size.x + 1 : -1);
@@ -31,7 +34,7 @@ export default class StatePatrol extends State {
         const nextAirTile = this.obj.scene.ground.getTileAtWorldXY(nextX, nextY - (this.obj.body.size.y / 2), true);
 
         if ((nextGroundTile === null || !nextGroundTile.collides) || (nextAirTile === null || nextAirTile.collides)) {
-            this.obj.body.accelGround *= -1;
+            self.body.accelGround *= -1;
         }
 
         this.obj.flipX = this.obj.body.accelGround < 0;

@@ -10,10 +10,13 @@ export default class Flying extends Phaser.Physics.Impact.Sprite {
         this.setGravity(0);
         this.setBodySize(10, 10);
         this.setOrigin(0.5, 0.5);
+
+        this.tint = 0xce4a4a;
         this.body.offset = {
             x: 5,
             y: 16
         };
+
         this.update.bind(this);
     }
 

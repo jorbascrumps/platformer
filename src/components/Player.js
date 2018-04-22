@@ -9,6 +9,12 @@ export default class Player extends Phaser.Physics.Impact.Sprite {
     constructor (scene, x, y) {
         super(scene.impact.world, x, y, 'enemyWalk');
 
+        this.update.bind(this);
+        this.changeState.bind(this);
+
+        this.on(DAMAGE_RECEIVE, this.damage);
+        this.on(STATE_CHANGE, this.changeState);
+
         this.setActiveCollision();
         this.setAvsB();
         this.setOrigin(0.5, 0.5);
@@ -24,9 +30,6 @@ export default class Player extends Phaser.Physics.Impact.Sprite {
             radius: 150
         })
             .startFollow(this);
-
-        this.previousState = null;
-        this.state = new StateIdle(this);
         this.health = 5;
         this.hitGracePeriod = 1000;
         this.vulnerable = true;
@@ -36,11 +39,8 @@ export default class Player extends Phaser.Physics.Impact.Sprite {
             y: 9
         };
 
-        this.update.bind(this);
-        this.changeState.bind(this);
-
-        this.on(DAMAGE_RECEIVE, this.damage);
-        this.on(STATE_CHANGE, this.changeState);
+        this.previousState = null;
+        this.emit(STATE_CHANGE, StateIdle);
     }
 
     damage (v) {
@@ -77,9 +77,13 @@ export default class Player extends Phaser.Physics.Impact.Sprite {
     }
 
     changeState (state) {
-        this.state.onExit(this);
+        if (this.state) {
+            this.state.onExit(this);
+        }
 
         this.previousState = this.state;
-        this.state = new state(this);
+        this.state = typeof state === 'function'
+            ?   new state(this)
+            :   new state.constructor(this);
     }
 }
