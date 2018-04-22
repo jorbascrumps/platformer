@@ -24,6 +24,7 @@ export default class Enemy extends Phaser.Physics.Impact.Sprite {
         this.canSeePlayer = false;
         this.body.accelGround = Phaser.Math.RND.between(-1, 1);
 
+        this.tint = 0xce4a4a;
         this.body.offset = {
             x: 2,
             y: 9
