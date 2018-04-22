@@ -84,6 +84,6 @@ export default class Player extends Phaser.Physics.Impact.Sprite {
         this.previousState = this.state;
         this.state = typeof state === 'function'
             ?   new state(this)
-            :   state;
+            :   new state.constructor(this);
     }
 }
