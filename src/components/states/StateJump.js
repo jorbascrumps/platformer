@@ -1,5 +1,4 @@
 import State from './State';
-import StateIdle from './StateIdle';
 import StateWalk from './StateWalk';
 import {
     STATE_CHANGE
@@ -10,42 +9,44 @@ export default class StateJump extends State {
         super.onEnter();
 
         const {
-            obj: {
-                scene: {
-                    cursors
-                }
-            }
+            obj: self
         } = this;
+        const {
+            scene: {
+                cursors
+            }
+        } = self;
 
         if (cursors.left.isDown) {
-            this.obj.flipX = true;
+            self.flipX = true;
         } else if (cursors.right.isDown) {
-            this.obj.flipX = false;
+            self.flipX = false;
         }
 
-        this.obj.body.offset = {
-            x: this.obj.flipX ? 11 : 2,
+        self.body.offset = {
+            x: self.flipX ? 11 : 2,
             y: 9
         };
 
-        this.obj.setVelocityY(-650);
+        self.setVelocityY(-650);
     }
 
     execute () {
         const {
-            obj: {
-                scene: {
-                    cursors
-                }
-            }
+            obj: self
         } = this;
+        const {
+            scene: {
+                cursors
+            }
+        } = self;
 
-        if (this.obj.body.standing) {
-            return this.obj.emit(STATE_CHANGE, StateIdle);
+        if (self.body.standing) {
+            return self.emit(STATE_CHANGE, self.previousState);
         }
 
         if (cursors.left.isDown || cursors.right.isDown) {
-            return this.obj.emit(STATE_CHANGE, StateWalk);
+            return self.emit(STATE_CHANGE, StateWalk);
         }
     }
 }
