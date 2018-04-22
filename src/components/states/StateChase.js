@@ -7,13 +7,22 @@ import {
 
 const SPEED = 100;
 const REACTION_DISTANCE = 200;
+const MEMORY_LIMIT = 1500;
 
 export default class StateChase extends State {
     onEnter () {
         super.onEnter();
 
-        this.obj.body.accelGround = SPEED;
-        this.obj.anims.play('enemyWalk');
+        this.stopChasing.bind(this);
+
+        const {
+            obj: self
+        } = this;
+
+        self.body.accelGround = SPEED;
+        self.anims.play('enemyWalk');
+
+        this.timer = null;
     }
 
     execute () {
@@ -25,8 +34,8 @@ export default class StateChase extends State {
         const distanceToPlayer = Phaser.Math.Distance.Between(self.x, self.y, player.x, player.y);
         const isWithinChasingDistance = distanceToPlayer < REACTION_DISTANCE;
 
-        if (!self.canSeePlayer || !isWithinChasingDistance) {
-            return self.emit(STATE_CHANGE, StatePatrol);
+        if (!this.timer && (!self.canSeePlayer || !isWithinChasingDistance)) {
+            this.timer = self.scene.time.delayedCall(MEMORY_LIMIT, this.stopChasing, [], this);
         }
 
         const direction = self.x - player.x > 0 ? -SPEED : SPEED;
@@ -38,7 +47,6 @@ export default class StateChase extends State {
             x: self.flipX ? 11 : 2,
             y: 9
         };
-
 
         const nextX = self.body.pos.x + (
             self.body.accelGround > 1
@@ -60,6 +68,22 @@ export default class StateChase extends State {
             if (!jumpTargetTile) {
                 return self.emit(STATE_CHANGE, StateEnemyJump);
             }
+        }
+    }
+
+    stopChasing () {
+        const {
+            obj: self
+        } = this;
+
+        return self.emit(STATE_CHANGE, StatePatrol);
+    }
+
+    onExit () {
+        super.onExit();
+
+        if (this.timer) {
+            this.timer.remove(false);
         }
     }
 }
