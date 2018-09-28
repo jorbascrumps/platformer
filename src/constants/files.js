@@ -37,7 +37,7 @@ export const SPRITESHEETS = type('spritesheet', [
     {
         key: 'enemyWalk',
         url: 'enemy/walk.png',
-        config: {
+        frameConfig: {
             frameWidth: 22,
             frameHeight: 33,
             endFrame: 12
@@ -46,7 +46,7 @@ export const SPRITESHEETS = type('spritesheet', [
     {
         key: 'enemyAttack',
         url: 'enemy/attack.png',
-        config: {
+        frameConfig: {
             frameWidth: 43,
             frameHeight: 37,
             endFrame: 18
@@ -55,7 +55,7 @@ export const SPRITESHEETS = type('spritesheet', [
     {
         key: 'enemyIdle',
         url: 'enemy/idle.png',
-        config: {
+        frameConfig: {
             frameWidth: 24,
             frameHeight: 32,
             endFrame: 10
@@ -64,7 +64,7 @@ export const SPRITESHEETS = type('spritesheet', [
     {
         key: 'enemyHit',
         url: 'enemy/hit.png',
-        config: {
+        frameConfig: {
             frameWidth: 30,
             frameHeight: 32,
             endFrame: 9
