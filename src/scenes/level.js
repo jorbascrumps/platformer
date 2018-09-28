@@ -30,7 +30,7 @@ export function create () {
 
     this.background = this.add.tileSprite(0, 0, mapWidth * tileSize, mapHeight * tileSize, 'tilesprite')
         .setOrigin(0, 0);
-    this.background.setPipeline('Light2D');
+    // this.background.setPipeline('Light2D');
 
     this.anims.create({
         key: 'enemyWalk',
@@ -216,13 +216,13 @@ export function create () {
     });
 
     this.decorations.texture = tileset.image;
-    this.decorations.setPipeline('Light2D');
+    // this.decorations.setPipeline('Light2D');
 
     this.ground.texture = tileset.image;
-    this.ground.setPipeline('Light2D');
+    // this.ground.setPipeline('Light2D');
 
     this.interactions.texture = tileset.image;
-    this.interactions.setPipeline('Light2D');
+    // this.interactions.setPipeline('Light2D');
 
     this.lights
         .enable()
