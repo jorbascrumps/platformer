@@ -6,15 +6,15 @@ const type = (type, assets) => assets
 export const IMAGES = type('image', [
     {
         key: 'tiles',
-        file: [ 'tiles.png', 'tiles_n.png' ]
+        url: [ 'tiles.png', 'tiles_n.png' ]
     },
     {
         key: 'player',
-        file: 'nega_nathan.png'
+        url: 'nega_nathan.png'
     },
     {
         key: 'tilesprite',
-        file: [ 'tilesprite.png', 'tilesprite_n.png' ]
+        url: [ 'tilesprite.png', 'tilesprite_n.png' ]
     }
 ]);
 
@@ -36,7 +36,7 @@ export const JSON = type('json', [
 export const SPRITESHEETS = type('spritesheet', [
     {
         key: 'enemyWalk',
-        file: 'enemy/walk.png',
+        url: 'enemy/walk.png',
         config: {
             frameWidth: 22,
             frameHeight: 33,
@@ -45,7 +45,7 @@ export const SPRITESHEETS = type('spritesheet', [
     },
     {
         key: 'enemyAttack',
-        file: 'enemy/attack.png',
+        url: 'enemy/attack.png',
         config: {
             frameWidth: 43,
             frameHeight: 37,
@@ -54,7 +54,7 @@ export const SPRITESHEETS = type('spritesheet', [
     },
     {
         key: 'enemyIdle',
-        file: 'enemy/idle.png',
+        url: 'enemy/idle.png',
         config: {
             frameWidth: 24,
             frameHeight: 32,
@@ -63,7 +63,7 @@ export const SPRITESHEETS = type('spritesheet', [
     },
     {
         key: 'enemyHit',
-        file: 'enemy/hit.png',
+        url: 'enemy/hit.png',
         config: {
             frameWidth: 30,
             frameHeight: 32,
