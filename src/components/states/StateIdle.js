@@ -9,33 +9,27 @@ import {
 } from '@/constants/events';
 
 export default class StateIdle extends State {
-    onEnter () {
-        super.onEnter();
-
-        this.obj.body.offset = {
-            x: this.obj.flipX ? 11 : 2,
-            y: 9
-        };
-        this.obj.anims.play('enemyIdle');
-    }
 
     execute () {
-        if (this.obj.vel.y > 1000) {
-            return this.obj.emit(STATE_CHANGE, StateFalling);
-        }
-
         const {
-            obj: {
+            target: {
                 scene: {
                     cursors
                 }
-            }
+            },
+            target
         } = this;
+
+        /*
+        if (this.target.vel.y > 1000) {
+            return this.target.emit(STATE_CHANGE, StateFalling);
+        }
+
         const groundTilePos = {
-            x: this.obj.body.pos.x + (this.obj.body.size.x / 2),
-            y: this.obj.body.pos.y + this.obj.body.size.y
+            x: this.target.body.pos.x + (this.target.body.size.x / 2),
+            y: this.target.body.pos.y + this.target.body.size.y
         };
-        const currentTileAtPosition = this.obj.scene.interactions.getTileAtWorldXY(groundTilePos.x, groundTilePos.y - 1, true);
+        const currentTileAtPosition = this.target.scene.interactions.getTileAtWorldXY(groundTilePos.x, groundTilePos.y - 1, true);
         const climbKeys = [ 'up', 'down' ];
         const climbKeysPressed = !!Object
             .keys(cursors)
@@ -43,25 +37,27 @@ export default class StateIdle extends State {
             .find(key => cursors[key].isDown);
 
         if (currentTileAtPosition.index === 11 && climbKeysPressed) {
-            return this.obj.emit(STATE_CHANGE, StateLadder);
-        }
-
-        if (this.obj.body.standing && Phaser.Input.Keyboard.JustDown(cursors.up)) {
-            return this.obj.emit(STATE_CHANGE, StateJump);
+            return this.target.emit(STATE_CHANGE, StateLadder);
         }
 
         if (cursors.space.isDown) {
-            return this.obj.emit(STATE_CHANGE, StateAttack);
+            return this.target.emit(STATE_CHANGE, StateAttack);
+        }
+        */
+
+        if (Phaser.Input.Keyboard.JustDown(cursors.up)) {
+            return target.events.emit(STATE_CHANGE, StateJump);
         }
 
         const movementKeys = [ 'left', 'right' ];
         const movementKeysPressed = !!Object
             .keys(cursors)
             .filter(key => movementKeys.includes(key))
-            .find(key => cursors[key].isDown);
+            .some(key => cursors[key].isDown);
 
         if (movementKeysPressed) {
-            return this.obj.emit(STATE_CHANGE, StateWalk);
+            return target.events.emit(STATE_CHANGE, StateWalk);
         }
     }
+
 }
