@@ -18,11 +18,7 @@ window.onload = () => {
         type: Phaser.AUTO,
         width: level.roomWidth * level.tileSize,
         physics: {
-            default: 'impact',
-            impact: {
-                gravity: 2600,
-                // debug: true
-            }
-        },
+            default: 'matter'
+        }
     });
 };
