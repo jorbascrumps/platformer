@@ -1,6 +1,6 @@
 export default class State {
     constructor (obj) {
-        this.obj = obj;
+        this.target = obj;
 
         this.onEnter.bind(this);
         this.execute.bind(this);
@@ -13,8 +13,7 @@ export default class State {
         return console.log(`Enter ${this.constructor.name}`);
     }
 
-    execute () {
-    }
+    execute () {}
 
     onExit () {
         return console.log(`Exit ${this.constructor.name}`);
