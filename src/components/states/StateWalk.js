@@ -5,61 +5,47 @@ import {
     STATE_CHANGE
 } from '@/constants/events';
 
-const SPEED = 225;
+const SPEED_WALK = 0.003;
+const SPEED_RUN = 0.005;
+const VELOCITY_MAX_WALK = 4;
+const VELOCITY_MAX_RUN = 5;
 
 export default class StateWalk extends State {
-    onEnter () {
-        super.onEnter();
-
-        const {
-            obj: {
-                scene: {
-                    cursors
-                }
-            }
-        } = this;
-
-        if (cursors.left.isDown) {
-            this.obj.flipX = true;
-        } else if (cursors.right.isDown) {
-            this.obj.flipX = false;
-        }
-
-        this.obj.body.offset = {
-            x: this.obj.flipX ? 11 : 2,
-            y: 9
-        };
-        this.obj.anims.play('enemyWalk');
-    }
 
     execute () {
         const {
-            obj: {
+            target: {
                 scene: {
                     cursors
                 }
-            }
+            },
+            target
         } = this;
 
-        if (this.obj.body.standing && Phaser.Input.Keyboard.JustDown(cursors.up)) {
-            return this.obj.emit(STATE_CHANGE, StateJump);
+        if (target.isTouching.ground && Phaser.Input.Keyboard.JustDown(cursors.up)) {
+            return target.events.emit(STATE_CHANGE, StateJump);
         }
 
-        if (cursors.left.isDown && cursors.right.isUp) {
-            this.obj.setVelocityX(-SPEED);
-        } else if (cursors.right.isDown && cursors.left.isUp) {
-            this.obj.setVelocityX(SPEED);
+        if (!target.isTouching.left && cursors.left.isDown && cursors.right.isUp) {
+            target.sprite.applyForce({ x: -SPEED_WALK, y: 0 });
+        } else if (!target.isTouching.right && cursors.right.isDown && cursors.left.isUp) {
+            target.sprite.applyForce({ x: SPEED_WALK, y: 0 });
         } else {
-            this.obj.emit(STATE_CHANGE, StateIdle);
+            target.events.emit(STATE_CHANGE, StateIdle);
+        }
+
+        const maxVelocity = target.isTouching.ground
+            ?   VELOCITY_MAX_WALK
+            :   VELOCITY_MAX_WALK / 3;
+        const minVlocity = -maxVelocity;
+
+        if (target.sprite.body.velocity.x > maxVelocity) {
+            target.sprite.setVelocityX(maxVelocity);
+        } else if (target.sprite.body.velocity.x < minVlocity) {
+            target.sprite.setVelocityX(minVlocity);
         }
 
         // TODO: Pan camera down when down held
     }
 
-    onExit () {
-        this.obj.body.offset = {
-            x: this.obj.flipX ? 11 : 2,
-            y: 9
-        };
-    }
 }
