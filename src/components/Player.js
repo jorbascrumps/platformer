@@ -1,3 +1,5 @@
+import EventEmitter from 'eventemitter3';
+
 import StateIdle from './states/StateIdle';
 import {
     DAMAGE_RECEIVE,
@@ -5,9 +7,142 @@ import {
 } from '@/constants/events';
 import LightSource from './LightSource';
 
+const MIN_SEPARATION = 1;
+
+const {
+    Physics: {
+        Matter: {
+            Matter: {
+                Body,
+                Bodies
+            }
+        }
+    }
+} = Phaser;
+
+class Entity {
+
+    constructor (scene, x, y) {
+        this.scene = scene;
+        this.x = x;
+        this.y = y;
+        this.events = new EventEmitter();
+        
+        scene.sys.updateList.add(this);
+
+        this.events.on(STATE_CHANGE, this.changeState, this);
+        this.scene.events.on('update', this.update, this);
+
+        this.events.emit(STATE_CHANGE, StateIdle);
+    }
+
+    update () {
+        if (typeof this.state !== 'undefined') {
+            this.state.execute();
+        }
+    }
+
+    changeState (state) {
+        if (this.state) {
+            this.state.onExit();
+        }
+
+        this.previousState = this.state;
+        this.state = typeof state === 'function'
+            ?   new state(this)
+            :   new state.constructor(this);
+    }
+
+}
+
+export default class Player extends Entity {
+
+    constructor (scene, x, y) {
+        super(scene, x, y);
+
+        const sensorOptions = {
+            isSensor: true
+        };
+        const sprite = this.scene.matter.add.sprite(0, 0, 'player', 0)
+            .setDisplaySize(30, 30)
+            .setSize(30, 30);
+        const mainBody = Bodies.rectangle(0, 0, sprite.width, sprite.height, {
+            chamfer: {
+                radius: 10
+            }
+        });
+        this.sensors = {
+            right: Bodies.rectangle(sprite.width * 0.5, 0, 2, sprite.height * 0.5, sensorOptions),
+            bottom: Bodies.rectangle(0, sprite.height * 0.5, sprite.width * 0.25, 2, sensorOptions),
+            left: Bodies.rectangle(-sprite.width * 0.5, 0, 2, sprite.height * 0.5, sensorOptions)
+        };
+        const compoundBody = Body.create({
+            parts: [
+                mainBody,
+                ...Object.values(this.sensors)
+            ],
+            frictionStatic: 0,
+            frictionAir: 0.02,
+            friction: 0.1
+        });
+        this.sprite = sprite
+            .setExistingBody(compoundBody)
+            .setFixedRotation()
+            .setPosition(x, y);
+
+        this.isTouching = {
+            left: false,
+            right: false,
+            ground: false
+        };
+        this.scene.matterCollision.addOnCollideStart({
+            objectA: Object.values(this.sensors),
+            callback: this.onSensorCollide,
+            context: this
+        });
+        this.scene.matterCollision.addOnCollideActive({
+            objectA: Object.values(this.sensors),
+            callback: this.onSensorCollide,
+            context: this
+        });
+
+        scene.matter.world.on('beforeupdate', this.resetTouching, this);
+    }
+
+    onSensorCollide ({ bodyA, bodyB, pair: { separation } }) {
+        if (bodyB.isSensor) {
+            return;
+        }
+
+        if (bodyA === this.sensors.left) {
+            this.isTouching.left = true;
+
+            if (separation > MIN_SEPARATION) {
+                this.sprite.x += separation - MIN_SEPARATION;
+            }
+        } else if (bodyA === this.sensors.right) {
+            this.isTouching.right = true;
+
+            if (separation > MIN_SEPARATION) {
+                this.sprite.x -= separation - MIN_SEPARATION;
+            }
+        } else if (bodyA === this.sensors.bottom) {
+            this.isTouching.ground = true;
+        }
+    }
+
+    resetTouching () {
+        this.isTouching.left = false;
+        this.isTouching.right = false;
+        this.isTouching.ground = false;
+    }
+
+}
+
+/*
 export default class Player extends Phaser.Physics.Impact.Sprite {
     constructor (scene, x, y) {
-        super(scene.impact.world, x, y, 'enemyWalk');
+        super(scene.matter.world, x, y, 'enemyWalk');
 
         this.update.bind(this);
         this.changeState.bind(this);
@@ -18,7 +153,7 @@ export default class Player extends Phaser.Physics.Impact.Sprite {
         this.setActiveCollision();
         this.setAvsB();
         this.setOrigin(0.5, 0.5);
-        this.setMaxVelocity(500);
+        // this.setMaxVelocity(500);
         this.setFriction(2000, 100);
         this.setBodySize(10, 23);
 
@@ -59,31 +194,5 @@ export default class Player extends Phaser.Physics.Impact.Sprite {
         this.vulnerable = false;
         this.scene.time.delayedCall(this.hitGracePeriod, () => this.vulnerable = true);
     }
-
-    preUpdate (...args) {
-        this.update(...args);
-    }
-
-    update () {
-        const {
-            scene: {
-                cursors
-            }
-        } = this;
-
-        if (typeof this.state !== 'undefined') {
-            this.state.execute(this);
-        }
-    }
-
-    changeState (state) {
-        if (this.state) {
-            this.state.onExit(this);
-        }
-
-        this.previousState = this.state;
-        this.state = typeof state === 'function'
-            ?   new state(this)
-            :   new state.constructor(this);
-    }
 }
+*/
