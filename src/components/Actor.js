@@ -18,7 +18,6 @@ export default class Actor {
     }
 
     constructor (scene, x, y) {
-        console.log('ACTOR!');
         this.scene = scene;
         this.x = x;
         this.y = y;
@@ -30,6 +29,7 @@ export default class Actor {
         this.scene.events.on('update', this.update, this);
 
         this.events.emit(STATE_CHANGE, StateIdle);
+        scene.matter.world.on('beforeupdate', this.resetTouching, this);
     }
 
     update () {

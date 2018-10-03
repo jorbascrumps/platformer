@@ -57,8 +57,6 @@ export default class Player extends Actor {
             callback: this.onSensorCollide,
             context: this
         });
-
-        scene.matter.world.on('beforeupdate', this.resetTouching, this);
     }
 
 }
