@@ -64,11 +64,11 @@ export default class Player extends Entity {
             isSensor: true
         };
         const sprite = this.scene.matter.add.sprite(0, 0, 'player', 0)
-            .setDisplaySize(30, 30)
-            .setSize(30, 30);
+            .setDisplaySize(15, 30)
+            .setSize(15, 30);
         const mainBody = Bodies.rectangle(0, 0, sprite.width, sprite.height, {
             chamfer: {
-                radius: 10
+                radius: 4
             }
         });
         this.sensors = {
@@ -83,7 +83,7 @@ export default class Player extends Entity {
             ],
             frictionStatic: 0,
             frictionAir: 0.02,
-            friction: 0.1
+            friction: 0.05
         });
         this.sprite = sprite
             .setExistingBody(compoundBody)
