@@ -40,7 +40,13 @@ export default class Player extends Actor {
             ],
             frictionStatic: 0,
             frictionAir: 0.02,
-            friction: 0.05
+            friction: 0.05,
+            render: {
+                sprite: {
+                    xOffset: 1,
+                    yOffset: 0.3
+                }
+            }
         });
         this.sprite = sprite
             .setExistingBody(compoundBody)
