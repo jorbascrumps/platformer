@@ -1,3 +1,5 @@
+import Slopes from 'phaser-slopes';
+
 import {
     LEVEL,
     PAUSE,
@@ -24,6 +26,10 @@ let startPosition = {
     x: 0,
     y: 0
 };
+
+export function preload () {
+    this.load.scenePlugin('Slopes', Slopes);
+}
 
 export function create () {
     this.scene.launch(UI);
