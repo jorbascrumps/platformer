@@ -21,8 +21,8 @@ export default class Player extends Actor {
             isSensor: true
         };
         const sprite = this.scene.matter.add.sprite(0, 0, 'player', 0)
-            .setDisplaySize(15, 30)
-            .setSize(15, 30);
+            .setDisplaySize(16, 32)
+            .setSize(16, 32);
         const mainBody = Bodies.rectangle(0, 0, sprite.width, sprite.height, {
             chamfer: {
                 radius: 4
