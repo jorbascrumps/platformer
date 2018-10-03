@@ -1,13 +1,5 @@
-import EventEmitter from 'eventemitter3';
-
-import StateIdle from './states/StateIdle';
-import {
-    DAMAGE_RECEIVE,
-    STATE_CHANGE
-} from '@/constants/events';
+import Actor from './Actor';
 import LightSource from './LightSource';
-
-const MIN_SEPARATION = 1;
 
 const {
     Physics: {
@@ -20,49 +12,7 @@ const {
     }
 } = Phaser;
 
-class Entity {
-
-    constructor (scene, x, y) {
-        this.scene = scene;
-        this.x = x;
-        this.y = y;
-        this.events = new EventEmitter();
-        
-        scene.sys.updateList.add(this);
-
-        this.events.on(STATE_CHANGE, this.changeState, this);
-        this.scene.events.on('update', this.update, this);
-
-        this.events.emit(STATE_CHANGE, StateIdle);
-    }
-
-    update () {
-        if (typeof this.state !== 'undefined') {
-            this.state.execute();
-        }
-    }
-
-    changeState (state) {
-        if (this.state) {
-            this.state.onExit();
-        }
-
-        this.previousState = this.state;
-        this.state = typeof state === 'function'
-            ?   new state(this)
-            :   new state.constructor(this);
-    }
-
-}
-
-export default class Player extends Entity {
-
-    #isTouching = {
-        left: false,
-        ground: false,
-        ladder: false,
-        right: false,
-    }
+export default class Player extends Actor {
 
     constructor (scene, x, y) {
         super(scene, x, y);
@@ -111,107 +61,4 @@ export default class Player extends Entity {
         scene.matter.world.on('beforeupdate', this.resetTouching, this);
     }
 
-    get isTouchingGround () {
-        return this.#isTouching.ground;
-    }
-
-    get isTouchingLadder () {
-        return this.#isTouching.ladder;
-    }
-
-    get isTouchingLeft () {
-        return this.#isTouching.left;
-    }
-
-    get isTouchingRight () {
-        return this.#isTouching.right;
-    }
-
-    onSensorCollide ({ bodyA, bodyB, pair: { separation } }) {
-        if (bodyB.isSensor) {
-            return this.#isTouching.ladder = true;
-        }
-
-        if (bodyA === this.sensors.left) {
-            this.#isTouching.left = true;
-
-            if (separation > MIN_SEPARATION) {
-                this.sprite.x += separation - MIN_SEPARATION;
-            }
-        } else if (bodyA === this.sensors.right) {
-            this.#isTouching.right = true;
-
-            if (separation > MIN_SEPARATION) {
-                this.sprite.x -= separation - MIN_SEPARATION;
-            }
-        } else if (bodyA === this.sensors.bottom) {
-            this.#isTouching.ground = true;
-        }
-    }
-
-    resetTouching () {
-        this.#isTouching.left = false;
-        this.#isTouching.right = false;
-        this.#isTouching.ground = false;
-        this.#isTouching.ladder = false;
-    }
-
 }
-
-/*
-export default class Player extends Phaser.Physics.Impact.Sprite {
-    constructor (scene, x, y) {
-        super(scene.matter.world, x, y, 'enemyWalk');
-
-        this.update.bind(this);
-        this.changeState.bind(this);
-
-        this.on(DAMAGE_RECEIVE, this.damage);
-        this.on(STATE_CHANGE, this.changeState);
-
-        this.setActiveCollision();
-        this.setAvsB();
-        this.setOrigin(0.5, 0.5);
-        // this.setMaxVelocity(500);
-        this.setFriction(2000, 100);
-        this.setBodySize(10, 23);
-
-        this.light = new LightSource({
-            scene: this.scene,
-            x: this.x,
-            y: this.y,
-            flicker: true,
-            radius: 150
-        })
-            .startFollow(this);
-        this.health = 5;
-        this.hitGracePeriod = 1000;
-        this.vulnerable = true;
-
-        this.body.offset = {
-            x: 2,
-            y: 9
-        };
-
-        this.previousState = null;
-        this.emit(STATE_CHANGE, StateIdle);
-    }
-
-    damage (v) {
-        if (!this.vulnerable) {
-            return;
-        }
-
-        const value = parseInt(v, 10);
-        const newHealth = this.health - value;
-
-        if (newHealth <= 0) {
-            alert('Game over!');
-        }
-
-        this.health = newHealth;
-        this.vulnerable = false;
-        this.scene.time.delayedCall(this.hitGracePeriod, () => this.vulnerable = true);
-    }
-}
-*/
