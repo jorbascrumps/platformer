@@ -19,6 +19,15 @@ window.onload = () => {
         width: level.roomWidth * level.tileSize,
         physics: {
             default: 'matter'
+        },
+        plugins: {
+            scene: [
+                {
+                    plugin: PhaserMatterCollisionPlugin,
+                    key: 'matterCollision',
+                    mapping: 'matterCollision'
+                }
+            ]
         }
     });
 };
