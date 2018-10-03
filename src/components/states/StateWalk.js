@@ -22,19 +22,19 @@ export default class StateWalk extends State {
             target
         } = this;
 
-        if (target.isTouching.ground && Phaser.Input.Keyboard.JustDown(cursors.up)) {
+        if (target.isTouchingGround && Phaser.Input.Keyboard.JustDown(cursors.up)) {
             return target.events.emit(STATE_CHANGE, StateJump);
         }
 
-        if (!target.isTouching.left && cursors.left.isDown && cursors.right.isUp) {
+        if (!target.isTouchingLeft && cursors.left.isDown && cursors.right.isUp) {
             target.sprite.applyForce({ x: -SPEED_WALK, y: 0 });
-        } else if (!target.isTouching.right && cursors.right.isDown && cursors.left.isUp) {
+        } else if (!target.isTouchingRight && cursors.right.isDown && cursors.left.isUp) {
             target.sprite.applyForce({ x: SPEED_WALK, y: 0 });
         } else {
             target.events.emit(STATE_CHANGE, StateIdle);
         }
 
-        const maxVelocity = target.isTouching.ground
+        const maxVelocity = target.isTouchingGround
             ?   VELOCITY_MAX_WALK
             :   VELOCITY_MAX_WALK / 3;
         const minVlocity = -maxVelocity;

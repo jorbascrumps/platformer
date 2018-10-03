@@ -23,7 +23,7 @@ export default class StateJump extends State {
             target
         } = this;
 
-        if (target.isTouching.ground) {
+        if (target.isTouchingGround) {
             return target.events.emit(STATE_CHANGE, target.previousState);
         }
 

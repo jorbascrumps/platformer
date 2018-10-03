@@ -24,7 +24,7 @@ export default class StateLadder extends State {
             target
         } = this;
 
-        if (!target.isTouching.ladder) {
+        if (!target.isTouchingLadder) {
             return target.events.emit(STATE_CHANGE, StateIdle);
         }
 

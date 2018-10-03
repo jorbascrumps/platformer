@@ -57,6 +57,13 @@ class Entity {
 
 export default class Player extends Entity {
 
+    #isTouching = {
+        left: false,
+        ground: false,
+        ladder: false,
+        right: false,
+    }
+
     constructor (scene, x, y) {
         super(scene, x, y);
 
@@ -90,12 +97,6 @@ export default class Player extends Entity {
             .setFixedRotation()
             .setPosition(x, y);
 
-        this.isTouching = {
-            left: false,
-            right: false,
-            ground: false,
-            ladder: false
-        };
         this.scene.matterCollision.addOnCollideStart({
             objectA: Object.values(this.sensors),
             callback: this.onSensorCollide,
@@ -110,33 +111,49 @@ export default class Player extends Entity {
         scene.matter.world.on('beforeupdate', this.resetTouching, this);
     }
 
+    get isTouchingGround () {
+        return this.#isTouching.ground;
+    }
+
+    get isTouchingLadder () {
+        return this.#isTouching.ladder;
+    }
+
+    get isTouchingLeft () {
+        return this.#isTouching.left;
+    }
+
+    get isTouchingRight () {
+        return this.#isTouching.right;
+    }
+
     onSensorCollide ({ bodyA, bodyB, pair: { separation } }) {
         if (bodyB.isSensor) {
-            return this.isTouching.ladder = true;
+            return this.#isTouching.ladder = true;
         }
 
         if (bodyA === this.sensors.left) {
-            this.isTouching.left = true;
+            this.#isTouching.left = true;
 
             if (separation > MIN_SEPARATION) {
                 this.sprite.x += separation - MIN_SEPARATION;
             }
         } else if (bodyA === this.sensors.right) {
-            this.isTouching.right = true;
+            this.#isTouching.right = true;
 
             if (separation > MIN_SEPARATION) {
                 this.sprite.x -= separation - MIN_SEPARATION;
             }
         } else if (bodyA === this.sensors.bottom) {
-            this.isTouching.ground = true;
+            this.#isTouching.ground = true;
         }
     }
 
     resetTouching () {
-        this.isTouching.left = false;
-        this.isTouching.right = false;
-        this.isTouching.ground = false;
-        this.isTouching.ladder = false;
+        this.#isTouching.left = false;
+        this.#isTouching.right = false;
+        this.#isTouching.ground = false;
+        this.#isTouching.ladder = false;
     }
 
 }

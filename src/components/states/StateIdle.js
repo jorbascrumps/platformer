@@ -46,6 +46,10 @@ export default class StateIdle extends State {
         */
 
         if (Phaser.Input.Keyboard.JustDown(cursors.up)) {
+            if (target.isTouchingLadder) {
+                return target.events.emit(STATE_CHANGE, StateLadder);
+            }
+
             return target.events.emit(STATE_CHANGE, StateJump);
         }
 
