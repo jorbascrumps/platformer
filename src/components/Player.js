@@ -93,7 +93,8 @@ export default class Player extends Entity {
         this.isTouching = {
             left: false,
             right: false,
-            ground: false
+            ground: false,
+            ladder: false
         };
         this.scene.matterCollision.addOnCollideStart({
             objectA: Object.values(this.sensors),
@@ -111,7 +112,7 @@ export default class Player extends Entity {
 
     onSensorCollide ({ bodyA, bodyB, pair: { separation } }) {
         if (bodyB.isSensor) {
-            return;
+            return this.isTouching.ladder = true;
         }
 
         if (bodyA === this.sensors.left) {
@@ -135,6 +136,7 @@ export default class Player extends Entity {
         this.isTouching.left = false;
         this.isTouching.right = false;
         this.isTouching.ground = false;
+        this.isTouching.ladder = false;
     }
 
 }
