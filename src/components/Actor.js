@@ -37,7 +37,7 @@ export default class Actor {
             this.state.execute();
         }
 
-        // TODO: Flip sprite depending on movement direction
+        this.sprite.flipX = this.sprite.body.force.x < 0;
     }
 
     changeState (state) {
