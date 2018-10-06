@@ -25,17 +25,17 @@ export default class Enemy extends Actor {
             isSensor: true
         };
         const sprite = this.scene.matter.add.sprite(0, 0, 'player', 0)
-            .setDisplaySize(16, 32)
-            .setSize(16, 32);
-        const mainBody = Bodies.rectangle(0, 0, sprite.width, sprite.height, {
+            .setDisplaySize(32, 32)
+            .setSize(32, 32);
+        const mainBody = Bodies.rectangle(0, 0, 16, 32, {
             chamfer: {
                 radius: 4
             }
         });
         this.sensors = {
-            right: Bodies.rectangle(sprite.width * 0.5, 0, 2, sprite.height * 0.5, sensorOptions),
+            right: Bodies.rectangle(8, 0, 2, sprite.height * 0.5, sensorOptions),
             bottom: Bodies.rectangle(0, sprite.height * 0.5, sprite.width * 0.25, 2, sensorOptions),
-            left: Bodies.rectangle(-sprite.width * 0.5, 0, 2, sprite.height * 0.5, sensorOptions)
+            left: Bodies.rectangle(-8, 0, 2, sprite.height * 0.5, sensorOptions)
         };
         const compoundBody = Body.create({
             parts: [
@@ -47,8 +47,8 @@ export default class Enemy extends Actor {
             friction: 0.05,
             render: {
                 sprite: {
-                    xOffset: 1,
-                    yOffset: 0.3
+                    xOffset: 0,
+                    yOffset: 0.1
                 }
             }
         });
@@ -57,6 +57,7 @@ export default class Enemy extends Actor {
             .setFixedRotation()
             .setPosition(x, y)
             .setTint(0xce4a4a);
+        sprite.anims.play('enemyPatrol');
 
         this.events.emit(STATE_CHANGE, StatePatrol);
     }

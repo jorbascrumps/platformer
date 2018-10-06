@@ -60,6 +60,17 @@ export function create () {
         repeat: -1,
         repeatDelay: 0
     });
+    this.anims.create({
+        key: 'enemyPatrol',
+        frames: this.anims.generateFrameNumbers('enemyPatrol', {
+            start: 8,
+            end: 11,
+            first: 8
+        }),
+        frameRate: 8,
+        repeat: -1,
+        repeatDelay: 0
+    })
 
     const generatedMap = new Map({
         size: {

@@ -69,5 +69,14 @@ export const SPRITESHEETS = type('spritesheet', [
             frameHeight: 32,
             endFrame: 9
         }
+    },
+    {
+        key: 'enemyPatrol',
+        url: 'enemy/patrol.png',
+        frameConfig: {
+            endFrame: 30,
+            frameHeight: 64,
+            frameWidth: 64
+        }
     }
 ]);
