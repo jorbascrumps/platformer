@@ -22,6 +22,7 @@ export default class Actor {
         this.x = x;
         this.y = y;
         this.events = new EventEmitter();
+        this.data = new Phaser.Data.DataManager(this, this.events);
 
         scene.sys.updateList.add(this);
 
