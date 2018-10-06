@@ -45,7 +45,7 @@ export default class StatePatrol extends State {
         const nextX = target.sprite.x + (target.sprite.displayWidth / 2 * direction);
         const nextY = target.sprite.y + (target.sprite.displayHeight / 2);
         const nextGroundTile = ground.getTileAtWorldXY(nextX, nextY, true);
-        const nextAirTile = ground.getTileAtWorldXY(nextX, nextY - 1, true);
+        const nextAirTile = ground.getTileAtWorldXY(nextX, nextY - (target.sprite.displayHeight / 2), true);
 
         if ((nextGroundTile === null || !nextGroundTile.collides) || (nextAirTile === null || nextAirTile.collides)) {
             target.sprite.setVelocity(0);
