@@ -29,7 +29,6 @@ export default class Actor {
         this.events.on(STATE_CHANGE, this.changeState, this);
         this.scene.events.on('update', this.update, this);
 
-        this.events.emit(STATE_CHANGE, StateIdle);
         scene.matter.world.on('beforeupdate', this.resetTouching, this);
     }
 

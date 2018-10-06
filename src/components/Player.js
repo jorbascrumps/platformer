@@ -1,5 +1,9 @@
 import Actor from './Actor';
 import LightSource from './LightSource';
+import StateIdle from './states/StateIdle';
+import {
+    STATE_CHANGE
+} from '@/constants/events';
 
 const {
     Physics: {
@@ -63,6 +67,8 @@ export default class Player extends Actor {
             callback: this.onSensorCollide,
             context: this
         });
+
+        this.events.emit(STATE_CHANGE, StateIdle);
     }
 
 }
