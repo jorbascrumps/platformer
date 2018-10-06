@@ -1,6 +1,8 @@
 export default class State {
-    constructor (obj) {
-        this.target = obj;
+    constructor (target) {
+        this.target = target;
+        this.debugGraphic = target.scene.add.graphics()
+            .fillStyle(0x00ff00, 1);
 
         this.onEnter.bind(this);
         this.execute.bind(this);
