@@ -5,7 +5,7 @@ import {
 } from '@/constants/events';
 
 const REACTION_DISTANCE = 200;
-const SPEED_WALK = 0.0005;
+const SPEED_WALK = 0.00025;
 const SPEED_RUN = 0.005;
 const VELOCITY_MAX_WALK = 4;
 const VELOCITY_MAX_RUN = 5;
