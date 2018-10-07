@@ -1,6 +1,6 @@
 import State from './State';
+import StateAttack from './StateAttack';
 import StateEnemyJump from './StateEnemyJump';
-import StatePatrol from './StatePatrol';
 import {
     STATE_CHANGE
 } from '@/constants/events';
@@ -40,7 +40,7 @@ export default class StateChase extends State {
         const isWithinAttackingDistance = distanceToPlayer < ATTACK_DISTANCE;
         
         if (isWithinAttackingDistance) {
-            return console.warn('[Atack Player]');
+            return target.events.emit(STATE_CHANGE, StateAttack);
         }
 
         if (!isWithinChasingDistance) {
