@@ -12,6 +12,18 @@ const VELOCITY_MAX_RUN = 5;
 
 export default class StatePatrol extends State {
 
+    onEnter () {
+        super.onEnter();
+
+        const {
+            target: {
+                sprite
+            }
+        } = this;
+
+        sprite.anims.play('enemyPatrol');
+    }
+
     execute () {
         const {
             target: {
