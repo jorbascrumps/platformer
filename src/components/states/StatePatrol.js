@@ -4,7 +4,7 @@ import {
     STATE_CHANGE
 } from '@/constants/events';
 
-const REACTION_DISTANCE = 200;
+const REACTION_DISTANCE = 150;
 const SPEED_WALK = 0.00025;
 const SPEED_RUN = 0.005;
 const VELOCITY_MAX_WALK = 4;
@@ -34,13 +34,9 @@ export default class StatePatrol extends State {
         );
         const isWithinChasingDistance = distanceToPlayerX <= REACTION_DISTANCE;
 
-        if (isWithinChasingDistance) {
-            return target.sprite.setVelocityX(0);
+        if (/*this.obj.canSeePlayer &&*/ isWithinChasingDistance /*&& (player.y >= self.y && self.y + self.height >= player.y)*/) {
+            return target.events.emit(STATE_CHANGE, StateChase);
         }
-
-        // if (this.obj.canSeePlayer && isWithinChasingDistance && (player.y >= self.y && self.y + self.height >= player.y)) {
-        //     return self.emit(STATE_CHANGE, StateChase);
-        // }
 
         const nextX = target.sprite.x + (target.sprite.displayWidth / 2 * direction);
         const nextY = target.sprite.y + (target.sprite.displayHeight / 2);

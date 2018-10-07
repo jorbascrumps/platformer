@@ -5,78 +5,81 @@ import {
     STATE_CHANGE
 } from '@/constants/events';
 
-const SPEED = 100;
-const REACTION_DISTANCE = 200;
+const SPEED_RUN = 0.00005;
+const VELOCITY_MAX_RUN = 1;
+const REACTION_DISTANCE = 150;
+const ATTACK_DISTANCE = 20;
 const MEMORY_LIMIT = 1500;
 
 export default class StateChase extends State {
+
     onEnter () {
         super.onEnter();
-
-        this.stopChasing.bind(this);
-
-        const {
-            obj: self
-        } = this;
-
-        self.body.accelGround = SPEED;
-        self.anims.play('enemyWalk');
 
         this.timer = null;
     }
 
     execute () {
         const {
-            obj: self
+            target: {
+                scene: {
+                    player
+                },
+                scene
+            },
+            target
         } = this;
-        const player = players.getFirstAlive();
 
-        const distanceToPlayer = Phaser.Math.Distance.Between(self.x, self.y, player.x, player.y);
-        const isWithinChasingDistance = distanceToPlayer < REACTION_DISTANCE;
-
-        if (!this.timer && (!self.canSeePlayer || !isWithinChasingDistance)) {
-            this.timer = self.scene.time.delayedCall(MEMORY_LIMIT, this.stopChasing, [], this);
-        }
-
-        const direction = self.x - player.x > 0 ? -SPEED : SPEED;
-        self.setVelocityX(direction);
-
-        self.body.accelGround = direction;
-        self.flipX = direction < 0;
-        self.body.offset = {
-            x: self.flipX ? 11 : 2,
-            y: 9
-        };
-
-        const nextX = self.body.pos.x + (
-            self.body.accelGround > 1
-                ?   self.body.size.x + 1
-                :   -1
+        const distanceToPlayer = Phaser.Math.Distance.Between(
+            target.sprite.x,
+            target.sprite.y,
+            player.sprite.x,
+            player.sprite.y
         );
-        const nextY = self.body.pos.y + self.body.size.y + 1;
-        const nextAirTile = self.scene.ground.getTileAtWorldXY(nextX, nextY - (self.body.size.y / 2), true);
-
-        if (nextAirTile.collides) {
-            const jumpTargetX = self.body.pos.x + (
-                self.body.accelGround > 1
-                    ?   self.body.size.x + 32
-                    :   -32
-            );
-            const jumpTargetY = self.body.pos.y - 16;
-            const jumpTargetTile = self.scene.ground.getTileAtWorldXY(jumpTargetX, jumpTargetY);
-
-            if (!jumpTargetTile) {
-                return self.emit(STATE_CHANGE, StateEnemyJump);
-            }
+        const isWithinChasingDistance = distanceToPlayer < REACTION_DISTANCE;
+        const isWithinAttackingDistance = distanceToPlayer < ATTACK_DISTANCE;
+        
+        if (isWithinAttackingDistance) {
+            return console.warn('[Atack Player]');
         }
-    }
 
-    stopChasing () {
-        const {
-            obj: self
-        } = this;
+        if (!isWithinChasingDistance) {
+            if (!this.timer) {
+                this.timer = scene.time.delayedCall(
+                    MEMORY_LIMIT,
+                    () => target.events.emit(STATE_CHANGE, target.previousState),
+                    [],
+                    this
+                );
+            }
 
-        return self.emit(STATE_CHANGE, StatePatrol);
+            return;
+        }
+
+        if (target.sprite.x < player.sprite.x) {
+            target.sprite.applyForce({ x: -SPEED_RUN, y: 0 });
+            target.sprite.setVelocityX(VELOCITY_MAX_RUN);
+        } else if (target.sprite.x > player.sprite.x) {
+            target.sprite.applyForce({ x: SPEED_RUN, y: 0 });
+            target.sprite.setVelocityX(-VELOCITY_MAX_RUN);
+        }
+
+        // const nextY = self.body.pos.y + self.body.size.y + 1;
+        // const nextAirTile = self.scene.ground.getTileAtWorldXY(nextX, nextY - (self.body.size.y / 2), true);
+
+        // if (nextAirTile.collides) {
+        //     const jumpTargetX = self.body.pos.x + (
+        //         self.body.accelGround > 1
+        //             ?   self.body.size.x + 32
+        //             :   -32
+        //     );
+        //     const jumpTargetY = self.body.pos.y - 16;
+        //     const jumpTargetTile = self.scene.ground.getTileAtWorldXY(jumpTargetX, jumpTargetY);
+        //
+        //     if (!jumpTargetTile) {
+        //         return self.emit(STATE_CHANGE, StateEnemyJump);
+        //     }
+        // }
     }
 
     onExit () {
@@ -86,4 +89,5 @@ export default class StateChase extends State {
             this.timer.remove(false);
         }
     }
+
 }
