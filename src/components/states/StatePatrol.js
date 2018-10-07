@@ -27,8 +27,8 @@ export default class StatePatrol extends State {
         } = target.data.getAll();
 
         const distanceToPlayerX = Phaser.Math.Distance.Between(
-            target.sprite.x + (target.sprite.displayWidth / 2),
-            target.sprite.y + (target.sprite.displayHeight / 2),
+            target.sprite.x,
+            target.sprite.y,
             player.sprite.x,
             player.sprite.y
         );
