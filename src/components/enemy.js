@@ -57,7 +57,6 @@ export default class Enemy extends Actor {
             .setFixedRotation()
             .setPosition(x, y)
             .setTint(0xce4a4a);
-        sprite.anims.play('enemyPatrol');
 
         this.events.emit(STATE_CHANGE, StatePatrol);
     }
