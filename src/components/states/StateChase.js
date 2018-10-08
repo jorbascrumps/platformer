@@ -10,13 +10,26 @@ const VELOCITY_MAX_RUN = 1;
 const REACTION_DISTANCE = 150;
 const ATTACK_DISTANCE = 18;
 const MEMORY_LIMIT = 1500;
+const ATTACK_COOLDOWN = 1500;
 
 export default class StateChase extends State {
 
     onEnter () {
         super.onEnter();
 
-        this.timer = null;
+        const {
+            target: {
+                scene
+            }
+        } = this;
+
+        this.amnesiaTimer = null;
+
+        this.cooldownTimer = scene.time.addEvent({
+            delay: ATTACK_COOLDOWN,
+            callback: this.onCooldownComplete,
+            callbackScope: this
+        });
     }
 
     execute () {
@@ -38,14 +51,14 @@ export default class StateChase extends State {
         );
         const isWithinChasingDistance = distanceToPlayer < REACTION_DISTANCE;
         const isWithinAttackingDistance = distanceToPlayer < ATTACK_DISTANCE;
-        
-        if (isWithinAttackingDistance) {
+        // console.log(this.cooldownTimer);
+        if (isWithinAttackingDistance && !this.cooldownTimer) {
             return target.events.emit(STATE_CHANGE, StateAttack);
         }
 
         if (!isWithinChasingDistance) {
-            if (!this.timer) {
-                this.timer = scene.time.delayedCall(
+            if (!this.amnesiaTimer) {
+                this.amnesiaTimer = scene.time.delayedCall(
                     MEMORY_LIMIT,
                     () => target.events.emit(STATE_CHANGE, target.previousState),
                     [],
@@ -85,9 +98,19 @@ export default class StateChase extends State {
     onExit () {
         super.onExit();
 
-        if (this.timer) {
-            this.timer.remove(false);
+        if (this.amnesiaTimer) {
+            this.amnesiaTimer.remove(false);
         }
+
+        if (this.cooldownTimer) {
+            this.cooldownTimer.remove(false);
+        }
+    }
+    
+    onCooldownComplete () {
+        console.log('??');
+        this.cooldownTimer.remove(false)
+        this.cooldownTimer = null;
     }
 
 }
