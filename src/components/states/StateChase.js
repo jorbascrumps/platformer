@@ -8,7 +8,7 @@ import {
 const SPEED_RUN = 0.00005;
 const VELOCITY_MAX_RUN = 1;
 const REACTION_DISTANCE = 150;
-const ATTACK_DISTANCE = 20;
+const ATTACK_DISTANCE = 18;
 const MEMORY_LIMIT = 1500;
 
 export default class StateChase extends State {
