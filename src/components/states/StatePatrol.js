@@ -34,6 +34,13 @@ export default class StatePatrol extends State {
             },
             target
         } = this;
+
+        if (target.isTouchingLeft) {
+            target.data.set('direction', 1);
+        } else if (target.isTouchingRight) {
+            target.data.set('direction', -1);
+        }
+
         const {
             direction = 1
         } = target.data.getAll();
