@@ -56,10 +56,10 @@ export default class StateChase extends State {
             return;
         }
 
-        if (target.sprite.x < player.sprite.x) {
+        if (target.sprite.x < player.sprite.x && !target.isTouchingRight) {
             target.sprite.applyForce({ x: -SPEED_RUN, y: 0 });
             target.sprite.setVelocityX(VELOCITY_MAX_RUN);
-        } else if (target.sprite.x > player.sprite.x) {
+        } else if (target.sprite.x > player.sprite.x && !target.isTouchingLeft) {
             target.sprite.applyForce({ x: SPEED_RUN, y: 0 });
             target.sprite.setVelocityX(-VELOCITY_MAX_RUN);
         }
