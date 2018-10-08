@@ -71,4 +71,12 @@ export default class Player extends Actor {
         this.events.emit(STATE_CHANGE, StateIdle);
     }
 
+    onSensorCollide ({ bodyA, bodyB }) {
+        if (bodyB.label === 'ladder') {
+            return this.isTouchingLadder = true;
+        }
+
+        return super.onSensorCollide(...arguments);
+    }
+
 }

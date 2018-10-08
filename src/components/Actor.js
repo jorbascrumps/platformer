@@ -52,10 +52,6 @@ export default class Actor {
     }
 
     onSensorCollide ({ bodyA, bodyB, pair: { separation } }) {
-        if (bodyB.isSensor) {
-            return this.#isTouching.ladder = true;
-        }
-
         if (bodyA === this.sensors.left) {
             this.#isTouching.left = true;
 
@@ -79,6 +75,12 @@ export default class Actor {
 
     get isTouchingLadder () {
         return this.#isTouching.ladder;
+    }
+
+    set isTouchingLadder (val) {
+        this.#isTouching.ladder = val;
+
+        return this;
     }
 
     get isTouchingLeft () {
