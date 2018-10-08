@@ -58,7 +58,26 @@ export default class Enemy extends Actor {
             .setPosition(x, y)
             .setTint(0xce4a4a);
 
+        this.scene.matterCollision.addOnCollideStart({
+            objectA: Object.values(this.sensors),
+            callback: this.onSensorCollide,
+            context: this
+        });
+        this.scene.matterCollision.addOnCollideActive({
+            objectA: Object.values(this.sensors),
+            callback: this.onSensorCollide,
+            context: this
+        });
+
         this.events.emit(STATE_CHANGE, StatePatrol);
+    }
+
+    onSensorCollide ({ bodyA, bodyB }) {
+        if (bodyB.isSensor) {
+            return;
+        }
+
+        return super.onSensorCollide(...arguments);
     }
 
     // update () {
