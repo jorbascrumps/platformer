@@ -108,7 +108,6 @@ export default class StateChase extends State {
     }
     
     onCooldownComplete () {
-        console.log('??');
         this.cooldownTimer.remove(false)
         this.cooldownTimer = null;
     }
