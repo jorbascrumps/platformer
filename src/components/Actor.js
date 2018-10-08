@@ -10,6 +10,8 @@ const MIN_SEPARATION = 1;
 
 export default class Actor {
 
+    #health = 4
+
     #isTouching = {
         left: false,
         ground: false,
@@ -89,6 +91,14 @@ export default class Actor {
 
     get isTouchingRight () {
         return this.#isTouching.right;
+    }
+
+    get health () {
+        return this.#health;
+    }
+
+    set health (val) {
+        this.#health = val;
     }
 
     resetTouching () {
