@@ -1,4 +1,5 @@
 import Actor from './Actor';
+import ActorSprite from './ActorSprite';
 import LightSource from './LightSource';
 import StateIdle from './states/StateIdle';
 import {
@@ -24,7 +25,9 @@ export default class Player extends Actor {
         const sensorOptions = {
             isSensor: true
         };
-        const sprite = this.scene.matter.add.sprite(0, 0, 'player', 0)
+
+        const sprite = new ActorSprite(scene.matter.world, 0, 0, 'player', 0)
+            .setActor(this)
             .setDisplaySize(16, 32)
             .setSize(16, 32);
         const mainBody = Bodies.rectangle(0, 0, sprite.width, sprite.height, {
