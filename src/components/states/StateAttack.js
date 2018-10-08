@@ -2,6 +2,7 @@ import State from './State';
 import StatePatrol from './StatePatrol';
 import StateHit from './StateHit';
 import {
+    DAMAGE_RECEIVE,
     STATE_CHANGE
 } from '@/constants/events';
 
@@ -16,24 +17,32 @@ export default class StateAttack extends State {
             },
         } = this;
 
-        sprite.on('animationcomplete', this.onAnimComplete, this);
         sprite.anims.play('enemyAttack');
-    }
-
-    onExit () {
-        super.onExit();
-
-        const {
-            target: {
-                sprite
-            }
-        } = this;
-
-        sprite.off('animationcomplete', this.onAnimComplete, this);
+        sprite.once('animationcomplete', this.onAnimComplete, this);
     }
 
     onAnimComplete () {
-        this.target.events.emit(STATE_CHANGE, StatePatrol);
+        const {
+            target: {
+                isTouchingLeft,
+                isTouchingRight
+            },
+            target
+        } = this;
+
+        if (isTouchingLeft !== null || isTouchingRight !== null) {
+            const {
+                parent: {
+                    gameObject: {
+                        actor
+                    }
+                }
+            } = isTouchingLeft || isTouchingRight;
+
+            actor.events.emit(DAMAGE_RECEIVE, 1);
+        }
+
+        target.events.emit(STATE_CHANGE, StatePatrol);
     }
 
     // checkWeaponCollisionForFrame (target, anim, enemies) {

@@ -73,7 +73,7 @@ export default class Enemy extends Actor {
     }
 
     onSensorCollide ({ bodyA, bodyB }) {
-        if (bodyB.isSensor) {
+        if (bodyB.isSensor && bodyB.label.indexOf('player') !== 0) {
             return;
         }
 
