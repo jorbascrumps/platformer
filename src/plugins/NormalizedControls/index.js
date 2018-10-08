@@ -41,5 +41,29 @@ export default class extends Phaser.Plugins.BasePlugin {
 
         return 0;
     }
+
+    get verticalThreshold () {
+        const {
+            scene: {
+                cursors,
+                input: {
+                    gamepad
+                }
+            }
+        } = this;
+        const controller = gamepad.getPad(0);
+
+        if (controller.leftStick.y !== 0) {
+            return controller.leftStick.y;
+        }
+
+        if (cursors.up.isDown) {
+            return -1;
+        } else if (cursors.down.isDown) {
+            return 1;
+        }
+
+        return 0;
+    }
     
 }
