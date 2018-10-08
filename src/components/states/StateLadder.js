@@ -18,7 +18,7 @@ export default class StateLadder extends State {
         const {
             target: {
                 scene: {
-                    cursors
+                    normalizedControls
                 }
             },
             target
@@ -28,21 +28,8 @@ export default class StateLadder extends State {
             return target.events.emit(STATE_CHANGE, StateIdle);
         }
 
-        if (cursors.up.isDown) {
-            target.sprite.setVelocityY(-2.5);
-        } else if (cursors.down.isDown) {
-            target.sprite.setVelocityY(2.5);
-        } else {
-            target.sprite.setVelocityY(0);
-        }
-
-        if (cursors.left.isDown) {
-            target.sprite.setVelocityX(-2.5);
-        } else if (cursors.right.isDown) {
-            target.sprite.setVelocityX(2.5);
-        } else {
-            target.sprite.setVelocityX(0);
-        }
+        target.sprite.setVelocityY(normalizedControls.verticalThreshold * 2.5);
+        target.sprite.setVelocityX(normalizedControls.horizontalThreshold * 2.5);
     }
 
     onExit () {

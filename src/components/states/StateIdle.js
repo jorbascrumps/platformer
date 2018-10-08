@@ -45,9 +45,9 @@ export default class StateIdle extends State {
         }
         */
 
-        // if (target.isTouchingLadder) {
-        //     return target.events.emit(STATE_CHANGE, StateLadder);
-        // }
+        if (target.isTouchingLadder && normalizedControls.verticalThreshold !== 0) {
+            return target.events.emit(STATE_CHANGE, StateLadder);
+        }
 
         if (normalizedControls.jump) {
             if (target.isTouchingGround) {
