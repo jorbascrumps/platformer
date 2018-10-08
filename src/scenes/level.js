@@ -32,6 +32,8 @@ export function preload () {
 }
 
 export function create () {
+    this.normalizedControls.init(LEVEL);
+
     this.scene.launch(UI);
 
     this.background = this.add.tileSprite(0, 0, mapWidth * tileSize, mapHeight * tileSize, 'tilesprite')
