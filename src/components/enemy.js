@@ -1,4 +1,5 @@
 import Actor from './Actor';
+import ActorSprite from './ActorSprite';
 import StatePatrol from './states/StatePatrol';
 import {
     DAMAGE_RECEIVE,
@@ -24,7 +25,8 @@ export default class Enemy extends Actor {
         const sensorOptions = {
             isSensor: true
         };
-        const sprite = this.scene.matter.add.sprite(0, 0, 'player', 0)
+        const sprite = new ActorSprite(scene.matter.world, 0, 0, 'player', 0)
+            .setActor(this)
             .setDisplaySize(32, 32)
             .setSize(32, 32);
         const mainBody = Bodies.rectangle(0, 0, 16, 32, {
