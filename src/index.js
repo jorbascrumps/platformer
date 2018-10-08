@@ -4,10 +4,16 @@ import * as preloader from '@/scenes/preloader';
 import * as pause from '@/scenes/pause';
 import NormalizedControlsPlugin from './plugins/NormalizedControls';
 
+const ratioWidth = 16;
+const ratioHeight = 9;
+const height = level.roomHeight * level.tileSize;
+const ratio = height / ratioHeight;
+const width = ratio * ratioWidth;
+
 window.onload = () => {
     const game = new Phaser.Game({
         backgroundColor: 'rgba(0, 0, 0, 0)',
-        height: level.roomHeight * level.tileSize,
+        height,
         input: {
             gamepad: true
         },
@@ -20,7 +26,7 @@ window.onload = () => {
             pause
         ],
         type: Phaser.AUTO,
-        width: level.roomWidth * level.tileSize,
+        width,
         physics: {
             default: 'matter'
         },
