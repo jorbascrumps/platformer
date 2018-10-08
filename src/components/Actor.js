@@ -27,6 +27,7 @@ export default class Actor {
 
         scene.sys.updateList.add(this);
 
+        this.events.on(DAMAGE_RECEIVE, this.receiveDamage, this);
         this.events.on(STATE_CHANGE, this.changeState, this);
         this.scene.events.on('update', this.update, this);
 
@@ -39,6 +40,10 @@ export default class Actor {
         }
 
         this.sprite.flipX = this.sprite.body.force.x < 0;
+    }
+
+    receiveDamage (val) {
+        this.health -= val;
     }
 
     changeState (state) {
