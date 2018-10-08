@@ -50,7 +50,9 @@ export default class StateIdle extends State {
                 return target.events.emit(STATE_CHANGE, StateLadder);
             }
 
-            return target.events.emit(STATE_CHANGE, StateJump);
+            if (target.isTouchingGround) {
+                return target.events.emit(STATE_CHANGE, StateJump);
+            }
         }
 
         const movementKeys = [ 'left', 'right' ];
