@@ -23,7 +23,8 @@ export default class Player extends Actor {
         super(scene, x, y);
 
         const sensorOptions = {
-            isSensor: true
+            isSensor: true,
+            label: 'playerSensor'
         };
 
         const sprite = new ActorSprite(scene.matter.world, 0, 0, 'player', 0)
@@ -33,7 +34,8 @@ export default class Player extends Actor {
         const mainBody = Bodies.rectangle(0, 0, sprite.width, sprite.height, {
             chamfer: {
                 radius: 4
-            }
+            },
+            label: 'playerSensor'
         });
         this.sensors = {
             right: Bodies.rectangle(sprite.width * 0.5, 0, 2, sprite.height * 0.5, sensorOptions),
@@ -53,7 +55,8 @@ export default class Player extends Actor {
                     xOffset: 1,
                     yOffset: 0.3
                 }
-            }
+            },
+            label: 'playerBody'
         });
         this.sprite = sprite
             .setExistingBody(compoundBody)
