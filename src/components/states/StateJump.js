@@ -17,7 +17,7 @@ export default class StateJump extends State {
         const {
             target: {
                 scene: {
-                    cursors
+                    normalizedControls
                 }
             },
             target
@@ -27,7 +27,7 @@ export default class StateJump extends State {
             return target.events.emit(STATE_CHANGE, target.previousState);
         }
 
-        if (cursors.left.isDown || cursors.right.isDown) {
+        if (normalizedControls.horizontalThreshold !== 0) {
             return target.events.emit(STATE_CHANGE, StateWalk);
         }
     }

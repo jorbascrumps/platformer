@@ -16,23 +16,24 @@ export default class StateWalk extends State {
         const {
             target: {
                 scene: {
-                    cursors
+                    normalizedControls
                 }
             },
             target
         } = this;
 
-        if (target.isTouchingGround && Phaser.Input.Keyboard.JustDown(cursors.up)) {
+        if (target.isTouchingGround && normalizedControls.jump) {
             return target.events.emit(STATE_CHANGE, StateJump);
         }
 
-        if (!target.isTouchingLeft && cursors.left.isDown && cursors.right.isUp) {
-            target.sprite.applyForce({ x: -SPEED_WALK, y: 0 });
-        } else if (!target.isTouchingRight && cursors.right.isDown && cursors.left.isUp) {
-            target.sprite.applyForce({ x: SPEED_WALK, y: 0 });
-        } else {
-            target.events.emit(STATE_CHANGE, StateIdle);
+        if (normalizedControls.horizontalThreshold === 0) {
+            return target.events.emit(STATE_CHANGE, StateIdle);
         }
+
+        target.sprite.applyForce({
+            x: SPEED_WALK * normalizedControls.horizontalThreshold,
+            y: 0
+        });
 
         const maxVelocity = target.isTouchingGround
             ?   VELOCITY_MAX_WALK

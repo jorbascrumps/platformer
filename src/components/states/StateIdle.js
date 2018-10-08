@@ -14,7 +14,7 @@ export default class StateIdle extends State {
         const {
             target: {
                 scene: {
-                    cursors
+                    normalizedControls
                 }
             },
             target
@@ -45,23 +45,17 @@ export default class StateIdle extends State {
         }
         */
 
-        if (Phaser.Input.Keyboard.JustDown(cursors.up)) {
-            if (target.isTouchingLadder) {
-                return target.events.emit(STATE_CHANGE, StateLadder);
-            }
+        // if (target.isTouchingLadder) {
+        //     return target.events.emit(STATE_CHANGE, StateLadder);
+        // }
 
+        if (normalizedControls.jump) {
             if (target.isTouchingGround) {
                 return target.events.emit(STATE_CHANGE, StateJump);
             }
         }
 
-        const movementKeys = [ 'left', 'right' ];
-        const movementKeysPressed = !!Object
-            .keys(cursors)
-            .filter(key => movementKeys.includes(key))
-            .some(key => cursors[key].isDown);
-
-        if (movementKeysPressed) {
+        if (normalizedControls.horizontalThreshold !== 0) {
             return target.events.emit(STATE_CHANGE, StateWalk);
         }
     }
