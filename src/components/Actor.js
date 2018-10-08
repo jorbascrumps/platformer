@@ -12,10 +12,10 @@ export default class Actor {
     #health = 4
 
     #isTouching = {
-        left: false,
-        ground: false,
-        ladder: false,
-        right: false,
+        left: null,
+        ground: null,
+        ladder: null,
+        right: null,
     }
 
     constructor (scene, x, y) {
@@ -54,19 +54,19 @@ export default class Actor {
 
     onSensorCollide ({ bodyA, bodyB, pair: { separation } }) {
         if (bodyA === this.sensors.left) {
-            this.#isTouching.left = true;
+            this.#isTouching.left = bodyB;
 
             if (separation > MIN_SEPARATION) {
                 this.sprite.x += separation - MIN_SEPARATION;
             }
         } else if (bodyA === this.sensors.right) {
-            this.#isTouching.right = true;
+            this.#isTouching.right = bodyB;
 
             if (separation > MIN_SEPARATION) {
                 this.sprite.x -= separation - MIN_SEPARATION;
             }
         } else if (bodyA === this.sensors.bottom) {
-            this.#isTouching.ground = true;
+            this.#isTouching.ground = bodyB;
         }
     }
 
@@ -101,10 +101,10 @@ export default class Actor {
     }
 
     resetTouching () {
-        this.#isTouching.left = false;
-        this.#isTouching.right = false;
-        this.#isTouching.ground = false;
-        this.#isTouching.ladder = false;
+        this.#isTouching.left = null;
+        this.#isTouching.right = null;
+        this.#isTouching.ground = null;
+        this.#isTouching.ladder = null;
     }
 
 }
