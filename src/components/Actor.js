@@ -1,6 +1,5 @@
 import EventEmitter from 'eventemitter3';
 
-import StateIdle from './states/StateIdle';
 import {
     DAMAGE_RECEIVE,
     STATE_CHANGE
