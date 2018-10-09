@@ -1,31 +1,33 @@
 import State from './State';
-import StateIdle from './StateIdle';
-import StateWalk from './StateWalk';
+import StateChase from './StateChase';
 import {
     STATE_CHANGE
 } from '@/constants/events';
 
+const VELOCITY_JUMP = -7;
+
 export default class StateEnemyJump extends State {
+
     onEnter () {
         super.onEnter();
 
-        this.obj.body.offset = {
-            x: this.obj.flipX ? 11 : 2,
-            y: 9
-        };
+        const {
+            target: {
+                sprite
+            },
+        } = this;
 
-        this.obj.setVelocityY(-650);
+        sprite.setVelocityY(VELOCITY_JUMP);
     }
 
     execute () {
         const {
-            obj: self
+            target
         } = this;
 
-        self.setVelocityX(self.body.accelGround);
-
-        if (self.body.standing) {
-            return self.emit(STATE_CHANGE, self.previousState);
+        if (target.isTouchingGround) {
+            target.events.emit(STATE_CHANGE, StateChase);
         }
     }
+
 }

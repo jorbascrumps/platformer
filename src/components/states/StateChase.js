@@ -1,5 +1,6 @@
 import State from './State';
 import StateAttack from './StateAttack';
+import StatePatrol from './StatePatrol';
 import StateEnemyJump from './StateEnemyJump';
 import {
     STATE_CHANGE
@@ -51,7 +52,7 @@ export default class StateChase extends State {
         );
         const isWithinChasingDistance = distanceToPlayer < REACTION_DISTANCE;
         const isWithinAttackingDistance = distanceToPlayer < ATTACK_DISTANCE;
-        // console.log(this.cooldownTimer);
+
         if (isWithinAttackingDistance && !this.cooldownTimer) {
             return target.events.emit(STATE_CHANGE, StateAttack);
         }
@@ -60,7 +61,7 @@ export default class StateChase extends State {
             if (!this.amnesiaTimer) {
                 this.amnesiaTimer = scene.time.delayedCall(
                     MEMORY_LIMIT,
-                    () => target.events.emit(STATE_CHANGE, target.previousState),
+                    () => target.events.emit(STATE_CHANGE, StatePatrol),
                     [],
                     this
                 );
@@ -77,22 +78,14 @@ export default class StateChase extends State {
             target.sprite.setVelocityX(-VELOCITY_MAX_RUN);
         }
 
-        // const nextY = self.body.pos.y + self.body.size.y + 1;
-        // const nextAirTile = self.scene.ground.getTileAtWorldXY(nextX, nextY - (self.body.size.y / 2), true);
+        const direction = -Math.sign(target.sprite.body.force.x);
+        const nextX = target.sprite.x + (14 * direction);
+        const nextY = target.sprite.y;
+        const nextAirTile = scene.ground.getTileAtWorldXY(nextX, nextY, true);
 
-        // if (nextAirTile.collides) {
-        //     const jumpTargetX = self.body.pos.x + (
-        //         self.body.accelGround > 1
-        //             ?   self.body.size.x + 32
-        //             :   -32
-        //     );
-        //     const jumpTargetY = self.body.pos.y - 16;
-        //     const jumpTargetTile = self.scene.ground.getTileAtWorldXY(jumpTargetX, jumpTargetY);
-        //
-        //     if (!jumpTargetTile) {
-        //         return self.emit(STATE_CHANGE, StateEnemyJump);
-        //     }
-        // }
+        if (target.isTouchingGround && (nextAirTile && nextAirTile.collides)) {
+            return target.events.emit(STATE_CHANGE, StateEnemyJump);
+        }
     }
 
     onExit () {
