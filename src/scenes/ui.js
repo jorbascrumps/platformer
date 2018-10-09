@@ -23,11 +23,15 @@ export function update () {
 }
 
 function drawHealthContainer () {
-    if (typeof window.player === 'undefined') {
+    const {
+        player
+    } = this.sys.game.scene.getScene('level');
+
+    if (typeof player === 'undefined') {
         return;
     }
 
-    const playerHealth = window.player.health;
+    const playerHealth = player.health;
 
     if (playerHealth === this.heartContainer.children.size) {
         return;

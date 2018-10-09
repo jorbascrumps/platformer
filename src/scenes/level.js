@@ -198,8 +198,7 @@ export function create () {
 
     this.cursors = this.input.keyboard.createCursorKeys();
 
-    window.players = this.add.group();
-    players.add(new Player(this, startPosition.x + 32, startPosition.y + 32), true);
+    this.player = new Player(this, startPosition.x + 32, startPosition.y + 32);
 
     this.enemies = this.add.group();
     spawnPositions
@@ -227,7 +226,7 @@ export function create () {
     this.cameras.main
         .setBounds(0, 0, mapWidth * tileSize, mapHeight * tileSize)
         .setBackgroundColor('#000000')
-        .startFollow(players.getFirstAlive());
+        .startFollow(this.player.sprite);
 
     this.input.on('pointerdown', () => {
         this.input.stopPropagation();
