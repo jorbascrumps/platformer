@@ -13,7 +13,9 @@ export default class extends Phaser.Plugins.BasePlugin {
                 }
             }
         } = this;
-        const controller = gamepad.getPad(0);
+        const [
+            controller = {}
+        ] = gamepad.getAll();
 
         return controller.A || Phaser.Input.Keyboard.JustDown(cursors.up);
     }
@@ -27,10 +29,16 @@ export default class extends Phaser.Plugins.BasePlugin {
                 }
             }
         } = this;
-        const controller = gamepad.getPad(0);
+        const [
+            {
+                leftStick: {
+                    x: xAxis = 0
+                } = {}
+            } = {}
+        ] = gamepad.getAll();
 
-        if (controller.leftStick.x !== 0) {
-            return controller.leftStick.x;
+        if (xAxis !== 0) {
+            return xAxis;
         }
 
         if (cursors.right.isDown) {
@@ -51,10 +59,16 @@ export default class extends Phaser.Plugins.BasePlugin {
                 }
             }
         } = this;
-        const controller = gamepad.getPad(0);
+        const [
+            {
+                leftStick: {
+                    y: yAxis = 0
+                } = {}
+            } = {}
+        ] = gamepad.getAll();
 
-        if (controller.leftStick.y !== 0) {
-            return controller.leftStick.y;
+        if (yAxis !== 0) {
+            return yAxis;
         }
 
         if (cursors.up.isDown) {
