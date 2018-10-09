@@ -12,6 +12,17 @@ import Player from '../components/Player';
 import LightSource from '../components/LightSource';
 import Flying from '../components/Flying';
 
+const {
+    Physics: {
+        Matter: {
+            Matter: {
+                Body,
+                Bodies
+            }
+        }
+    }
+} = Phaser;
+
 export const key = LEVEL;
 
 export const tileSize = 32;
@@ -26,6 +37,26 @@ let startPosition = {
     x: 0,
     y: 0
 };
+
+const setTilesFromGrid = grid => (tile, pos) => {
+    const {
+        [pos]: index
+    } = grid;
+
+    tile.index = index;
+};
+
+const createInteractionsBody = ({ height, width, x, y }) =>
+    Bodies.rectangle(
+        x * tileSize + (tileSize / 2),
+        y * tileSize + (tileSize / 2),
+        width,
+        height,
+        {
+            isSensor: true,
+            label: 'ladder'
+        }
+    );
 
 export function preload () {
     this.load.scenePlugin('Slopes', Slopes);
@@ -72,7 +103,17 @@ export function create () {
         frameRate: 8,
         repeat: -1,
         repeatDelay: 0
-    })
+    });
+    this.anims.create({
+        key: 'enemyAttack',
+        frames: this.anims.generateFrameNumbers('enemyPatrol', {
+            start: 16,
+            end: 19,
+            first: 16
+        }),
+        frameRate: 8,
+        repeat: 0,
+    });
 
     const generatedMap = new Map({
         size: {
@@ -169,32 +210,30 @@ export function create () {
     });
     const tileset = map.addTilesetImage('tiles');
 
-    const setTilesFromGrid = (grid, collisions = true) => (tile, pos) => {
-        const {
-            [pos]: index
-        } = grid;
-
-        tile.index = index;
-
-        if (collisions && index !== -1) {
-            tile.setCollision(true, true, true, true, true);
-        }
-    };
-
     this.interactions = map.createBlankDynamicLayer('interactions', tileset);
     const interactionsGrid = generatedMap
         .buildRoomGrid(interactions)
         .reduce((room, interactions) => ([ ...room, ...interactions ]), []);
-    this.interactions.forEachTile(setTilesFromGrid(interactionsGrid, false), this, undefined, undefined, undefined, undefined, { isNotEmpty: false });
+    this.interactions.forEachTile(setTilesFromGrid(interactionsGrid));
+    this.interactions.setCollisionByExclusion(([ -1 ]));
 
+    this.matter.world.add(
+        Body.create({
+            parts: this.interactions
+                .filterTiles(tile => tile, this, undefined, undefined, undefined, undefined, { isNotEmpty: true })
+                .map(createInteractionsBody),
+            isStatic: true
+        })
+    );
     this.ground = map.createBlankDynamicLayer('ground', tileset);
     const roomGrid = generatedMap
         .buildRoomGrid(rooms)
         .reduce((room, segment) => ([ ...room, ...segment ]), []);
-    this.ground.forEachTile(setTilesFromGrid(roomGrid), this, undefined, undefined, undefined, undefined, { isNotEmpty: false });
+    this.ground.forEachTile(setTilesFromGrid(roomGrid));
+    this.ground.setCollisionByExclusion(([ -1 ]));
 
-    this.impact.world.setCollisionMapFromTilemapLayer(this.ground);
-    this.impact.world.setBounds(0, 0, mapWidth * tileSize, mapHeight * tileSize);
+    this.matter.world.convertTilemapLayer(this.ground);
+    this.matter.world.setBounds(0, 0, mapWidth * tileSize, mapHeight * tileSize);
 
     this.cursors = this.input.keyboard.createCursorKeys();
 
@@ -202,11 +241,9 @@ export function create () {
 
     this.enemies = this.add.group();
     spawnPositions
-        .map(({ x, y, type }) => this.enemies.add(
-            type === 'fly'
-            ?   new Flying(this, x, y)
-            :   new Enemy(this, x, y)
-        , true));
+        .map(({ x, y, type }) =>
+            new Enemy(this, x, y)
+        );
 
     this.sceneLights = this.add.group();
     lightPositions
@@ -221,7 +258,7 @@ export function create () {
     const decorationsGrid = generatedMap
         .buildRoomGrid(decorations)
         .reduce((room, decorations) => ([ ...room, ...decorations ]), []);
-    this.decorations.forEachTile(setTilesFromGrid(decorationsGrid, false), this, undefined, undefined, undefined, undefined, { isNotEmpty: false });
+    this.decorations.forEachTile(setTilesFromGrid(decorationsGrid));
 
     this.cameras.main
         .setBounds(0, 0, mapWidth * tileSize, mapHeight * tileSize)
