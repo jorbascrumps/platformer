@@ -23,11 +23,11 @@ export function update () {
 }
 
 function drawHealthContainer () {
-    if (typeof window.players === 'undefined') {
+    if (typeof window.player === 'undefined') {
         return;
     }
 
-    const playerHealth = window.players.getFirstAlive().health;
+    const playerHealth = window.player.health;
 
     if (playerHealth === this.heartContainer.children.size) {
         return;
