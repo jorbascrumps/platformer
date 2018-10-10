@@ -26,7 +26,7 @@ const {
 export const key = LEVEL;
 
 export const tileSize = 32;
-export const roomWidth = 10;
+export const roomWidth = 12;
 export const roomHeight = 8;
 export const numRows = 6;
 export const numColumns = 6;
@@ -234,6 +234,7 @@ export function create () {
 
     this.matter.world.convertTilemapLayer(this.ground);
     this.matter.world.setBounds(0, 0, mapWidth * tileSize, mapHeight * tileSize);
+    // this.matter.world.createDebugGraphic();
 
     this.cursors = this.input.keyboard.createCursorKeys();
 
