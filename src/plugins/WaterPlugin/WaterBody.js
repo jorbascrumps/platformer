@@ -106,9 +106,11 @@ export default class WaterBody {
                 this.ripple(Phaser.Math.Clamp(i, 0, this.columns.length - 1), 10);
             }
         });
+
+        context.events.on('update', this.update, this);
     }
 
-    update (t) {
+    update () {
         this.columns.forEach(column =>
             column.update(this.dampening, this.tension)
         );
