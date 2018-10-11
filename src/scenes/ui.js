@@ -43,7 +43,7 @@ function drawHealthContainer () {
         .fill()
         .forEach((n, i) =>
             this.heartContainer.add(
-                this.add.image(i * 14, 0, 'heart')
+                this.add.image(4 + i * 14, 4, 'heart')
                     .setOrigin(0, 0)
                     .setDisplaySize(14, 14),
                 true
