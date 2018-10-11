@@ -3,6 +3,7 @@ import * as ui from './scenes/ui';
 import * as preloader from '@/scenes/preloader';
 import * as pause from '@/scenes/pause';
 import NormalizedControlsPlugin from './plugins/NormalizedControls';
+import WaterPlugin from './plugins/WaterPlugin';
 
 const ratioWidth = 16;
 const ratioHeight = 9;
@@ -36,6 +37,11 @@ window.onload = () => {
                     key: 'normalizedControls',
                     mapping: 'normalizedControls',
                     plugin: NormalizedControlsPlugin,
+                },
+                {
+                    key: 'WaterPlugin',
+                    plugin: WaterPlugin,
+                    start: true
                 }
             ],
             scene: [
