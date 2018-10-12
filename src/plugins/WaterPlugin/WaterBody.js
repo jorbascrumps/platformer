@@ -2,48 +2,42 @@ import WaterColumn from './WaterColumn';
 
 export default class WaterBody {
 
-    constructor (
-        context,
-        {
-            h = 100,
-            w = 100,
-            x = 0,
-            y = 0,
-            depth = 150,
-            tension = 0.025,
-            dampening = 0.025,
-            spread = 0.25
-        } = {}
-    ) {
+    #height = 50
+    #width = 50
+    #x = 0
+    #y = 0
+    #debug = false
+
+    #tension = 0.025
+    #dampening = 0.025
+    #spread = 0.25
+    #depth = 10
+
+    constructor (context, x, y, width, height) {
         this.debug = false;
 
-        this.x = x;
-        this.y = y;
-        this.w = w;
-        this.h = h;
+        this.#x = x;
+        this.#y = y;
+        this.#width = width;
+        this.#height = height;
 
-        this.tension = tension;
-        this.dampening = dampening;
-        this.spread = spread;
-        this.depth = depth;
-
-        this.background = context.add.tileSprite(this.x, this.y, this.w, this.h, 'water')
+        this.background = context.add.tileSprite(this.#x, this.#y, this.#width, this.#height, 'water')
             .setAlpha(0.75)
-            .setDepth(99)
+            .setDepth(0)
             .setOrigin(0, 0);
 
         const coords = [
             0,
-            this.h - depth,
-            this.w,
-            this.h - depth
+            this.#height - this.#depth,
+            this.#width,
+            this.#height - this.#depth
         ];
         const surface = new Phaser.Geom.Line(...coords);
         const points = surface.getPoints(0, 20);
         this.columns = [
             ...points,
             {
-                x: this.w,
+                x: this.#width,
                 y: coords[1]
             }
         ]
@@ -54,9 +48,9 @@ export default class WaterBody {
         const data = this.columns
             .reduce((cache, { x, y }) => ([ ...cache, x, y ]), []);
         this.body = context.add.polygon(x, y, [
-            coords[0], this.h,
+            coords[0], this.#height,
             ...data,
-            coords[2], this.h
+            coords[2], this.#height
         ])
             .setFillStyle(0x145dd1, 0)
             .setDepth(99)
@@ -65,13 +59,14 @@ export default class WaterBody {
         this.background.mask = new Phaser.Display.Masks.GeometryMask(context, this.body);
 
         this.sensor = context.matter.add.rectangle(
-            this.x + (this.w / 2),
-            this.y + this.h - (this.depth / 2),
-            w,
-            this.depth,
+            this.#x + (this.#width / 2),
+            this.#y + this.#height - (this.#depth / 2),
+            this.#width,
+            this.#depth,
             {
                 isSensor: true,
-                isStatic: true
+                isStatic: true,
+                gameObject: this
             }
         );
 
@@ -96,13 +91,13 @@ export default class WaterBody {
                 source: new Phaser.Geom.Polygon(
                     Object.values(this.body.geom.points)
                         .map(({ x, y }) => ([
-                            this.x + x,
-                            this.y + y
+                            this.#x + x,
+                            this.#y + y
                         ]))
                 )
             },
             deathCallback: ({ x }) => {
-                const i = this.columns.findIndex((col, i) => this.x + col.x >= x && i);
+                const i = this.columns.findIndex((col, i) => this.#x + col.x >= x && i);
                 this.ripple(Phaser.Math.Clamp(i, 0, this.columns.length - 1), 10);
             }
         });
@@ -112,22 +107,22 @@ export default class WaterBody {
 
     update () {
         this.columns.forEach(column =>
-            column.update(this.dampening, this.tension)
+            column.update(this.#dampening, this.#tension)
         );
 
         const data = this.columns
             .reduce((cache, { x, y }) => ([ ...cache, x, y ]), []);
         this.body.geom.setTo([
-            0, this.h,
+            0, this.#height,
             ...data,
-            this.w, this.h
+            this.#width, this.#height
         ]);
         this.body.updateData();
 
         this.debugGraphic.clear();
-        if (this.debug) {
+        if (this.#debug) {
             this.columns.forEach(({ x, y }) =>
-                this.debugGraphic.fillRect(this.x + x - 1, this.y + y - 1, 2, 2)
+                this.debugGraphic.fillRect(this.#x + x - 1, this.#y + y - 1, 2, 2)
             );
         }
 
@@ -140,7 +135,7 @@ export default class WaterBody {
                     const currColumn = this.columns[j];
                     const prevColumn = this.columns[j - 1];
 
-                    lDeltas[j] = this.spread * (currColumn.y - prevColumn.y);
+                    lDeltas[j] = this.#spread * (currColumn.y - prevColumn.y);
                     prevColumn.speed += lDeltas[j];
                 }
 
@@ -148,7 +143,7 @@ export default class WaterBody {
                     const currColumn = this.columns[j];
                     const nextColumn = this.columns[j + 1];
 
-                    rDeltas[j] = this.spread * (currColumn.y - nextColumn.y);
+                    rDeltas[j] = this.#spread * (currColumn.y - nextColumn.y);
                     nextColumn.speed += rDeltas[j];
                 }
             }
@@ -176,7 +171,7 @@ export default class WaterBody {
         column.speed = speed;
 
         this.emitter
-            .explode(numDroplets, this.x + column.x, this.y + column.y)
+            .explode(numDroplets, this.#x + column.x, this.#y + column.y)
 
         return this;
     }
@@ -189,7 +184,7 @@ export default class WaterBody {
     }
 
     setDebug (bool) {
-        this.debug = bool;
+        this.#debug = bool;
 
         return this;
     }

@@ -8,8 +8,8 @@ export default class WaterPlugin extends Phaser.Plugins.BasePlugin {
         pluginManager.registerGameObject('water', this.createBody);
     }
 
-    createBody (config) {
-        return  new WaterBody(this.scene, config);
+    createBody (x, y, width, height) {
+        return  new WaterBody(this.scene, x, y, width, height);
     }
 
 }
