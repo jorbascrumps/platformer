@@ -30,6 +30,9 @@ export const JSON = type('json', [
     },
     {
         key: 'start'
+    },
+    {
+        key: 'end'
     }
 ]);
 

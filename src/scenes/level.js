@@ -132,7 +132,8 @@ export function create () {
         left: this.cache.json.get('left').layers,
         right: this.cache.json.get('right').layers,
         down: this.cache.json.get('down').layers,
-        start: this.cache.json.get('start').layers
+        start: this.cache.json.get('start').layers,
+        end: this.cache.json.get('end').layers,
     };
     const levelLayout = generatedMap.solutionPath;
     const {
@@ -293,5 +294,6 @@ const directionsMap = {
     2: 'right',
     3: 'right',
     4: 'down',
-    5: 'start'
+    5: 'start',
+    6: 'end'
 };

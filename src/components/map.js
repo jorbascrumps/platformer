@@ -58,6 +58,8 @@ export default class Map {
         const calcHeight = this.mapHeight / this.roomHeight;
         const calcWidth = this.mapWidth / this.roomWidth;
         const startTile = Phaser.Math.RND.between(0, calcWidth - 1);
+        const endTile = Phaser.Math.RND.between(0, calcWidth - 1);
+
         let data = [];
 
         for (let row = 0; row < calcHeight; row++) {
@@ -68,6 +70,12 @@ export default class Map {
                 // Place start tile
                 if (row === 0 && col === startTile) {
                     rowData.push(5);
+
+                    continue;
+                }
+                
+                if (row === calcHeight - 1 && col === endTile) {
+                    rowData.push(6);
 
                     continue;
                 }
