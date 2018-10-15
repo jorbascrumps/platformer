@@ -5,6 +5,14 @@ const type = (type, assets) => assets
 
 export const IMAGES = type('image', [
     {
+        key: 'background',
+        url: 'background.jpg'
+    },
+    {
+        key: 'droplet',
+        url: 'droplet.png'
+    },
+    {
         key: 'tiles',
         url: [ 'tiles.png', 'tiles_n.png' ]
     },
@@ -15,6 +23,10 @@ export const IMAGES = type('image', [
     {
         key: 'tilesprite',
         url: [ 'tilesprite.png', 'tilesprite_n.png' ]
+    },
+    {
+        key: 'water',
+        url: 'water.jpg'
     }
 ]);
 
