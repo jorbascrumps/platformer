@@ -16,10 +16,11 @@ export default class WaterBody {
     constructor (context, x, y, width, height) {
         this.debug = false;
 
-        this.#x = x;
-        this.#y = y;
-        this.#width = width;
-        this.#height = height;
+        this.#x = Math.floor(x);
+        this.#y = Math.floor(y);
+        this.#width = Math.floor(width);
+        this.#height = Math.floor(height);
+        this.#depth = Math.floor(height);
 
         this.background = context.add.tileSprite(this.#x, this.#y, this.#width, this.#height, 'water')
             .setAlpha(0.75)
@@ -185,6 +186,17 @@ export default class WaterBody {
 
     setDebug (bool) {
         this.#debug = bool;
+
+        return this;
+    }
+
+    // TODO: Fix body not resizing
+    setDepth (val) {
+        this.#depth = this.#height - val;
+
+        this.columns.forEach(col =>
+            col.targetY = this.#depth
+        );
 
         return this;
     }
