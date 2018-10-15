@@ -32,6 +32,7 @@ export const numRows = 6;
 export const numColumns = 6;
 export const mapWidth = roomWidth * numColumns;
 export const mapHeight = roomHeight * numRows;
+export const waterTable = 64;
 
 let startPosition = {
     x: 0,
@@ -67,7 +68,7 @@ export function create () {
 
     this.scene.launch(UI);
 
-    this.background = this.add.tileSprite(0, 0, mapWidth * tileSize, mapHeight * tileSize, 'tilesprite')
+    this.background = this.add.tileSprite(0, 0, mapWidth * tileSize, mapHeight * tileSize + waterTable, 'background')
         .setOrigin(0, 0);
     // this.background.setPipeline('Light2D');
 
@@ -128,6 +129,11 @@ export function create () {
 
     let spawnPositions = [];
     let lightPositions = [];
+    let waterPositions = [
+        this.add.water(0, mapHeight * tileSize, mapWidth * tileSize, waterTable)
+            .setDepth(waterTable - 8)
+    ];
+
     const layouts = {
         left: this.cache.json.get('left').layers,
         right: this.cache.json.get('right').layers,
@@ -234,14 +240,29 @@ export function create () {
     this.ground.setCollisionByExclusion(([ -1 ]));
 
     this.matter.world.convertTilemapLayer(this.ground);
-    this.matter.world.setBounds(0, 0, mapWidth * tileSize, mapHeight * tileSize);
+    this.matter.world.setBounds(0, 0, mapWidth * tileSize, mapHeight * tileSize + waterTable);
     // this.matter.world.createDebugGraphic();
 
     this.cursors = this.input.keyboard.createCursorKeys();
 
     this.player = new Player(this, startPosition.x + 32, startPosition.y + 32);
 
-    this.enemies = this.add.group();
+    this.matterCollision.addOnCollideStart({
+        objectA: waterPositions.map(({ sensor }) => sensor),
+        callback ({ gameObjectA, gameObjectB }) {
+            if (gameObjectB === null) {
+                return console.log('mssing body');
+            }
+
+            const i = gameObjectA.columns.findIndex((col, i) =>
+                gameObjectA.x + col.x >= gameObjectB.x && i
+            );
+            const columnIndex = Phaser.Math.Clamp(i, 0, gameObjectA.columns.length - 1);
+            gameObjectA.splash(columnIndex, 3);
+        },
+        context: this
+    });
+
     spawnPositions
         .map(({ x, y, type }) =>
             new Enemy(this, x, y)
@@ -263,7 +284,7 @@ export function create () {
     this.decorations.forEachTile(setTilesFromGrid(decorationsGrid));
 
     this.cameras.main
-        .setBounds(0, 0, mapWidth * tileSize, mapHeight * tileSize)
+        .setBounds(0, 0, mapWidth * tileSize, mapHeight * tileSize + waterTable)
         .setBackgroundColor('#000000')
         .startFollow(this.player.sprite);
 

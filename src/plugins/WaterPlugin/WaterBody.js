@@ -184,6 +184,10 @@ export default class WaterBody {
         return this;
     }
 
+    get x () {
+        return this.#x;
+    }
+
     setDebug (bool) {
         this.#debug = bool;
 
