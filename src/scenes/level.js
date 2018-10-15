@@ -165,6 +165,9 @@ export function create () {
                     } = {},
                     {
                         objects: lights = []
+                    } = {},
+                    {
+                        objects: waterBodies = []
                     } = {}
                 ]
             } = layouts;
@@ -191,6 +194,14 @@ export function create () {
                     x: (colNum * width) + x,
                     y: (rowNum * height) + y
                 }));
+            }
+            
+            if (waterBodies.length) {
+                waterBodies.forEach(({ height: h, width: w, x, y }) =>
+                    waterPositions.push(
+                        this.add.water((colNum * width) + x, (rowNum * height) + y, w, h)
+                    )
+                );
             }
 
             return {
