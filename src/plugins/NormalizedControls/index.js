@@ -1,13 +1,34 @@
+const KEY_INTERACT = 'interact';
+const KEY_JUMP = 'jump';
+const KEY_RELOAD = 'reload';
+
 export default class extends Phaser.Plugins.BasePlugin {
+    
+    #keys = {
+        jump: null
+    }
 
     init (sceneKey) {
         this.scene = this.game.scene.getScene(sceneKey);
+
+        if (this.scene === null) {
+            return;
+        }
+
+        this.setKey(KEY_INTERACT, 'up');
+        this.setKey(KEY_JUMP, 'X');
+        this.setKey(KEY_RELOAD, 'enter');
     }
     
-    get jump () {
+    setKey (key, val) {
+        this.#keys[key] = this.scene.input.keyboard.addKey(val);
+
+        return this;
+    }
+
+    get interact () {
         const {
             scene: {
-                cursors,
                 input: {
                     gamepad
                 }
@@ -17,7 +38,37 @@ export default class extends Phaser.Plugins.BasePlugin {
             controller = {}
         ] = gamepad.getAll();
 
-        return controller.A || Phaser.Input.Keyboard.JustDown(cursors.up);
+        return controller.isButtonDown(3) ||  Phaser.Input.Keyboard.JustDown(this.#keys[KEY_INTERACT]);
+    }
+
+    get jump () {
+        const {
+            scene: {
+                input: {
+                    gamepad
+                }
+            }
+        } = this;
+        const [
+            controller = {}
+        ] = gamepad.getAll();
+
+        return controller.isButtonDown(0) || Phaser.Input.Keyboard.JustDown(this.#keys[KEY_JUMP]);
+    }
+
+    get reload () {
+        const {
+            scene: {
+                input: {
+                    gamepad
+                }
+            }
+        } = this;
+        const [
+            controller = {}
+        ] = gamepad.getAll();
+
+        return controller.isButtonDown(8) || Phaser.Input.Keyboard.JustDown(this.#keys[KEY_RELOAD]);
     }
 
     get horizontalThreshold () {
