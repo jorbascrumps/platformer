@@ -318,7 +318,11 @@ export function create () {
         .setAmbientColor(0x333333);
 }
 
-export function update () {}
+export function update () {
+    if (this.normalizedControls.reload) {
+        this.scene.restart();
+    }
+}
 
 const directionsMap = {
     0: 'left',
