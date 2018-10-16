@@ -2,6 +2,8 @@ import WaterColumn from './WaterColumn';
 
 export default class WaterBody {
 
+    #context
+
     #height = 50
     #width = 50
     #x = 0
@@ -14,7 +16,7 @@ export default class WaterBody {
     #depth = 10
 
     constructor (context, x, y, width, height) {
-        this.debug = false;
+        this.#context = context;
 
         this.#x = Math.floor(x);
         this.#y = Math.floor(y);
@@ -104,6 +106,7 @@ export default class WaterBody {
         });
 
         context.events.on('update', this.update, this);
+        context.events.on('shutdown', this.destroy, this);
     }
 
     update () {
@@ -203,6 +206,10 @@ export default class WaterBody {
         );
 
         return this;
+    }
+
+    destroy () {
+        this.#context.events.off('update', this.update, this);
     }
 
 }

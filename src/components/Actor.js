@@ -25,13 +25,11 @@ export default class Actor {
         this.events = new EventEmitter();
         this.data = new Phaser.Data.DataManager(this, this.events);
 
-        scene.sys.updateList.add(this);
-
         this.events.on(DAMAGE_RECEIVE, this.receiveDamage, this);
         this.events.on(STATE_CHANGE, this.changeState, this);
+        this.scene.matter.world.on('beforeupdate', this.resetTouching, this);
         this.scene.events.on('update', this.update, this);
-
-        scene.matter.world.on('beforeupdate', this.resetTouching, this);
+        this.scene.events.on('shutdown', this.destroy, this);
     }
 
     update () {
@@ -110,6 +108,10 @@ export default class Actor {
         this.#isTouching.right = null;
         this.#isTouching.ground = null;
         this.#isTouching.ladder = null;
+    }
+
+    destroy () {
+        this.scene.events.off('update', this.update, this);
     }
 
 }
