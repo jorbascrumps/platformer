@@ -77,9 +77,20 @@ export default class Player extends Actor {
         this.events.emit(STATE_CHANGE, StateIdle);
     }
 
-    onSensorCollide ({ bodyA, bodyB }) {
-        if (bodyB.label === 'ladder') {
-            return this.isTouchingLadder = true;
+    onSensorCollide ({ bodyA, bodyB, gameObjectB }) {
+        if (bodyB.gameObject instanceof Phaser.Tilemaps.Tile) {
+            const {
+                isClimbable,
+                isDoor
+            } = bodyB.gameObject.properties;
+
+            if (isDoor === 'true') {
+                return this.isTouchingDoor = bodyB.gameObject;
+            }
+
+            if (isClimbable === 'true') {
+                return this.isTouchingLadder = bodyB.gameObject;
+            }
         }
 
         return super.onSensorCollide(...arguments);
