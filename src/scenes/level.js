@@ -155,12 +155,13 @@ export function create () {
     ];
 
     const layouts = {
-        left: this.cache.json.get('left').layers,
-        right: this.cache.json.get('right').layers,
-        down: this.cache.json.get('down').layers,
-        start: this.cache.json.get('start').layers,
-        end: this.cache.json.get('end').layers,
+        left: this.cache.tilemap.get('left').data,
+        right: this.cache.tilemap.get('right').data,
+        down: this.cache.tilemap.get('down').data,
+        start: this.cache.tilemap.get('start').data,
+        end: this.cache.tilemap.get('end').data,
     };
+
     const levelLayout = generatedMap.solutionPath;
     const {
         decorations,
@@ -170,26 +171,28 @@ export function create () {
         .reduce(({ decorations, rooms, interactions }, direction, i) => {
             const type = directionsMap[direction];
             const {
-                [type]: [
-                    {
-                        data: layoutData = new Array(80).fill(-1)
-                    } = {},
-                    {
-                        data: interactiveData = new Array(80).fill(-1)
-                    } = {},
-                    {
-                        data: decorationsData = new Array(80).fill(-1)
-                    } = {},
-                    {
-                        objects: spawns = []
-                    } = {},
-                    {
-                        objects: lights = []
-                    } = {},
-                    {
-                        objects: waterBodies = []
-                    } = {}
-                ]
+                [type]: {
+                    layers: [
+                        {
+                            data: layoutData = new Array(80).fill(-1)
+                        } = {},
+                        {
+                            data: interactiveData = new Array(80).fill(-1)
+                        } = {},
+                        {
+                            data: decorationsData = new Array(80).fill(-1)
+                        } = {},
+                        {
+                            objects: spawns = []
+                        } = {},
+                        {
+                            objects: lights = []
+                        } = {},
+                        {
+                            objects: waterBodies = []
+                        } = {}
+                    ]
+                }
             } = layouts;
 
             const rowNum = Math.floor(i / numColumns);
