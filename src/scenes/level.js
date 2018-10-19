@@ -59,6 +59,25 @@ const createInteractionsBody = ({ height, width, x, y }) =>
         }
     );
 
+const assignTileProps = props => tile => {
+    if (tile.index === -1) {
+        return;
+    }
+
+    tile.properties = Array
+        .from(
+            props
+                .getElementById(tile.index)
+                .getElementsByTagName('property')
+        )
+        .reduce((o, { attributes }) => ({
+            ...o,
+            [attributes.getNamedItem('name').value]: attributes.getNamedItem('value').value
+        }), {});
+
+    return tile;
+};
+
 export function preload () {
     this.load.scenePlugin('Slopes', Slopes);
 }
@@ -235,6 +254,9 @@ export function create () {
     this.interactions.forEachTile(setTilesFromGrid(interactionsGrid));
     this.interactions.setCollisionByExclusion(([ -1 ]));
 
+    const tileProps = this.cache.xml.get('tileset');
+    this.interactions.forEachTile(assignTileProps(tileProps));
+
     this.matter.world.add(
         Body.create({
             parts: this.interactions
@@ -243,6 +265,7 @@ export function create () {
             isStatic: true
         })
     );
+    
     this.ground = map.createBlankDynamicLayer('ground', tileset);
     const roomGrid = generatedMap
         .buildRoomGrid(rooms)

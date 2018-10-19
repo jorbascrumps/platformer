@@ -48,6 +48,13 @@ export const JSON = type('json', [
     }
 ]);
 
+export const XML = type('xml', [
+    {
+        key: 'tileset',
+        url: 'tileset.tsx'
+    }
+]);
+
 export const SPRITESHEETS = type('spritesheet', [
     {
         key: 'enemyWalk',

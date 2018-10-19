@@ -5,7 +5,8 @@ import {
 import {
     IMAGES,
     JSON,
-    SPRITESHEETS
+    SPRITESHEETS,
+    XML
 } from '@/constants/files';
 
 export const key = PRELOADER;
@@ -16,8 +17,9 @@ export const loader = {
 
 export function preload () {
     this.load.image(IMAGES);
-    this.load.json(JSON);
+    this.load.tilemapTiledJSON(JSON);
     this.load.spritesheet(SPRITESHEETS);
+    this.load.xml(XML);
 
     this.progressBar = this.add.graphics();
     this.progressValue = this.add.text(this.cameras.main.width - 10, (this.cameras.main.height / 2) + 5, '0%', {
