@@ -47,15 +47,16 @@ const setTilesFromGrid = grid => (tile, pos) => {
     tile.index = index;
 };
 
-const createInteractionsBody = ({ height, width, x, y }) =>
+const createInteractionsBody = tile =>
     Bodies.rectangle(
-        x * tileSize + (tileSize / 2),
-        y * tileSize + (tileSize / 2),
-        width,
-        height,
+        tile.x * tile.width + (tile.width / 2),
+        tile.y * tile.height + (tile.height / 2),
+        tile.width,
+        tile.height,
         {
+            isStatic: true,
             isSensor: true,
-            label: 'ladder'
+            gameObject: tile,
         }
     );
 
@@ -257,14 +258,13 @@ export function create () {
     const tileProps = this.cache.xml.get('tileset');
     this.interactions.forEachTile(assignTileProps(tileProps));
 
-    this.matter.world.add(
-        Body.create({
-            parts: this.interactions
-                .filterTiles(tile => tile, this, undefined, undefined, undefined, undefined, { isNotEmpty: true })
-                .map(createInteractionsBody),
-            isStatic: true
-        })
-    );
+    const interactionBodies = Body.create({
+        parts: this.interactions
+            .filterTiles(tile => tile, this, undefined, undefined, undefined, undefined, { isNotEmpty: true })
+            .map(createInteractionsBody),
+        isStatic: true
+    });
+    this.matter.world.add(interactionBodies);
     
     this.ground = map.createBlankDynamicLayer('ground', tileset);
     const roomGrid = generatedMap
@@ -280,6 +280,39 @@ export function create () {
     this.cursors = this.input.keyboard.createCursorKeys();
 
     this.player = new Player(this, startPosition.x + 32, startPosition.y + 32);
+
+    // START - Interactions prompts
+    const buttonPrompt = this.add.image(50, 50, 'keyboard', 50)
+        .setDisplaySize(24, 24)
+        .setPosition(-50, -50)
+    this.matterCollision.addOnCollideActive({
+        objectA: this.player.sprite,
+        objectB: interactionBodies.parts,
+        callback ({ bodyB }) {
+            const {
+                gameObject: {
+                    properties: {
+                        prompt
+                    }
+                }
+            } = bodyB;
+
+            if (prompt === 'up') {
+                buttonPrompt.setPosition(
+                    bodyB.gameObject.x * 32 + 16,
+                    bodyB.gameObject.y * 32 - 16,
+                );
+            }
+        }
+    });
+    this.matterCollision.addOnCollideEnd({
+        objectA: this.player.sprite,
+        objectB: interactionBodies.parts,
+        callback ({ bodyB }) {
+            buttonPrompt.setPosition(-50, -50);
+        }
+    });
+    // END - Interactions prompts
 
     this.matterCollision.addOnCollideStart({
         objectA: waterPositions.map(({ sensor }) => sensor),
