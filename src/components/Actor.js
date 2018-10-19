@@ -12,9 +12,10 @@ export default class Actor {
     #health = 4
 
     #isTouching = {
+        door: null,
+        ladder: null,
         left: null,
         ground: null,
-        ladder: null,
         right: null,
     }
 
@@ -73,6 +74,16 @@ export default class Actor {
         }
     }
 
+    get isTouchingDoor () {
+        return this.#isTouching.door;
+    }
+
+    set isTouchingDoor (val) {
+        this.#isTouching.door = val;
+
+        return this;
+    }
+
     get isTouchingGround () {
         return this.#isTouching.ground;
     }
@@ -104,6 +115,7 @@ export default class Actor {
     }
 
     resetTouching () {
+        this.#isTouching.door = null;
         this.#isTouching.left = null;
         this.#isTouching.right = null;
         this.#isTouching.ground = null;
