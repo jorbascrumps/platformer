@@ -84,7 +84,7 @@ export function preload () {
 }
 
 export function create () {
-    this.normalizedControls.init(LEVEL);
+    this.normalizedControls.init(this);
 
     this.scene.launch(UI);
 
@@ -358,11 +358,6 @@ export function create () {
         .setBackgroundColor('#000000')
         .startFollow(this.player.sprite);
 
-    this.input.on('pointerdown', () => {
-        this.input.stopPropagation();
-        this.scene.switch(PAUSE);
-    });
-
     this.decorations.texture = tileset.image;
     // this.decorations.setPipeline('Light2D');
 
@@ -375,12 +370,30 @@ export function create () {
     this.lights
         .enable()
         .setAmbientColor(0x333333);
+
+    this.events.on('pause', pause.bind(this));
+    this.events.on('resume', resume.bind(this));
 }
 
 export function update () {
     if (this.normalizedControls.reload) {
         this.scene.restart();
+    } else if (this.normalizedControls.pause) {
+        this.scene.pause();
+        this.scene.launch(PAUSE);
     }
+}
+
+function pause () {
+    const uiScene = this.scene.get(UI);
+    uiScene.scene.setVisible(false);
+}
+
+function resume () {
+    const uiScene = this.scene.get(UI);
+    uiScene.scene.setVisible(true);
+
+    this.normalizedControls.init(this);
 }
 
 const directionsMap = {
