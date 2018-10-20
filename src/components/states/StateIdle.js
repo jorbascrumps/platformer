@@ -14,8 +14,9 @@ export default class StateIdle extends State {
         const {
             target: {
                 scene: {
-                    normalizedControls
-                }
+                    normalizedControls,
+                    scene,
+                },
             },
             target
         } = this;
@@ -44,6 +45,10 @@ export default class StateIdle extends State {
             return this.target.emit(STATE_CHANGE, StateAttack);
         }
         */
+        
+        if (target.isTouchingDoor && normalizedControls.interact) {
+            return scene.restart();
+        }
 
         if (target.isTouchingLadder && normalizedControls.verticalThreshold !== 0) {
             return target.events.emit(STATE_CHANGE, StateLadder);
