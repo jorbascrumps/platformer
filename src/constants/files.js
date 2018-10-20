@@ -100,5 +100,14 @@ export const SPRITESHEETS = type('spritesheet', [
             frameHeight: 64,
             frameWidth: 64
         }
+    },
+    {
+        key: 'keyboard',
+        url: 'keyboard.png',
+        frameConfig: {
+            endFrame: 200,
+            frameHeight: 100,
+            frameWidth: 100
+        }
     }
 ]);
