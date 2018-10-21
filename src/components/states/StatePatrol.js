@@ -4,7 +4,7 @@ import {
     STATE_CHANGE
 } from '@/constants/events';
 
-const REACTION_DISTANCE = 150;
+const REACTION_DISTANCE = 96;
 const SPEED_WALK = 0.00025;
 const SPEED_RUN = 0.005;
 const VELOCITY_MAX_WALK = 4;
@@ -35,6 +35,19 @@ export default class StatePatrol extends State {
             target
         } = this;
 
+        const visionRect = new Phaser.Geom.Rectangle(
+            target.sprite.x - REACTION_DISTANCE,
+            target.sprite.y - REACTION_DISTANCE,
+            REACTION_DISTANCE * 2,
+            REACTION_DISTANCE * 2
+        );
+
+        if (target.debug) {
+            this.debugGraphic
+                .clear()
+                .strokeRectShape(visionRect);
+        }
+
         if (target.isTouchingLeft) {
             target.data.set('direction', 1);
         } else if (target.isTouchingRight) {
@@ -45,13 +58,7 @@ export default class StatePatrol extends State {
             direction = 1
         } = target.data.getAll();
 
-        const distanceToPlayerX = Phaser.Math.Distance.Between(
-            target.sprite.x,
-            target.sprite.y,
-            player.sprite.x,
-            player.sprite.y
-        );
-        const isWithinChasingDistance = distanceToPlayerX <= REACTION_DISTANCE;
+        const isWithinChasingDistance = Phaser.Geom.Rectangle.ContainsPoint(visionRect, player.sprite);
 
         if (/*this.obj.canSeePlayer &&*/ isWithinChasingDistance /*&& (player.y >= self.y && self.y + self.height >= player.y)*/) {
             return target.events.emit(STATE_CHANGE, StateChase);
