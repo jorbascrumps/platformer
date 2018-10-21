@@ -8,7 +8,7 @@ import {
 
 const SPEED_RUN = 0.00005;
 const VELOCITY_MAX_RUN = 1;
-const REACTION_DISTANCE = 150;
+const REACTION_DISTANCE = 128;
 const ATTACK_DISTANCE = 18;
 const MEMORY_LIMIT = 1500;
 const ATTACK_COOLDOWN = 1500;
@@ -44,14 +44,28 @@ export default class StateChase extends State {
             target
         } = this;
 
-        const distanceToPlayer = Phaser.Math.Distance.Between(
-            target.sprite.x,
-            target.sprite.y,
-            player.sprite.x,
-            player.sprite.y
+        const vision = new Phaser.Geom.Rectangle(
+            target.sprite.x - REACTION_DISTANCE,
+            target.sprite.y - REACTION_DISTANCE,
+            REACTION_DISTANCE * 2,
+            REACTION_DISTANCE * 2
         );
-        const isWithinChasingDistance = distanceToPlayer < REACTION_DISTANCE;
-        const isWithinAttackingDistance = distanceToPlayer < ATTACK_DISTANCE;
+        const attackRect = new Phaser.Geom.Rectangle(
+            target.sprite.x - ATTACK_DISTANCE,
+            target.sprite.y - ATTACK_DISTANCE,
+            ATTACK_DISTANCE * 2,
+            ATTACK_DISTANCE * 2
+        );
+
+        if (target.debug) {
+            this.debugGraphic
+                .clear()
+                .strokeRectShape(vision)
+                .strokeRectShape(attackRect);
+        }
+
+        const isWithinChasingDistance = Phaser.Geom.Rectangle.ContainsPoint(vision, player.sprite);
+        const isWithinAttackingDistance = Phaser.Geom.Rectangle.ContainsPoint(attackRect, player.sprite)
 
         if (isWithinAttackingDistance && !this.cooldownTimer) {
             return target.events.emit(STATE_CHANGE, StateAttack);
