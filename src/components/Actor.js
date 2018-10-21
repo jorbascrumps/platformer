@@ -27,6 +27,18 @@ export default class Actor {
         this.y = y;
         this.events = new EventEmitter();
         this.data = new Phaser.Data.DataManager(this, this.events);
+        this.debugGraphic = scene.add.graphics()
+            .setDefaultStyles({
+                fillStyle: {
+                    alpha: 1,
+                    color: 0x00ff00,
+                },
+                lineStyle: {
+                    alpha: 1,
+                    color: 0x00ff00,
+                    width: 1,
+                }
+            });
 
         this.events.on(DAMAGE_RECEIVE, this.receiveDamage, this);
         this.events.on(STATE_CHANGE, this.changeState, this);

@@ -82,27 +82,29 @@ export default class Enemy extends Actor {
         return super.onSensorCollide(...arguments);
     }
 
-    // update () {
-    //     const player = window.players.getFirstAlive();
-    //     const line = new Phaser.Geom.Line(this.body.pos.x, this.body.pos.y, player.body.pos.x, player.body.pos.y);
-    //
-    //     const x = this.body.pos.x > player.body.pos.x
-    //         ?   player.body.pos.x
-    //         :   this.body.pos.x;
-    //     const y = this.body.pos.y > player.body.pos.y
-    //         ?   player.body.pos.y
-    //         :   this.body.pos.y;
-    //     const w = this.body.pos.x > player.body.pos.x
-    //         ?   this.body.pos.x - player.body.pos.x
-    //         :   player.body.pos.x;
-    //     const h = this.body.pos.y > player.body.pos.y
-    //         ?   this.body.pos.y - player.body.pos.y
-    //         :   player.body.pos.y - this.body.pos.y;
-    //     this.canSeePlayer = !this.scene.ground.getTilesWithinWorldXY(x, y, w, h, {
-    //             isNotEmpty: true
-    //         })
-    //         .filter(tile => Phaser.Geom.Intersects.LineToRectangle(line, tile.getBounds()))
-    //         .length;
-    // }
+    update () {
+        super.update();
+
+        const {
+            scene: {
+                ground,
+                player,
+            }
+        } = this;
+
+        const line = new Phaser.Geom.Line(this.sprite.x, this.sprite.y, player.sprite.x, player.sprite.y);
+        this.canSeePlayer = ground.getTilesWithinShape(line, {
+            isNotEmpty: true
+        })
+            .length === 0;
+
+        if (this.debug) {
+            const lineColour = this.canSeePlayer ? this.debugGraphic.defaultStrokeColor : 0xff0000;
+            this.debugGraphic
+                .clear()
+                .lineStyle(1, lineColour)
+                .strokeLineShape(line)
+        }
+    }
 
 }
