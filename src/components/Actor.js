@@ -9,6 +9,8 @@ const MIN_SEPARATION = 1;
 
 export default class Actor {
 
+    #debug = false
+
     #health = 4
 
     #isTouching = {
@@ -120,6 +122,16 @@ export default class Actor {
         this.#isTouching.right = null;
         this.#isTouching.ground = null;
         this.#isTouching.ladder = null;
+    }
+
+    get debug () {
+        return this.#debug;
+    }
+
+    setDebug (val) {
+        this.#debug = Boolean(val);
+
+        return this;
     }
 
     destroy () {
