@@ -2,7 +2,17 @@ export default class State {
     constructor (target) {
         this.target = target;
         this.debugGraphic = target.scene.add.graphics()
-            .fillStyle(0x00ff00, 1);
+            .setDefaultStyles({
+                fillStyle: {
+                    alpha: 1,
+                    color: 0x00ff00,
+                },
+                lineStyle: {
+                    alpha: 1,
+                    color: 0x00ff00,
+                    width: 1,
+                }
+            });
 
         this.onEnter.bind(this);
         this.execute.bind(this);
@@ -18,6 +28,8 @@ export default class State {
     execute () {}
 
     onExit () {
+        this.debugGraphic.clear();
+
         return console.log(`Exit ${this.constructor.name}`);
     }
 }
