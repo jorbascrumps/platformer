@@ -10,7 +10,7 @@ const SPEED_RUN = 0.00005;
 const VELOCITY_MAX_RUN = 1;
 const REACTION_DISTANCE = 128;
 const ATTACK_DISTANCE = 18;
-const MEMORY_LIMIT = 1500;
+const MEMORY_LIMIT = 5000;
 const ATTACK_COOLDOWN = 1500;
 
 export default class StateChase extends State {
@@ -71,7 +71,7 @@ export default class StateChase extends State {
             return target.events.emit(STATE_CHANGE, StateAttack);
         }
 
-        if (!isWithinChasingDistance) {
+        if (!target.canSeePlayer || !isWithinChasingDistance) {
             if (!this.amnesiaTimer) {
                 this.amnesiaTimer = scene.time.delayedCall(
                     MEMORY_LIMIT,
@@ -80,8 +80,6 @@ export default class StateChase extends State {
                     this
                 );
             }
-
-            return;
         }
 
         if (target.sprite.x < player.sprite.x && !target.isTouchingRight) {
