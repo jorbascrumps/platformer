@@ -52,7 +52,7 @@ export default class Actor {
             this.state.execute();
         }
 
-        this.sprite.flipX = this.sprite.body.force.x < 0;
+        this.sprite.flipX = this.sprite.body.force.x > 0;
     }
 
     receiveDamage (val) {

@@ -5,10 +5,8 @@ import {
 } from '@/constants/events';
 
 const REACTION_DISTANCE = 96;
-const SPEED_WALK = 0.00025;
-const SPEED_RUN = 0.005;
-const VELOCITY_MAX_WALK = 4;
-const VELOCITY_MAX_RUN = 5;
+const SPEED_WALK = 0.000025;
+const VELOCITY_MAX_WALK = 0.25;
 
 export default class StatePatrol extends State {
 
@@ -64,10 +62,16 @@ export default class StatePatrol extends State {
             return target.events.emit(STATE_CHANGE, StateChase);
         }
 
-        const nextX = target.sprite.x + (target.sprite.displayWidth / 2 * direction);
+        const nextX = target.sprite.x + (target.sprite.displayWidth / 2 * direction * -1);
         const nextY = target.sprite.y + (target.sprite.displayHeight / 2);
         const nextGroundTile = ground.getTileAtWorldXY(nextX, nextY, true);
         const nextAirTile = ground.getTileAtWorldXY(nextX, nextY - (target.sprite.displayHeight / 2), true);
+
+        if (target.debug) {
+            this.debugGraphic
+                .fillRect(nextX, nextY, 2, 2)
+                .fillRect(nextX, nextY - (target.sprite.displayHeight / 2), 2, 2);
+        }
 
         if ((nextGroundTile === null || !nextGroundTile.collides) || (nextAirTile === null || nextAirTile.collides)) {
             target.sprite.setVelocity(0);
@@ -77,15 +81,10 @@ export default class StatePatrol extends State {
 
         target.sprite.applyForce({ x: SPEED_WALK * direction, y: 0 });
 
-        const maxVelocity = target.isTouchingGround
-            ?   VELOCITY_MAX_WALK
-            :   VELOCITY_MAX_WALK / 3;
-        const minVlocity = -maxVelocity;
-
-        if (target.sprite.body.velocity.x > maxVelocity) {
-            target.sprite.setVelocityX(maxVelocity);
-        } else if (target.sprite.body.velocity.x < minVlocity) {
-            target.sprite.setVelocityX(minVlocity);
+        if (direction > 0) {
+            target.sprite.setVelocityX(-VELOCITY_MAX_WALK);
+        } else if (direction < 0) {
+            target.sprite.setVelocityX(VELOCITY_MAX_WALK);
         }
     }
 
