@@ -60,7 +60,7 @@ export default class StatePatrol extends State {
 
         const isWithinChasingDistance = Phaser.Geom.Rectangle.ContainsPoint(visionRect, player.sprite);
 
-        if (target.canSeePlayer && isWithinChasingDistance /*&& (player.y >= self.y && self.y + self.height >= player.y)*/) {
+        if (target.canSeePlayer && isWithinChasingDistance) {
             return target.events.emit(STATE_CHANGE, StateChase);
         }
 
