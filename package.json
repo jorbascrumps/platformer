@@ -23,7 +23,8 @@
     "rollup-plugin-babel": "4.0.3",
     "rollup-plugin-commonjs": "9.1.8",
     "rollup-plugin-node-builtins": "2.1.2",
-    "rollup-plugin-node-resolve": "3.4.0"
+    "rollup-plugin-node-resolve": "3.4.0",
+    "trekker": "1.0.0-alpha01"
   },
   "babel": {
     "presets": [
