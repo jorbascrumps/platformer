@@ -136,6 +136,16 @@ export function create () {
         frameRate: 8,
         repeat: 0,
     });
+    this.anims.create({
+        key: 'enemyFlying',
+        frames: this.anims.generateFrameNumbers('enemyFlying', {
+            start: 0,
+            end: 4,
+            first: 0
+        }),
+        frameRate: 8,
+        repeat: -1,
+    });
 
     const generatedMap = new Map({
         size: {

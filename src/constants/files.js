@@ -102,6 +102,15 @@ export const SPRITESHEETS = type('spritesheet', [
         }
     },
     {
+        key: 'enemyFlying',
+        url: 'enemy/flying.png',
+        frameConfig: {
+            endFrame: 30,
+            frameHeight: 64,
+            frameWidth: 64,
+        }
+    },
+    {
         key: 'keyboard',
         url: 'keyboard.png',
         frameConfig: {
