@@ -81,6 +81,7 @@ const assignTileProps = props => tile => {
 
 export function preload () {
     this.load.scenePlugin('Slopes', Slopes);
+    this.load.plugin('pathFollower', window.rexpathfollowerplugin, true, 'pathFollower');
 }
 
 export function create () {
