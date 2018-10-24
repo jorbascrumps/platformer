@@ -81,6 +81,7 @@ const assignTileProps = props => tile => {
 
 export function preload () {
     this.load.scenePlugin('Slopes', Slopes);
+    this.load.plugin('pathFollower', window.rexpathfollowerplugin, true, 'pathFollower');
 }
 
 export function create () {
@@ -134,6 +135,16 @@ export function create () {
         }),
         frameRate: 8,
         repeat: 0,
+    });
+    this.anims.create({
+        key: 'enemyFlying',
+        frames: this.anims.generateFrameNumbers('enemyFlying', {
+            start: 0,
+            end: 4,
+            first: 0
+        }),
+        frameRate: 8,
+        repeat: -1,
     });
 
     const generatedMap = new Map({
@@ -335,7 +346,11 @@ export function create () {
 
     spawnPositions
         .map(({ x, y, type }) =>
-            new Enemy(this, x, y)
+            (
+                type === 'fly'
+                    ?   new Flying(this, x, y)
+                    :   new Enemy(this, x, y)
+            )
         );
 
     this.sceneLights = this.add.group();
