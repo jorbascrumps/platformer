@@ -346,7 +346,11 @@ export function create () {
 
     spawnPositions
         .map(({ x, y, type }) =>
-            new Enemy(this, x, y)
+            (
+                type === 'fly'
+                    ?   new Flying(this, x, y)
+                    :   new Enemy(this, x, y)
+            )
         );
 
     this.sceneLights = this.add.group();
