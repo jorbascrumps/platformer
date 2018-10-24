@@ -1,4 +1,4 @@
-import Trekker, { DIAGONAL_MODE } from 'trekker';
+import Trekker  from 'trekker';
 
 import State from './State';
 import StateSleep from './StateSleep';

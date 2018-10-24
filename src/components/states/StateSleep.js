@@ -1,11 +1,8 @@
-import Trekker, { DIAGONAL_MODE } from 'trekker';
-
 import State from './State';
 import StateFlyChase from './StateFlyChase';
 import {
     STATE_CHANGE
 } from '@/constants/events';
-import StateChase from "./StateChase";
 
 const REACTION_DISTANCE = 128;
 
@@ -27,7 +24,6 @@ export default class StateSleep extends State {
         const {
             target: {
                 scene: {
-                    ground,
                     player
                 }
             },
