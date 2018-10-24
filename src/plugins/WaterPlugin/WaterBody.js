@@ -11,8 +11,8 @@ export default class WaterBody {
     #debug = false
 
     #tension = 0.025
-    #dampening = 0.025
-    #spread = 0.25
+    #dampening = 0.015
+    #spread = 0.05
     #depth = 10
 
     constructor (context, x, y, width, height) {
@@ -36,7 +36,7 @@ export default class WaterBody {
             this.#height - this.#depth
         ];
         const surface = new Phaser.Geom.Line(...coords);
-        const points = surface.getPoints(0, 20);
+        const points = surface.getPoints(0, 10);
         this.columns = [
             ...points,
             {
@@ -82,13 +82,13 @@ export default class WaterBody {
         this.emitter = context.add.particles('droplet').createEmitter({
             alpha: 0.5,
             tint: 0x08bde1,
-            speed: { min: 100, max: 500 },
+            speed: { min: 100, max: 350 },
             gravityY: 1000,
             lifespan: 4000,
             quantity: 0,
             frequency: 1000,
             angle: { min: 240, max: 300 },
-            scale: { min: .5, max: .1 },
+            scale: { min: .15, max: .1 },
             deathZone: {
                 type: 'onEnter',
                 source: new Phaser.Geom.Polygon(
@@ -101,7 +101,7 @@ export default class WaterBody {
             },
             deathCallback: ({ x }) => {
                 const i = this.columns.findIndex((col, i) => this.#x + col.x >= x && i);
-                this.ripple(Phaser.Math.Clamp(i, 0, this.columns.length - 1), 10);
+                this.ripple(Phaser.Math.Clamp(i, 0, this.columns.length - 1), 3);
             }
         });
 
