@@ -1,5 +1,4 @@
 import State from './State';
-import StateSleep from './StateSleep';
 import StateFlyPathTo from './StateFlyPathTo';
 import {
     STATE_CHANGE
@@ -9,7 +8,6 @@ const SPEED_RUN = 0.00005;
 const VELOCITY_MAX_RUN = 1;
 const REACTION_DISTANCE = 160;
 const ATTACK_DISTANCE = 18;
-const MEMORY_LIMIT = 5000;
 const ATTACK_COOLDOWN = 1500;
 
 export default class StateFlyChase extends State {
@@ -38,7 +36,6 @@ export default class StateFlyChase extends State {
                 scene: {
                     player
                 },
-                scene
             },
             target
         } = this;
@@ -67,20 +64,11 @@ export default class StateFlyChase extends State {
         const isWithinAttackingDistance = Phaser.Geom.Rectangle.ContainsPoint(attackRect, player.sprite)
 
         if (isWithinAttackingDistance && !this.cooldownTimer) {
-            // return target.events.emit(STATE_CHANGE, StateAttack);
             return;
         }
 
         if (!target.canSeePlayer || !isWithinChasingDistance) {
             return target.events.emit(STATE_CHANGE, StateFlyPathTo);
-            // if (!this.amnesiaTimer) {
-            //     this.amnesiaTimer = scene.time.delayedCall(
-            //         MEMORY_LIMIT,
-            //         () => target.events.emit(STATE_CHANGE, StateSleep),
-            //         [],
-            //         this
-            //     );
-            // }
         }
 
         let x = 0;
