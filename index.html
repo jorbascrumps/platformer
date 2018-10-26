@@ -1,24 +1,36 @@
 <html>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<style>
-    body {
-        background: url('/src/data/background.jpg');
-        margin: 0;
-        padding: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-39184826-2"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
 
-    #game {
-        border: 10px solid #251b1e;
-    }
-</style>
+        gtag('config', 'UA-39184826-2');
+    </script>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            background: url('/src/data/background.jpg');
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #game {
+            border: 10px solid #251b1e;
+            transform: scale(2);
+        }
+    </style>
+</head>
 <body>
 <div id="game"></div>
 <script src="https://cdn.jsdelivr.net/gh/photonstorm/phaser@3.13.0/dist/phaser.js"></script>
 <script src="//cdn.jsdelivr.net/npm/phaser-matter-collision-plugin"></script>
 <script src="/src/plugins/PathFollower/index.js"></script>
-<script src="/build/index.js"></script>
+<script src="/public/index.js"></script>
 </body>
 </html>
