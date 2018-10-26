@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "rollup -c -w",
     "serve": "sudo python -m SimpleHTTPServer 80",
+    "build": "rollup -c",
+    "watch": "npm run build -- -w",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -38,6 +39,16 @@
     "plugins": [
       "@babel/plugin-proposal-object-rest-spread",
       "@babel/plugin-proposal-class-properties"
+    ]
+  },
+  "now": {
+    "alias": "platformer.now.sh",
+    "type": "static",
+    "files": [
+      "public",
+      "index.html",
+      "src/data",
+      "src/plugins"
     ]
   }
 }

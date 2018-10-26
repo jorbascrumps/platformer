@@ -9,7 +9,7 @@ import alias from 'rollup-plugin-alias';
 export default {
     input: 'src/index.js',
     output: {
-        file: 'build/index.js',
+        file: 'public/index.js',
         format: 'umd'
     },
     plugins: [
