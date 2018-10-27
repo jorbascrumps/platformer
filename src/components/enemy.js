@@ -1,4 +1,4 @@
-import Actor from './Actor';
+import EnemyBase from './EnemyBase';
 import ActorSprite from './ActorSprite';
 import StatePatrol from './states/StatePatrol';
 import {
@@ -17,7 +17,7 @@ const {
     }
 } = Phaser;
 
-export default class Enemy extends Actor {
+export default class Enemy extends EnemyBase {
 
     constructor (scene, x, y) {
         super(scene, x, y);
@@ -80,31 +80,6 @@ export default class Enemy extends Actor {
         }
 
         return super.onSensorCollide(...arguments);
-    }
-
-    update () {
-        super.update();
-
-        const {
-            scene: {
-                ground,
-                player,
-            }
-        } = this;
-
-        const line = new Phaser.Geom.Line(this.sprite.x, this.sprite.y, player.sprite.x, player.sprite.y);
-        this.canSeePlayer = ground.getTilesWithinShape(line, {
-            isNotEmpty: true
-        })
-            .length === 0;
-
-        if (this.debug) {
-            const lineColour = this.canSeePlayer ? this.debugGraphic.defaultStrokeColor : 0xff0000;
-            this.debugGraphic
-                .clear()
-                .lineStyle(1, lineColour)
-                .strokeLineShape(line)
-        }
     }
 
 }
