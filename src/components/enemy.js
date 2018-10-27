@@ -23,7 +23,8 @@ export default class Enemy extends EnemyBase {
         super(scene, x, y);
 
         const sensorOptions = {
-            isSensor: true
+            isSensor: true,
+            gameObject: this,
         };
         const sprite = new ActorSprite(scene.matter.world, 0, 0, 'player', 0)
             .setActor(this)
@@ -32,7 +33,8 @@ export default class Enemy extends EnemyBase {
         const mainBody = Bodies.rectangle(0, 0, 16, 32, {
             chamfer: {
                 radius: 4
-            }
+            },
+            gameObject: this,
         });
         this.sensors = {
             right: Bodies.rectangle(8, 0, 2, sprite.height * 0.5, sensorOptions),

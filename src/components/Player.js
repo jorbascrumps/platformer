@@ -1,7 +1,9 @@
 import Actor from './Actor';
+import EnemyBase from './EnemyBase';
 import ActorSprite from './ActorSprite';
 import LightSource from './LightSource';
 import StateIdle from './states/StateIdle';
+import StateJump from './states/StateJump';
 import {
     STATE_CHANGE
 } from '@/constants/events';
@@ -78,6 +80,14 @@ export default class Player extends Actor {
     }
 
     onSensorCollide ({ bodyA, bodyB, gameObjectB }) {
+        if (bodyA === this.sensors.bottom) {
+            if (bodyB.gameObject instanceof EnemyBase) {
+                bodyB.gameObject.destroy();
+
+                return this.events.emit(STATE_CHANGE, StateJump);
+            }
+        }
+
         if (bodyB.gameObject instanceof Phaser.Tilemaps.Tile) {
             const {
                 isClimbable,

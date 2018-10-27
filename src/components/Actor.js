@@ -48,6 +48,10 @@ export default class Actor {
     }
 
     update () {
+        if (!this.sprite.active) {
+            return;
+        }
+
         if (typeof this.state !== 'undefined') {
             this.state.execute();
         }
@@ -148,6 +152,9 @@ export default class Actor {
 
     destroy () {
         this.scene.events.off('update', this.update, this);
+        this.events.removeAllListeners();
+        this.state = undefined;
+        this.sprite.destroy();
     }
 
 }
