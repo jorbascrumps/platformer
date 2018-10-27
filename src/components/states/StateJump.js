@@ -24,7 +24,7 @@ export default class StateJump extends State {
         } = this;
 
         if (target.isTouchingGround) {
-            return target.events.emit(STATE_CHANGE, target.previousState);
+            return target.events.emit(STATE_CHANGE, StateIdle);
         }
 
         if (normalizedControls.horizontalThreshold !== 0) {
