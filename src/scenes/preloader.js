@@ -3,6 +3,7 @@ import {
     PRELOADER
 } from '@/constants/scenes';
 import {
+    ATLAS,
     IMAGES,
     JSON,
     SPRITESHEETS,
@@ -16,6 +17,7 @@ export const loader = {
 };
 
 export function preload () {
+    this.load.atlas(ATLAS);
     this.load.image(IMAGES);
     this.load.tilemapTiledJSON(JSON);
     this.load.spritesheet(SPRITESHEETS);

@@ -3,6 +3,14 @@ const type = (type, assets) => assets
         type
     }));
 
+export const ATLAS = type('atlas', [
+    {
+        key: 'dirttiles',
+        atlasURL: 'dirttiles.json',
+        textureURL: 'dirttiles.png',
+    }
+]);
+
 export const IMAGES = type('image', [
     {
         key: 'background',
