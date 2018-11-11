@@ -1,0 +1,64 @@
+{
+  "frames": [
+    {
+      "filename": "ground0",
+      "frame": {
+        "x": 32,
+        "y": 32,
+        "w": 32,
+        "h": 32
+      },
+      "rotated": false
+    },
+    {
+      "filename": "ground1",
+      "frame": {
+        "x": 64,
+        "y": 32,
+        "w": 32,
+        "h": 32
+      },
+      "rotated": false
+    },
+    {
+      "filename": "dirttop",
+      "frame": {
+        "x": 192,
+        "y": 10,
+        "w": 32,
+        "h": 32
+      },
+      "rotated": false
+    },
+    {
+      "filename": "dirtbottom",
+      "frame": {
+        "x": 192,
+        "y": 44,
+        "w": 32,
+        "h": 11
+      },
+      "rotated": false
+    },
+    {
+      "filename": "dirtright",
+      "frame": {
+        "x": 233,
+        "y": 32,
+        "w": 16,
+        "h": 33
+      },
+      "rotated": false
+    },
+    {
+      "filename": "dirtleft",
+      "frame": {
+        "x": 229,
+        "y": 64,
+        "w": 20,
+        "h": 32
+      },
+      "rotated": false
+    }
+  ]
+}
