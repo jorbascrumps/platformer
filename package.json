@@ -19,6 +19,7 @@
     "@babel/plugin-proposal-private-methods": "^7.4.4",
     "@babel/preset-env": "^7.5.4",
     "phaser-matter-collision-plugin": "^0.10.2",
+    "phaser-plugin-water-body": "^1.0.0-beta02",
     "phaser-slopes": "0.1.0",
     "rollup": "^1.16.7",
     "rollup-plugin-alias": "^1.5.2",
