@@ -111,7 +111,20 @@ export function create () {
     this.cameras.main
         .setBounds(0, 0, mapWidth * tileSize, mapHeight * tileSize + waterTable)
         .setBackgroundColor('#000000')
-        .startFollow(this.player.sprite, true);
+        .startFollow(this.player.sprite, true, 0.5, 0.5)
+        .setDeadzone(this.game.config.width / 4, this.game.config.height / 2)
+    ;
+
+    // this.add.graphics()
+    //     .setScrollFactor(0)
+    //     .lineStyle(1, 0x00ff00, 0.5)
+    //     .strokeRect(
+    //         (this.game.config.width / 2) - (this.cameras.main.deadzone.width / 2),
+    //         (this.game.config.height / 2) - (this.cameras.main.deadzone.height / 2),
+    //         this.cameras.main.deadzone.width,
+    //         this.cameras.main.deadzone.height
+    //     )
+    // ;
 
     this.events.on('pause', pause.bind(this));
     this.events.on('resume', resume.bind(this));
