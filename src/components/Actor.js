@@ -1,11 +1,24 @@
 import EventEmitter from 'eventemitter3';
 
+import ActorSprite from './ActorSprite';
+
 import {
     DAMAGE_RECEIVE,
     STATE_CHANGE
 } from '@/constants/events';
 
 const MIN_SEPARATION = 1;
+
+const {
+    Physics: {
+        Matter: {
+            Matter: {
+                Body,
+                Bodies
+            }
+        }
+    }
+} = Phaser;
 
 export default class Actor {
 
@@ -21,7 +34,7 @@ export default class Actor {
         right: null,
     }
 
-    constructor (scene, x, y) {
+    constructor (scene, x, y, spritesheet) {
         this.scene = scene;
         this.x = x;
         this.y = y;
@@ -39,6 +52,59 @@ export default class Actor {
                     width: 1,
                 }
             });
+
+        const sensorOptions = {
+            isSensor: true,
+            label: 'playerSensor'
+        };
+
+        const sprite = new ActorSprite(scene.matter.world, 0, 0, spritesheet, 0)
+            .setActor(this)
+            .setDisplaySize(16, 32)
+            .setDepth(0)
+            .setSize(16, 32);
+        const mainBody = Bodies.rectangle(0, 0, sprite.width, sprite.height, {
+            chamfer: {
+                radius: 4
+            },
+            label: 'playerSensor'
+        });
+        this.sensors = {
+            right: Bodies.rectangle(sprite.width * 0.5, 0, 2, sprite.height * 0.5, sensorOptions),
+            bottom: Bodies.rectangle(0, sprite.height * 0.5, sprite.width * 0.25, 2, sensorOptions),
+            left: Bodies.rectangle(-sprite.width * 0.5, 0, 2, sprite.height * 0.5, sensorOptions)
+        };
+        const compoundBody = Body.create({
+            parts: [
+                mainBody,
+                ...Object.values(this.sensors)
+            ],
+            frictionStatic: 0,
+            frictionAir: 0.02,
+            friction: 0.05,
+            render: {
+                sprite: {
+                    xOffset: 1,
+                    yOffset: 0.3
+                }
+            },
+            label: 'playerBody'
+        });
+        this.sprite = sprite
+            .setExistingBody(compoundBody)
+            .setFixedRotation()
+            .setPosition(x, y);
+
+        this.scene.matterCollision.addOnCollideStart({
+            objectA: Object.values(this.sensors),
+            callback: this.onSensorCollide,
+            context: this
+        });
+        this.scene.matterCollision.addOnCollideActive({
+            objectA: Object.values(this.sensors),
+            callback: this.onSensorCollide,
+            context: this
+        });
 
         this.events.on(DAMAGE_RECEIVE, this.receiveDamage, this);
         this.events.on(STATE_CHANGE, this.changeState, this);
