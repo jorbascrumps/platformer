@@ -6,7 +6,6 @@ import {
     UI
 } from '@/constants/scenes';
 
-import Map from '../components/map';
 import Enemy from '../components/enemy';
 import Player from '../components/Player';
 import LightSource from '../components/LightSource';
