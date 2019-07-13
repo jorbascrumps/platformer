@@ -1,9 +1,11 @@
+import WaterBodyPlugin from 'phaser-plugin-water-body';
+
 import * as level from './scenes/level';
 import * as ui from './scenes/ui';
 import * as preloader from '@/scenes/preloader';
 import * as pause from '@/scenes/pause';
 import NormalizedControlsPlugin from './plugins/NormalizedControls';
-import WaterPlugin from './plugins/WaterPlugin';
+import MapManagerPlugin from './plugins/MapManager';
 
 const ratioWidth = 16;
 const ratioHeight = 9;
@@ -39,17 +41,22 @@ window.onload = () => {
                     plugin: NormalizedControlsPlugin,
                 },
                 {
-                    key: 'WaterPlugin',
-                    plugin: WaterPlugin,
+                    key: 'WaterBodyPlugin',
+                    plugin: WaterBodyPlugin,
                     start: true
                 }
             ],
             scene: [
                 {
+                    key: 'mapManagerPlugin',
+                    mapping: 'map',
+                    plugin: MapManagerPlugin,
+                },
+                {
                     plugin: PhaserMatterCollisionPlugin,
                     key: 'matterCollision',
                     mapping: 'matterCollision'
-                }
+                },
             ]
         }
     });
