@@ -12,19 +12,20 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@babel/core": "7.1.2",
-    "@babel/plugin-external-helpers": "7.0.0",
-    "@babel/plugin-proposal-class-properties": "7.1.0",
-    "@babel/plugin-proposal-object-rest-spread": "7.0.0",
-    "@babel/preset-env": "7.1.0",
-    "phaser-matter-collision-plugin": "0.10.0",
+    "@babel/core": "^7.5.4",
+    "@babel/plugin-external-helpers": "^7.2.0",
+    "@babel/plugin-proposal-class-properties": "^7.5.0",
+    "@babel/plugin-proposal-object-rest-spread": "^7.5.4",
+    "@babel/plugin-proposal-private-methods": "^7.4.4",
+    "@babel/preset-env": "^7.5.4",
+    "phaser-matter-collision-plugin": "^0.10.2",
     "phaser-slopes": "0.1.0",
-    "rollup": "0.66.2",
-    "rollup-plugin-alias": "1.4.0",
-    "rollup-plugin-babel": "4.0.3",
-    "rollup-plugin-commonjs": "9.1.8",
+    "rollup": "^1.16.7",
+    "rollup-plugin-alias": "^1.5.2",
+    "rollup-plugin-babel": "^4.3.3",
+    "rollup-plugin-commonjs": "^10.0.1",
     "rollup-plugin-node-builtins": "2.1.2",
-    "rollup-plugin-node-resolve": "3.4.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
     "trekker": "1.0.0-alpha01"
   },
   "babel": {
@@ -38,7 +39,8 @@
     ],
     "plugins": [
       "@babel/plugin-proposal-object-rest-spread",
-      "@babel/plugin-proposal-class-properties"
+      "@babel/plugin-proposal-class-properties",
+      "@babel/plugin-proposal-private-methods"
     ]
   },
   "now": {
