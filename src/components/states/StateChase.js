@@ -93,7 +93,7 @@ export default class StateChase extends State {
         const direction = -Math.sign(target.sprite.body.force.x);
         const nextX = target.sprite.x + (14 * direction);
         const nextY = target.sprite.y;
-        const nextAirTile = scene.ground.getTileAtWorldXY(nextX, nextY, true);
+        const nextAirTile = scene.map.ground.getTileAtWorldXY(nextX, nextY, true);
 
         if (target.isTouchingGround && (nextAirTile && nextAirTile.collides)) {
             return target.events.emit(STATE_CHANGE, StateEnemyJump);

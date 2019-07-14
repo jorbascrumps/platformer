@@ -26,7 +26,9 @@ export default class StatePatrol extends State {
         const {
             target: {
                 scene: {
-                    ground,
+                    map: {
+                        ground,
+                    },
                     player
                 }
             },

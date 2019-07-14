@@ -11,7 +11,9 @@ export default class EnemyBase extends Actor {
 
         const {
             scene: {
-                ground,
+                map: {
+                    ground,
+                },
                 player,
             }
         } = this;
