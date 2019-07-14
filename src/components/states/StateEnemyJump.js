@@ -4,7 +4,7 @@ import {
     STATE_CHANGE
 } from '@/constants/events';
 
-const VELOCITY_JUMP = -7;
+const VELOCITY_JUMP = -6;
 
 export default class StateEnemyJump extends State {
 
@@ -17,6 +17,8 @@ export default class StateEnemyJump extends State {
             },
         } = this;
 
+        this.velocityX = sprite.body.velocity.x;
+
         sprite.setVelocityY(VELOCITY_JUMP);
     }
 
@@ -24,6 +26,8 @@ export default class StateEnemyJump extends State {
         const {
             target
         } = this;
+
+        target.sprite.setVelocityX(this.velocityX);
 
         if (target.isTouchingGround) {
             target.events.emit(STATE_CHANGE, StateChase);
