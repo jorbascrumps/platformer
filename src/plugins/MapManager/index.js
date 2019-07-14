@@ -241,6 +241,10 @@ export default class extends Phaser.Plugins.BasePlugin {
         return data;
     }
 
+    get ground () {
+        return this.#layers.ground;
+    }
+
     #draw () {
         const scene = this.pluginManager.scene.scene;
         const map = scene.make.tilemap({
