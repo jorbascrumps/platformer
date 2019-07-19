@@ -53,26 +53,62 @@ export default class Actor {
                 }
             });
 
-        const sensorOptions = {
-            isSensor: true,
-            label: 'playerSensor'
-        };
-
-        const sprite = new ActorSprite(scene.matter.world, 0, 0, spritesheet, 0)
+        this.sprite = new ActorSprite(scene.matter.world, 0, 0, spritesheet, 0)
             .setActor(this)
             .setDisplaySize(16, 32)
             .setDepth(0)
-            .setSize(16, 32);
-        const mainBody = Bodies.rectangle(0, 0, sprite.width, sprite.height, {
-            chamfer: {
-                radius: 4
-            },
+            .setPosition(x, y)
+            .setSize(16, 32)
+        ;
+
+        this.events.on(DAMAGE_RECEIVE, this.receiveDamage, this);
+        this.events.on(STATE_CHANGE, this.changeState, this);
+
+        this.scene.matter.world.on('beforeupdate', this.resetTouching, this);
+        this.scene.events.on('update', this.update, this);
+        this.scene.events.on('shutdown', this.destroy, this);
+    }
+
+    update (...args) {
+        if (!this.sprite.active) {
+            return;
+        }
+
+        if (typeof this.state !== 'undefined') {
+            this.state.execute(...args);
+        }
+
+        this.sprite.flipX = this.sprite.body.force.x > 0;
+    }
+
+    setPhysicsBody ({
+        body: {
+            height: bodyHeight = this.sprite.displayHeight,
+            width: bodyWidth = this.sprite.displayWidth,
+        } = {},
+        ignoreGravity = false,
+        sprite: {
+            offset: {
+                x: spriteXOffset = 0,
+                y: spriteYOffset = 0,
+            } = {},
+        } = {},
+    } = {}) {
+        const sensorOptions = {
+            gameObject: this,
+            isSensor: true,
             label: 'playerSensor'
+        };
+        const mainBody = Bodies.rectangle(this.x, this.y, bodyWidth, bodyHeight, {
+            chamfer: {
+                radius: 4,
+            },
+            gameObject: this,
         });
         this.sensors = {
-            right: Bodies.rectangle(sprite.width * 0.5, 0, 2, sprite.height * 0.5, sensorOptions),
-            bottom: Bodies.rectangle(0, sprite.height * 0.5, sprite.width * 0.25, 2, sensorOptions),
-            left: Bodies.rectangle(-sprite.width * 0.5, 0, 2, sprite.height * 0.5, sensorOptions)
+            right: Bodies.rectangle(this.x + (bodyWidth * 0.5), this.y, 2, bodyHeight * 0.5, sensorOptions),
+            bottom: Bodies.rectangle(this.x, this.y + (bodyHeight * 0.5), bodyWidth * 0.25, 2, sensorOptions),
+            left: Bodies.rectangle(this.x - (bodyWidth * 0.5), this.y, 2, bodyHeight * 0.5, sensorOptions)
         };
         const compoundBody = Body.create({
             parts: [
@@ -84,45 +120,29 @@ export default class Actor {
             friction: 0.05,
             render: {
                 sprite: {
-                    xOffset: 1,
-                    yOffset: 0.3
+                    xOffset: spriteXOffset,
+                    yOffset: spriteYOffset,
                 }
             },
             label: 'playerBody'
         });
-        this.sprite = sprite
+
+        this.sprite
             .setExistingBody(compoundBody)
             .setFixedRotation()
-            .setPosition(x, y);
+            .setIgnoreGravity(ignoreGravity)
+        ;
 
         this.scene.matterCollision.addOnCollideStart({
             objectA: Object.values(this.sensors),
             callback: this.onSensorCollide,
-            context: this
+            context: this,
         });
         this.scene.matterCollision.addOnCollideActive({
             objectA: Object.values(this.sensors),
             callback: this.onSensorCollide,
-            context: this
+            context: this,
         });
-
-        this.events.on(DAMAGE_RECEIVE, this.receiveDamage, this);
-        this.events.on(STATE_CHANGE, this.changeState, this);
-        this.scene.matter.world.on('beforeupdate', this.resetTouching, this);
-        this.scene.events.on('update', this.update, this);
-        this.scene.events.on('shutdown', this.destroy, this);
-    }
-
-    update () {
-        if (!this.sprite.active) {
-            return;
-        }
-
-        if (typeof this.state !== 'undefined') {
-            this.state.execute();
-        }
-
-        this.sprite.flipX = this.sprite.body.force.x > 0;
     }
 
     receiveDamage (val) {

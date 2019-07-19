@@ -12,6 +12,15 @@ export default class Player extends Actor {
     constructor (scene, x, y) {
         super(scene, x, y, 'player');
 
+        this.setPhysicsBody({
+            sprite: {
+                offset: {
+                    x: 1,
+                    y: 0.3,
+                },
+            },
+        });
+
         this.events.emit(STATE_CHANGE, StateIdle);
     }
 
