@@ -4,7 +4,7 @@ import {
     STATE_CHANGE
 } from '@/constants/events';
 
-const REACTION_DISTANCE = 128;
+const REACTION_DISTANCE = 256;
 
 export default class StateSleep extends State {
 
