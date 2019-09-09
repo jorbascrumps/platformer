@@ -6,6 +6,7 @@ import * as preloader from '@/scenes/preloader';
 import * as pause from '@/scenes/pause';
 import NormalizedControlsPlugin from './plugins/NormalizedControls';
 import MapManagerPlugin from './plugins/MapManager';
+import PlatformPlugin from './plugins/Platform';
 
 const ratioWidth = 16;
 const ratioHeight = 9;
@@ -44,7 +45,12 @@ window.onload = () => {
                     key: 'WaterBodyPlugin',
                     plugin: WaterBodyPlugin,
                     start: true
-                }
+                },
+                {
+                    key: 'PlatformPlugin',
+                    plugin: PlatformPlugin,
+                    start: true,
+                },
             ],
             scene: [
                 {
